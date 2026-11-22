@@ -110,11 +110,11 @@
   <div class="bg-navy-dark text-peanut-cream border-b border-white/10 relative z-50">
     <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-3 text-xs sm:text-sm">
       <div class="flex items-center gap-2.5 flex-1 min-w-0">
-        <span class="px-2 py-0.5 rounded-full text-[11px] font-black bg-peanut-caramel text-navy-dark shrink-0">
-          OFFICIAL
+        <span class="px-2 py-0.5 rounded-full text-[11px] font-black bg-red-600 text-white shrink-0">
+          XMAS SOON
         </span>
         <p id="global-announcement-text" class="truncate sm:whitespace-normal font-medium text-peanut-sand">
-          即日起~11/30 公告：登入系統網址已升級為 IPO v2.0 會員系統，每天登入領 200P！
+          🎄 最新公告：2026 萬聖節活動已圓滿落幕！花生教聖誕節特別企劃即將公開（Coming Soon），每日登入領 200P！
         </p>
       </div>
       <button id="top-admin-shortcut" onclick="navigateTo('#/login', 'admin')" class="hidden shrink-0 items-center gap-1 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-peanut-light transition cursor-pointer">
@@ -203,20 +203,45 @@
     ======================================================= -->
     <section id="page-home" class="page-view max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-12">
 
-      <!-- Dual Hero Carousel Banner -->
+      <!-- 3-Slide Hero Carousel Banner -->
       <div class="relative rounded-3xl overflow-hidden shadow-xl border border-navy/15" onmouseenter="pauseHeroCarousel()" onmouseleave="resumeHeroCarousel()">
-        <!-- Slide 1: 花生の多重宇宙 -->
-        <div id="hero-slide-0" class="bg-gradient-to-br from-navy-dark via-navy to-[#1C2836] text-white p-7 sm:p-12 min-h-[340px] sm:min-h-[380px] flex flex-col md:flex-row items-center justify-between gap-8 relative">
+        <!-- Slide 1: Christmas Event Coming Soon -->
+        <div id="hero-slide-0" class="bg-gradient-to-br from-[#143626] via-[#1B4332] to-[#7F1D1D] text-white p-7 sm:p-12 min-h-[340px] sm:min-h-[380px] flex flex-col md:flex-row items-center justify-between gap-8 relative">
+          <div class="absolute -top-16 -right-16 w-72 h-72 rounded-full bg-amber-400/15 blur-3xl pointer-events-none"></div>
+          <div class="space-y-4 max-w-xl relative z-10 text-center md:text-left">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-600/35 border border-red-300/40 text-xs font-black text-amber-200 tracking-wider">
+              🎄 CHRISTMAS SPECIAL PROJECT · COMING SOON
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+              花生教聖誕節特別企劃 — <span class="text-amber-300">活動即將公開！</span>
+            </h1>
+            <p class="text-emerald-100 text-sm sm:text-lg leading-relaxed">
+              2026 萬聖節已圓滿落幕，Santa Peanuto 正在秘密籌備聖誕神秘驚喜！立即搶先預約公開通知並領取 +30P。
+            </p>
+            <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-3">
+              <button onclick="scrollToChristmasSection()" class="px-6 py-3.5 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-black text-sm sm:text-base shadow-lg hover:scale-[1.02] transition cursor-pointer">
+                🎄 搶先預約公開通知 (+30P) →
+              </button>
+              <button onclick="navigateTo('#/universe')" class="px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/15 transition cursor-pointer">
+                探索花生宇宙
+              </button>
+            </div>
+          </div>
+          <div id="home-hero-santa-svg" class="w-40 h-40 sm:w-52 sm:h-52 shrink-0 animate-float relative z-10"></div>
+        </div>
+
+        <!-- Slide 2: 花生の多重宇宙 -->
+        <div id="hero-slide-1" class="hidden bg-gradient-to-br from-navy-dark via-navy to-[#1C2836] text-white p-7 sm:p-12 min-h-[340px] sm:min-h-[380px] flex-col md:flex-row items-center justify-between gap-8 relative">
           <div class="absolute -top-16 -left-16 w-64 h-64 rounded-full bg-peanut-caramel/15 blur-3xl pointer-events-none"></div>
           <div class="space-y-4 max-w-xl relative z-10 text-center md:text-left">
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs font-black text-peanut-light tracking-wider">
               🌌 IPO QUANTUM PORTAL
             </span>
-            <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+            <h2 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
               花生の多重宇宙 — <span class="text-peanut-caramel">準備好了！</span>
-            </h1>
+            </h2>
             <p class="text-peanut-sand/90 text-sm sm:text-lg leading-relaxed">
-              跨越 804 創世校園、合歡山巔峰與萬聖幽靈次元，立即進入花生量子躍遷航道！
+              跨越 804 創世校園、合歡山巔峰與聖誕奇蹟次元，立即進入花生量子躍遷航道！
             </p>
             <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-3">
               <button onclick="navigateTo('#/universe')" class="px-6 py-3.5 rounded-2xl bg-peanut-caramel hover:bg-amber-400 text-navy-dark font-black text-sm sm:text-base shadow-lg hover:scale-[1.02] transition cursor-pointer">
@@ -230,31 +255,32 @@
           <div id="home-hero-cosmic-svg" class="w-40 h-40 sm:w-52 sm:h-52 shrink-0 animate-float relative z-10"></div>
         </div>
 
-        <!-- Slide 2: 萬聖節交換禮物 BOO! -->
-        <div id="hero-slide-1" class="hidden bg-gradient-to-br from-[#231942] via-[#3C1E5E] to-[#5E2B1D] text-white p-7 sm:p-12 min-h-[340px] sm:min-h-[380px] flex-col md:flex-row items-center justify-between gap-8 relative">
+        <!-- Slide 3: PNT ESG 永續發展 -->
+        <div id="hero-slide-2" class="hidden bg-gradient-to-br from-esg-dark via-esg-mid to-[#14532D] text-white p-7 sm:p-12 min-h-[340px] sm:min-h-[380px] flex-col md:flex-row items-center justify-between gap-8 relative">
           <div class="space-y-4 max-w-xl relative z-10 text-center md:text-left">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-spooky-orange/25 border border-spooky-orange/50 text-xs font-black text-orange-300 tracking-wider">
-              🎃 HALLOWEEN SPECIAL EVENT · 10.30.2026
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-white/20 text-xs font-black text-esg-mint tracking-wider">
+              🌿 #PNTESG · PROTECT NATURE, PROTECT FUTURE
             </span>
             <h2 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-              花生教 萬聖節 交換禮物 — <span class="text-spooky-orange">現在報名！</span>
+              IPO ESG BAG — <span class="text-emerald-300">二手考卷再生紙袋</span>
             </h2>
-            <p class="text-slate-200 text-sm sm:text-lg leading-relaxed">
-              NT$100 以內無花生小零食大抽獎！嚴格守護親愛的教主安全，立即登記你的萬聖驚喜包。
+            <p class="text-esg-mint text-sm sm:text-lg leading-relaxed">
+              讓每一張寫完的 100 分考卷華麗轉身，從校園日常實踐永續循環！
             </p>
             <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-3">
-              <button onclick="scrollToHalloweenSection()" class="px-6 py-3.5 rounded-2xl bg-spooky-orange hover:bg-orange-400 text-white font-black text-sm sm:text-base shadow-lg hover:scale-[1.02] transition cursor-pointer">
-                🎃 前往萬聖節報名專區 →
+              <button onclick="navigateTo('#/pnt-esg')" class="px-6 py-3.5 rounded-2xl bg-emerald-400 hover:bg-emerald-300 text-esg-dark font-black text-sm sm:text-base shadow-lg hover:scale-[1.02] transition cursor-pointer">
+                查看四步驟摺疊教學 →
               </button>
             </div>
           </div>
-          <div id="home-hero-witch-svg" class="w-40 h-40 sm:w-52 sm:h-52 shrink-0 animate-float relative z-10"></div>
+          <div id="home-hero-esg-svg" class="w-40 h-40 sm:w-52 sm:h-52 shrink-0 animate-float relative z-10"></div>
         </div>
 
         <!-- Carousel Controls -->
         <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-black/30 backdrop-blur-xs px-3 py-1.5 rounded-full">
-          <button onclick="setHeroSlide(0)" id="hero-dot-0" aria-label="第一張輪播" class="w-6 h-2 rounded-full bg-peanut-caramel transition-all cursor-pointer"></button>
+          <button onclick="setHeroSlide(0)" id="hero-dot-0" aria-label="第一張輪播" class="w-6 h-2 rounded-full bg-red-400 transition-all cursor-pointer"></button>
           <button onclick="setHeroSlide(1)" id="hero-dot-1" aria-label="第二張輪播" class="w-2.5 h-2 rounded-full bg-white/40 transition-all cursor-pointer"></button>
+          <button onclick="setHeroSlide(2)" id="hero-dot-2" aria-label="第三張輪播" class="w-2.5 h-2 rounded-full bg-white/40 transition-all cursor-pointer"></button>
         </div>
         <button onclick="prevHeroSlide()" aria-label="上一張" class="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/15 hover:bg-white/30 text-white items-center justify-center font-black backdrop-blur-xs transition cursor-pointer">
           ‹
@@ -266,7 +292,20 @@
 
       <!-- 3 Key Status Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <!-- Status 1: 本學期遶境資訊 -->
+        <!-- Status 1: 聖誕節活動籌備中 -->
+        <div onclick="scrollToChristmasSection()" class="rounded-3xl bg-white border border-red-200 p-6 shadow-xs hover:shadow-md transition cursor-pointer flex flex-col justify-between space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-xl bg-red-100 text-red-800 text-xs font-black">🎄 聖誕節特別企劃</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[11px] font-black">COMING SOON</span>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-red-600">2026 歲末壓軸盛典</p>
+            <h3 class="text-lg font-black text-navy mt-1">聖誕節活動籌備中，細節即將公開！</h3>
+          </div>
+          <span class="text-xs font-black text-red-700">前往聖誕看板搶先預約通知 (+30P) →</span>
+        </div>
+
+        <!-- Status 2: 本學期遶境資訊 -->
         <div class="rounded-3xl bg-white border border-peanut-light/70 p-6 shadow-xs flex flex-col justify-between space-y-3">
           <div class="flex items-center justify-between">
             <span class="px-2.5 py-1 rounded-xl bg-peanut-sand text-peanut-deep text-xs font-black">🏮 本學期遶境資訊</span>
@@ -279,7 +318,7 @@
           <p class="text-xs text-slate-500">感謝全體 804 信徒熱情參與神聖花生巡禮。</p>
         </div>
 
-        <!-- Status 2: 每天登入領點數！ -->
+        <!-- Status 3: 每天登入領點數！ -->
         <div onclick="navigateTo('#/login')" class="rounded-3xl bg-gradient-to-br from-amber-400 to-peanut-caramel text-navy-dark p-6 shadow-md hover:shadow-xl transition cursor-pointer flex flex-col justify-between space-y-3">
           <div class="flex items-center justify-between">
             <span class="px-2.5 py-1 rounded-xl bg-navy text-peanut-cream text-xs font-black">✨ 每日信仰任務</span>
@@ -287,24 +326,11 @@
           </div>
           <div>
             <h3 class="text-xl font-black">每天登入領點數！</h3>
-            <p class="text-xs sm:text-sm font-bold text-navy/85 mt-1">登入 @pnts 帳號每日領取 200P，兌換專屬花生寶寶造型！</p>
+            <p class="text-xs sm:text-sm font-bold text-navy/85 mt-1">登入 @pnts 帳號每日領取 200P，兌換聖誕限定花生寶寶造型！</p>
           </div>
           <div class="inline-flex items-center gap-1 text-xs font-black underline">
             <span>前往會員專區簽到 →</span>
           </div>
-        </div>
-
-        <!-- Status 3: 合歡山征服企劃 -->
-        <div onclick="openModal('hehuan-modal')" class="rounded-3xl bg-white border border-sky-200 p-6 shadow-xs hover:shadow-md transition cursor-pointer flex flex-col justify-between space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="px-2.5 py-1 rounded-xl bg-sky-100 text-sky-900 text-xs font-black">⛰️ 合歡山征服企劃</span>
-            <span class="text-xs font-extrabold text-sky-700">11/1 出發</span>
-          </div>
-          <div>
-            <h3 class="text-lg font-black text-navy">與花生一起征服合歡山！</h3>
-            <p class="text-xs sm:text-sm text-slate-600 mt-1">11/1日一起出發！挑戰海拔 3,422 公尺高山遠征。</p>
-          </div>
-          <span class="text-xs font-black text-sky-700">點擊查看海拔與遠征裝備清單 →</span>
         </div>
       </div>
 
@@ -325,10 +351,10 @@
             <p class="text-[11px] text-slate-500">花生教最高指導原則</p>
           </button>
 
-          <button onclick="scrollToHalloweenSection()" class="group rounded-3xl bg-white border border-peanut-light/70 p-5 text-center hover:border-spooky-orange hover:shadow-md transition cursor-pointer space-y-2">
-            <div class="w-12 h-12 mx-auto rounded-2xl bg-orange-100 text-spooky-orange flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">🎃</div>
-            <h3 class="font-black text-sm text-navy">活動辦理 Events</h3>
-            <p class="text-[11px] text-slate-500">萬聖節交換禮物報名</p>
+          <button onclick="scrollToChristmasSection()" class="group rounded-3xl bg-white border border-peanut-light/70 p-5 text-center hover:border-red-600 hover:shadow-md transition cursor-pointer space-y-2">
+            <div class="w-12 h-12 mx-auto rounded-2xl bg-red-100 text-red-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">🎄</div>
+            <h3 class="font-black text-sm text-navy">聖誕企劃 Soon</h3>
+            <p class="text-[11px] text-slate-500">搶先預約公開通知</p>
           </button>
 
           <button onclick="navigateTo('#/member')" class="group rounded-3xl bg-white border border-peanut-light/70 p-5 text-center hover:border-peanut-roasted hover:shadow-md transition cursor-pointer space-y-2">
@@ -357,12 +383,12 @@
         </div>
       </div>
 
-      <!-- Peanuto 花生寶寶 Official Character Showcase (4 Iconic Variants) -->
+      <!-- Peanuto 花生寶寶 Official Character Showcase (Classic, Sprout, Santa [NEW], Space) -->
       <div class="rounded-3xl bg-gradient-to-r from-peanut-sand via-peanut-cream to-peanut-sand border border-peanut-caramel/40 p-7 sm:p-9 space-y-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <div>
             <span class="px-3 py-0.5 rounded-full bg-white text-peanut-deep text-[11px] font-black">OFFICIAL CHARACTER OF IPO</span>
-            <h2 class="text-2xl sm:text-3xl font-black text-navy mt-1">Peanuto 花生寶寶 · 四大經典形象</h2>
+            <h2 class="text-2xl sm:text-3xl font-black text-navy mt-1">Peanuto 花生寶寶 · 四大官方形象</h2>
           </div>
           <button onclick="navigateTo('#/universe')" class="text-xs sm:text-sm font-black text-peanut-deep hover:underline cursor-pointer">
             前往宇宙工坊自訂造型 →
@@ -372,23 +398,24 @@
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="rounded-2xl bg-white p-5 text-center border border-peanut-light/60 shadow-2xs space-y-2">
             <div id="peanuto-var-1" class="w-24 h-24 mx-auto"></div>
-            <h3 class="font-black text-navy">原味經典</h3>
+            <h3 class="font-black text-navy">Classic 原味經典</h3>
             <p class="text-xs text-slate-500">純白肚兜 · 最純粹的 804 信仰象徵</p>
           </div>
           <div class="rounded-2xl bg-white p-5 text-center border border-peanut-light/60 shadow-2xs space-y-2">
             <div id="peanuto-var-2" class="w-24 h-24 mx-auto"></div>
-            <h3 class="font-black text-navy">抹茶肚兜</h3>
-            <p class="text-xs text-slate-500">森林抹茶綠 · 象徵和平與自然生機</p>
+            <h3 class="font-black text-navy">Sprout 嫩芽花生</h3>
+            <p class="text-xs text-slate-500">頭頂翠綠新芽 · 象徵希望與生機</p>
           </div>
-          <div class="rounded-2xl bg-white p-5 text-center border border-peanut-light/60 shadow-2xs space-y-2">
+          <div class="rounded-2xl bg-gradient-to-b from-red-50 to-white p-5 text-center border-2 border-red-300 shadow-xs space-y-2 relative">
+            <span class="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-red-600 text-white text-[10px] font-black">NEW</span>
             <div id="peanuto-var-3" class="w-24 h-24 mx-auto"></div>
-            <h3 class="font-black text-navy">粉紅雙生</h3>
-            <p class="text-xs text-slate-500">雙仁並蒂 · 甜美團結的幸運化身</p>
+            <h3 class="font-black text-red-800">Santa 聖誕老公公</h3>
+            <p class="text-xs text-slate-600">金鈴聖誕帽 · 派送歲末祝福驚喜</p>
           </div>
           <div class="rounded-2xl bg-white p-5 text-center border border-peanut-light/60 shadow-2xs space-y-2">
             <div id="peanuto-var-4" class="w-24 h-24 mx-auto"></div>
-            <h3 class="font-black text-navy">紳士眼鏡</h3>
-            <p class="text-xs text-slate-500">博學思考者 · 總在思考為什麼不是兩顆</p>
+            <h3 class="font-black text-navy">Space 宇宙太空人</h3>
+            <p class="text-xs text-slate-500">量子太空頭盔 · 探索花生の多重宇宙</p>
           </div>
         </div>
       </div>
@@ -418,94 +445,118 @@
           </div>
         </div>
 
-        <!-- Interactive Peanut Oracle -->
-        <div class="lg:col-span-5 rounded-3xl bg-navy text-white p-7 sm:p-8 shadow-lg flex flex-col justify-between space-y-5">
-          <div class="space-y-2 text-center">
-            <span class="px-3 py-0.5 rounded-full bg-white/10 text-peanut-caramel text-[11px] font-black">PEANUT ORACLE</span>
-            <h3 class="text-xl sm:text-2xl font-black">互動「花生神諭占卜機」</h3>
-            <p class="text-xs text-slate-300">遇到抉擇時，讓神聖花生為你指點迷津！</p>
+        <!-- Right 5 Cols: Interactive「如果是花生，會怎麼做？」神諭占卜機 -->
+        <div class="lg:col-span-5 rounded-3xl bg-gradient-to-br from-navy-dark via-navy to-navy-light text-white p-7 sm:p-8 shadow-lg flex flex-col justify-between space-y-5">
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-full bg-peanut-caramel/20 text-peanut-caramel text-xs font-black">🔮 PEANUT ORACLE</span>
+            <span class="text-xs text-peanut-light font-bold">點擊搖一搖神諭</span>
           </div>
 
-          <div class="flex flex-col items-center space-y-3">
-            <div id="home-oracle-peanut" onclick="askPeanutOracle()" class="w-28 h-28 rounded-3xl bg-white/10 border border-white/15 p-3 cursor-pointer hover:bg-white/15 transition"></div>
-            <button onclick="askPeanutOracle()" class="w-full py-3.5 px-5 rounded-2xl bg-peanut-caramel hover:bg-amber-400 text-navy-dark font-black text-sm shadow-md transition cursor-pointer">
-              🥜 問問花生：如果是花生，會怎麼做？
-            </button>
-          </div>
-
-          <div id="home-oracle-answer" class="rounded-2xl bg-white/10 border border-peanut-caramel/40 p-4 text-center space-y-1">
-            <span id="home-oracle-badge" class="text-[11px] font-black text-peanut-caramel">【點擊上方按鈕求取神諭】</span>
-            <p id="home-oracle-text" class="text-xs sm:text-sm font-bold text-peanut-sand leading-relaxed">
-              「靜心默念你的問題，點擊花生寶寶獲取今日人生智慧！」
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- 花生教 萬聖節 交換禮物 活動專區 -->
-      <div id="home-halloween-section" class="rounded-3xl bg-gradient-to-br from-[#1F1736] via-[#2B204A] to-navy text-white p-7 sm:p-10 shadow-xl border border-purple-400/20 space-y-8">
-        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 border-b border-white/10 pb-6">
-          <div class="flex items-center gap-4">
-            <div id="halloween-event-pumpkin" class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 animate-float"></div>
-            <div>
-              <span class="px-3 py-1 rounded-full bg-spooky-orange text-white text-xs font-black">🎃 HALLOWEEN GIFT EXCHANGE</span>
-              <h2 class="text-2xl sm:text-4xl font-black mt-2">花生教 萬聖節 交換禮物</h2>
-              <p class="text-xs sm:text-sm text-peanut-light mt-1">
-                報名截止：<strong class="text-white">10.16.2026(五)</strong> ｜ 活動日期：<strong class="text-orange-300">10.30.2026(五)</strong>
+          <div class="text-center space-y-3">
+            <div id="home-oracle-peanut" onclick="askPeanutOracle()" class="w-28 h-28 mx-auto cursor-pointer hover:scale-105 transition-transform" title="點擊搖一搖花生神諭"></div>
+            <div class="rounded-2xl bg-white/10 border border-white/15 p-4 space-y-1.5 min-h-[104px] flex flex-col justify-center">
+              <span id="home-oracle-badge" class="text-xs font-black text-peanut-caramel">【花生神諭占卜機】</span>
+              <p id="home-oracle-text" class="text-xs sm:text-sm text-peanut-cream leading-relaxed">
+                遇到人生重大抉擇嗎？點擊下方按鈕搖一搖花生，聽聽「如果是花生，會怎麼做？」
               </p>
             </div>
           </div>
-          <div class="px-4 py-2.5 rounded-2xl bg-rose-500/25 border border-rose-400/60 text-rose-200 text-xs sm:text-sm font-black">
-            ⚠️ 請避免花生及含花生製品，以保障親愛的教主安全
+
+          <button onclick="askPeanutOracle()" class="w-full py-3.5 rounded-2xl bg-peanut-caramel hover:bg-amber-400 text-navy-dark font-black text-sm shadow-md transition cursor-pointer">
+            🥜 搖一搖花生神諭
+          </button>
+        </div>
+      </div>
+
+      <!-- 花生教 聖誕節特別企劃 · COMING SOON 看板 -->
+      <div id="home-christmas-section" class="rounded-3xl bg-gradient-to-br from-[#0F291E] via-[#1B4332] to-[#7F1D1D] text-white p-7 sm:p-10 shadow-2xl border border-amber-300/30 relative overflow-hidden space-y-8">
+        <!-- Decorative Snowflakes -->
+        <div class="pointer-events-none select-none opacity-25 text-2xl">
+          <span class="absolute top-6 right-10 star-twinkle">❄️</span>
+          <span class="absolute top-24 left-1/2 star-twinkle" style="animation-delay: 1s;">✨</span>
+          <span class="absolute bottom-8 right-1/3 star-twinkle" style="animation-delay: 1.8s;">❄️</span>
+        </div>
+
+        <!-- Top Billboard Header & Past Event Archive Badge -->
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 border-b border-white/15 pb-6 relative z-10">
+          <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
+            <div id="christmas-billboard-santa" class="w-28 h-28 sm:w-32 sm:h-32 shrink-0 animate-float"></div>
+            <div class="space-y-2">
+              <div class="flex flex-wrap justify-center sm:justify-start items-center gap-2">
+                <span class="px-3 py-1 rounded-full bg-red-600 text-white text-xs font-black tracking-wider">🎄 CHRISTMAS COMING SOON</span>
+                <span class="px-3 py-1 rounded-full bg-amber-300/20 border border-amber-300/40 text-amber-200 text-xs font-black">活動即將公開</span>
+              </div>
+              <h2 class="text-2xl sm:text-4xl font-black tracking-tight">花生教聖誕節特別企劃 · 神秘看板</h2>
+              <p class="text-xs sm:text-sm text-emerald-100 max-w-xl leading-relaxed">
+                今年聖誕節，IPO 國際花生組織將帶來前所未有的歲末儀式！三大神秘線索搶先釋出，立即預約公開通知並投下你的創意許願！
+              </p>
+            </div>
+          </div>
+
+          <!-- Past Event Archive Badge -->
+          <div class="shrink-0 self-center lg:self-start px-4 py-2.5 rounded-2xl bg-white/10 border border-white/20 text-xs font-bold text-slate-200 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span>2026.10.30 花生教萬聖節交換禮物 — 已圓滿落幕</span>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <!-- Rules Column -->
-          <div class="lg:col-span-6 space-y-3">
-            <h3 class="text-lg font-black text-peanut-caramel">📋 活動規則與安全守則</h3>
-            <ul class="space-y-2.5 text-sm text-slate-200">
-              <li class="p-3.5 rounded-2xl bg-white/5 border border-white/10">🍬 每位參加者準備 <strong class="text-white">1 份不超過 NT$100</strong> 的小零食</li>
-              <li class="p-3.5 rounded-2xl bg-white/5 border border-white/10">🛍️ 活動當天全部放進大袋子裡，再 <strong class="text-white">隨機抽一份</strong></li>
-              <li class="p-3.5 rounded-2xl bg-white/5 border border-white/10">🙌 自由信仰原則：<strong class="text-white">可以選擇參加，也可以選擇不參加</strong></li>
-              <li class="p-3.5 rounded-2xl bg-rose-500/20 border border-rose-400/50 text-rose-100 font-black">
-                🚨 重要安全警告：請避免花生及含花生製品，以保障親愛的教主安全！
-              </li>
-              <li class="p-3.5 rounded-2xl bg-white/5 border border-white/10">🌀 奇怪到令人懷疑人生的零食，請先自行判斷後果</li>
-            </ul>
+        <!-- Teaser Mystery Clues -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+          <div class="rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15 p-5 space-y-1.5">
+            <span class="text-[11px] font-black text-amber-300 tracking-wider">CLUE 01 · MYSTERY</span>
+            <h3 class="text-base sm:text-lg font-black text-white">🎁 神秘交換驚喜？</h3>
+            <p class="text-xs text-emerald-100/90 leading-relaxed">全新升級版聖誕驚喜企劃正在緊鑼密鼓籌備中，究竟會是什麼神秘玩法？敬請期待！</p>
+          </div>
+          <div class="rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15 p-5 space-y-1.5">
+            <span class="text-[11px] font-black text-rose-300 tracking-wider">CLUE 02 · SAFETY FIRST</span>
+            <h3 class="text-base sm:text-lg font-black text-white">🛡️ 教祖無花生安全守則持續守護</h3>
+            <p class="text-xs text-emerald-100/90 leading-relaxed">無論任何節慶活動，全場嚴格執行 Peanut-Free 最高安全結界，守護親愛的教主 Yi-Hsun。</p>
+          </div>
+          <div class="rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15 p-5 space-y-1.5">
+            <span class="text-[11px] font-black text-emerald-300 tracking-wider">CLUE 03 · LIMITED SKIN</span>
+            <h3 class="text-base sm:text-lg font-black text-white">🎅 聖誕限定 Peanuto 造型即將解鎖</h3>
+            <p class="text-xs text-emerald-100/90 leading-relaxed">戴上金鈴聖誕帽的 Santa Peanuto 已降臨點數商城，快累積每日 200P 搶先兌換！</p>
+          </div>
+        </div>
+
+        <!-- Interactive Early-Bird Notification + Christmas Idea Wish Pool -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 relative z-10">
+          <!-- Left: Early-Bird Notification Signup (+30P) -->
+          <div class="lg:col-span-6 rounded-2xl bg-black/25 border border-white/15 p-6 space-y-4">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-lg font-black text-amber-300">🔔 搶先預約公開通知 (+30P)</h3>
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/25 text-emerald-200 text-xs font-black">
+                已預約 <span id="xmas-sub-count">0</span> 人
+              </span>
+            </div>
+            <p class="text-xs text-slate-200">
+              活動正式公開時第一時間接收通知！已登入的 @pnts 會員點擊預約即可獲得 <strong class="text-amber-300">+30P</strong> 獎勵。
+            </p>
+            <div class="flex flex-col sm:flex-row gap-2.5">
+              <input id="xmas-sub-name-input" type="text" placeholder="輸入英文代號（已登入會自動帶入）" class="flex-1 px-4 py-2.5 rounded-xl bg-navy-dark/90 border border-white/20 text-white text-sm focus:outline-none focus:border-amber-300" />
+              <button type="button" onclick="subscribeChristmasEarlyBird()" class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-black text-xs sm:text-sm shadow-md shrink-0 transition cursor-pointer">
+                🔔 搶先預約公開通知 (+30P)
+              </button>
+            </div>
+            <div class="space-y-1.5 pt-1">
+              <span class="text-[11px] font-bold text-emerald-200">✨ 已搶先預約信徒名單：</span>
+              <div id="xmas-sub-badges" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto"></div>
+            </div>
           </div>
 
-          <!-- Interactive RSVP Form & Live List -->
-          <div class="lg:col-span-6 space-y-5">
-            <form onsubmit="submitHalloweenRSVP(event)" class="rounded-2xl bg-white/10 border border-white/15 p-5 space-y-3.5">
-              <h3 class="text-base font-black text-white">✍️ 線上報名登記表</h3>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-[11px] font-bold text-peanut-light mb-1">參加者姓名 / @pnts 帳號</label>
-                  <input id="rsvp-name-input" type="text" required placeholder="例如：康羽安 (Anne)" class="w-full px-3.5 py-2.5 rounded-xl bg-navy-dark border border-white/15 text-white text-sm focus:outline-none focus:border-spooky-orange" />
-                </div>
-                <div>
-                  <label class="block text-[11px] font-bold text-peanut-light mb-1">零食小提示（選填）</label>
-                  <input id="rsvp-snack-input" type="text" placeholder="例如：酸甜神秘軟糖" class="w-full px-3.5 py-2.5 rounded-xl bg-navy-dark border border-white/15 text-white text-sm focus:outline-none focus:border-spooky-orange" />
-                </div>
-              </div>
-              <label class="flex items-start gap-2.5 text-xs text-rose-200 font-bold cursor-pointer select-none">
-                <input id="rsvp-safety-check" type="checkbox" required class="mt-0.5 rounded accent-spooky-orange" />
-                <span>我已確認準備之零食「完全不含花生及花生製品」，全力守護教主安全！</span>
-              </label>
-              <button type="submit" class="w-full py-3 rounded-xl bg-spooky-orange hover:bg-orange-400 text-white font-black text-sm shadow-md transition cursor-pointer">
-                🎃 送出萬聖節交換禮物報名
+          <!-- Right: Christmas Gameplay Wish Pool (+20P) -->
+          <div class="lg:col-span-6 rounded-2xl bg-black/25 border border-white/15 p-6 space-y-4">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-lg font-black text-emerald-300">🌠 聖誕玩法許願池 (+20P)</h3>
+              <span class="text-[11px] font-bold text-slate-300">投稿點子領 +20P</span>
+            </div>
+            <form onsubmit="submitChristmasIdea(event)" class="flex flex-col sm:flex-row gap-2.5">
+              <input id="xmas-idea-input" type="text" required maxlength="100" placeholder="許願你希望的聖誕活動玩法（例：聖誕盲盒、薑餅人裝飾...）" class="flex-1 px-4 py-2.5 rounded-xl bg-navy-dark/90 border border-white/20 text-white text-sm focus:outline-none focus:border-emerald-300" />
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-navy-dark font-black text-xs sm:text-sm shadow-md shrink-0 transition cursor-pointer">
+                投出許願 (+20P)
               </button>
             </form>
-
-            <!-- Live Participant List -->
-            <div class="rounded-2xl bg-navy-dark/80 border border-white/10 p-4 space-y-2.5">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-black text-peanut-caramel">👻 已報名信徒名單 (<span id="rsvp-count">0</span> 人)</span>
-                <span class="text-[11px] text-emerald-400 font-bold">✓ 皆通過無花生安全確認</span>
-              </div>
-              <div id="rsvp-live-list" class="max-h-40 overflow-y-auto space-y-1.5 pr-1"></div>
-            </div>
+            <div id="xmas-ideas-list" class="max-h-36 overflow-y-auto space-y-2 pr-1"></div>
           </div>
         </div>
       </div>
@@ -653,23 +704,23 @@
         <!-- Tier 1: 神明 -->
         <div class="flex flex-col items-center">
           <div class="w-full max-w-xs rounded-2xl bg-[#C66B49] px-6 py-4 text-center shadow-lg border border-white/15">
-            <span class="text-[10px] font-black uppercase tracking-widest text-amber-100 block">SUPREME DEITY</span>
-            <h2 class="text-xl sm:text-2xl font-black">✨ 神明 ✨</h2>
+            <span class="text-[10px] font-black uppercase tracking-widest text-amber-100 block">THE GREAT PEANUT</span>
+            <h2 class="text-xl sm:text-2xl font-black">✨ 神明 (The Great Peanut) ✨</h2>
           </div>
           <div class="w-1 h-6 bg-white/70"></div>
         </div>
 
-        <!-- Tier 2: 教祖 武意洵 -->
+        <!-- Tier 2: 教祖 Yi-Hsun -->
         <div class="flex flex-col items-center">
           <div class="w-full max-w-sm rounded-2xl bg-[#C89B6E] px-6 py-4 text-center shadow-lg border border-white/20">
             <span class="text-[10px] font-black uppercase tracking-wider text-navy-dark block">FOUNDER</span>
-            <h2 class="text-xl sm:text-2xl font-black text-white">教祖 · 武意洵 (Yi-Hsun)</h2>
+            <h2 class="text-xl sm:text-2xl font-black text-white">教祖 · Yi-Hsun</h2>
           </div>
           <div class="w-full max-w-3xl h-6 border-t-2 border-x-2 border-white/60 rounded-t-xl mt-2 hidden md:block"></div>
           <div class="w-1 h-5 bg-white/60 md:hidden"></div>
         </div>
 
-        <!-- Tier 3: 3 Pillars -->
+        <!-- Tier 3: 3 Pillars (English Names Only) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <!-- Pillar 1: 副教祖 -->
           <div class="rounded-2xl bg-[#C89B6E] p-6 shadow-lg space-y-4">
@@ -677,23 +728,23 @@
             <ul class="space-y-2.5 text-sm sm:text-base font-bold">
               <li class="flex items-center gap-3 bg-white/10 rounded-xl px-3.5 py-2">
                 <span class="w-7 h-7 shrink-0" data-org-peanut="#A594F9"></span>
-                <span>康羽安 (Anne)</span>
+                <span>Anne</span>
               </li>
               <li class="flex items-center gap-3 bg-white/10 rounded-xl px-3.5 py-2">
                 <span class="w-7 h-7 shrink-0" data-org-peanut="#5C7AEA"></span>
-                <span>張瑄芮 (Mei)</span>
+                <span>Mei</span>
               </li>
               <li class="flex items-center gap-3 bg-white/10 rounded-xl px-3.5 py-2">
                 <span class="w-7 h-7 shrink-0" data-org-peanut="#B8C0FF"></span>
-                <span>陳立恆 (Bella)</span>
+                <span>Bella</span>
               </li>
               <li class="flex items-center gap-3 bg-white/10 rounded-xl px-3.5 py-2">
                 <span class="w-7 h-7 shrink-0" data-org-peanut="#D4A3A3"></span>
-                <span>陳思語 (Heng)</span>
+                <span>Heng</span>
               </li>
               <li class="flex items-center gap-3 bg-white/10 rounded-xl px-3.5 py-2">
                 <span class="w-7 h-7 shrink-0" data-org-peanut="#E63946"></span>
-                <span>脈脈!? (Myaku Myaku)</span>
+                <span>Myaku Myaku!?</span>
               </li>
             </ul>
           </div>
@@ -704,15 +755,15 @@
             <div class="space-y-3.5">
               <div class="rounded-xl bg-white/15 p-4 text-center">
                 <span class="text-sm font-black text-amber-100 block">🧩 活動組</span>
-                <span class="text-lg font-black">蕭于軒</span>
+                <span class="text-lg font-black">Spencer</span>
               </div>
               <div class="rounded-xl bg-white/15 p-4 text-center">
                 <span class="text-sm font-black text-amber-100 block">💻 資訊組</span>
-                <span class="text-lg font-black">陳立恆</span>
+                <span class="text-lg font-black">Heng</span>
               </div>
               <div class="rounded-xl bg-white/15 p-4 text-center">
                 <span class="text-sm font-black text-amber-100 block">🎁 供品組</span>
-                <span class="text-lg font-black">康羽安</span>
+                <span class="text-lg font-black">Anne</span>
               </div>
             </div>
           </div>
@@ -721,16 +772,16 @@
           <div class="rounded-2xl bg-[#C89B6E] p-6 shadow-lg space-y-4">
             <h3 class="text-2xl font-black text-center pb-3 border-b border-white/25">教徒</h3>
             <ul class="space-y-1.5 text-sm font-bold">
-              <li class="bg-white/10 rounded-lg px-3 py-1.5">• 郭昕穎 (Jerry)</li>
-              <li class="bg-white/10 rounded-lg px-3 py-1.5">• 蕭于軒 (Nathan)</li>
-              <li class="bg-white/10 rounded-lg px-3 py-1.5">• 游智鈞 (Spencer)</li>
-              <li class="bg-white/10 rounded-lg px-3 py-1.5">• 廖翊伶 (Brian)</li>
-              <li class="bg-white/10 rounded-lg px-3 py-1.5">• 王子悅 (Eunice)</li>
-              <li class="bg-white/10 rounded-lg px-3 py-1.5">• 郭睿杰 (Charity)</li>
-              <li class="bg-white/10 rounded-lg px-3 py-1.5">• 洪家瑩 (Kiwi)</li>
-              <li class="bg-white/10 rounded-lg px-3 py-1.5">• 李思丞 (Alissa)</li>
-              <li class="bg-white/10 rounded-lg px-3 py-1.5">• 陳楚茜 (ELAINE)</li>
-              <li class="bg-white/10 rounded-lg px-3 py-1.5">• 林品漢 老師 (品漢)</li>
+              <li class="bg-white/10 rounded-lg px-3 py-1.5">• Jerry</li>
+              <li class="bg-white/10 rounded-lg px-3 py-1.5">• Nathan</li>
+              <li class="bg-white/10 rounded-lg px-3 py-1.5">• Spencer</li>
+              <li class="bg-white/10 rounded-lg px-3 py-1.5">• Brian</li>
+              <li class="bg-white/10 rounded-lg px-3 py-1.5">• Eunice</li>
+              <li class="bg-white/10 rounded-lg px-3 py-1.5">• Charity</li>
+              <li class="bg-white/10 rounded-lg px-3 py-1.5">• Kiwi</li>
+              <li class="bg-white/10 rounded-lg px-3 py-1.5">• Alissa</li>
+              <li class="bg-white/10 rounded-lg px-3 py-1.5">• ELAINE</li>
+              <li class="bg-white/10 rounded-lg px-3 py-1.5">• Hank</li>
               <li class="bg-white/10 rounded-lg px-3 py-1.5">• Xiann</li>
             </ul>
           </div>
@@ -746,7 +797,7 @@
             <button onclick="setMemberFilter('CADRE')" data-mfilter="CADRE" class="mfilter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white border border-peanut-light text-slate-700 cursor-pointer">組織幹部</button>
             <button onclick="setMemberFilter('BELIEVERS')" data-mfilter="BELIEVERS" class="mfilter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white border border-peanut-light text-slate-700 cursor-pointer">核心教徒</button>
           </div>
-          <input id="member-search-input" oninput="renderMemberDirectory()" type="text" placeholder="搜尋中文姓名、英文代號或組別..." class="px-4 py-2.5 rounded-xl bg-white border border-peanut-light text-sm focus:outline-none focus:border-peanut-caramel w-full md:w-72" />
+          <input id="member-search-input" oninput="renderMemberDirectory()" type="text" placeholder="搜尋成員英文代號或組別..." class="px-4 py-2.5 rounded-xl bg-white border border-peanut-light text-sm focus:outline-none focus:border-peanut-caramel w-full md:w-72" />
         </div>
 
         <div id="member-cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
@@ -910,9 +961,9 @@
             <span class="text-[11px] font-black text-peanut-caramel">EARTH-804</span>
             <h2 class="font-black text-base mt-0.5">創世校園宇宙</h2>
           </button>
-          <button onclick="switchParallelUniverse('u1030')" data-u="u1030" class="u-btn text-left rounded-2xl bg-white/5 border border-white/10 p-4 transition cursor-pointer">
-            <span class="text-[11px] font-black text-orange-400">EARTH-1030</span>
-            <h2 class="font-black text-base mt-0.5">萬聖南瓜宇宙</h2>
+          <button onclick="switchParallelUniverse('u1225')" data-u="u1225" class="u-btn text-left rounded-2xl bg-white/5 border border-white/10 p-4 transition cursor-pointer">
+            <span class="text-[11px] font-black text-red-400">EARTH-1225</span>
+            <h2 class="font-black text-base mt-0.5">聖誕奇蹟宇宙</h2>
           </button>
           <button onclick="switchParallelUniverse('u3417')" data-u="u3417" class="u-btn text-left rounded-2xl bg-white/5 border border-white/10 p-4 transition cursor-pointer">
             <span class="text-[11px] font-black text-sky-300">EARTH-3417</span>
@@ -960,6 +1011,7 @@
                 <label class="block text-xs font-bold text-peanut-light mb-2">1. 選擇花生寶寶服裝造型</label>
                 <div class="flex flex-wrap gap-2">
                   <button onclick="setCustomOutfit('classic')" data-coutfit="classic" class="coutfit-btn px-3.5 py-2 rounded-xl text-xs font-black bg-peanut-caramel text-navy-dark cursor-pointer">經典肚兜</button>
+                  <button onclick="setCustomOutfit('santa')" data-coutfit="santa" class="coutfit-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-white cursor-pointer">🎄 聖誕老公公</button>
                   <button onclick="setCustomOutfit('sprout')" data-coutfit="sprout" class="coutfit-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-white cursor-pointer">嫩芽抱花生</button>
                   <button onclick="setCustomOutfit('witch')" data-coutfit="witch" class="coutfit-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-white cursor-pointer">萬聖巫師</button>
                   <button onclick="setCustomOutfit('pumpkin')" data-coutfit="pumpkin" class="coutfit-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-white cursor-pointer">南瓜幽靈</button>
@@ -1077,9 +1129,9 @@
               <div class="relative z-10 my-7 flex items-center gap-5">
                 <div id="dash-avatar-box" class="w-24 h-24 rounded-2xl bg-white/15 border border-white/25 p-2 shrink-0"></div>
                 <div class="space-y-1">
-                  <p id="dash-cn-name" class="text-2xl sm:text-3xl font-black">武意洵</p>
-                  <p id="dash-en-name" class="text-base font-bold text-peanut-light">Yi-Hsun</p>
-                  <p id="dash-dept-title" class="text-xs opacity-85">花生教最高教祖</p>
+                  <p id="dash-en-name" class="text-2xl sm:text-3xl font-black">Yi-Hsun</p>
+                  <p id="dash-dept-title" class="text-sm font-bold text-peanut-light">最高領袖 · 教祖</p>
+                  <p class="text-xs opacity-75">804 International Peanut Org. Official Member</p>
                 </div>
               </div>
 
@@ -1182,10 +1234,10 @@
             </div>
           </div>
 
-          <!-- 3. Manage Halloween Gift Exchange Signups -->
+          <!-- 3. Manage Christmas Early-Bird Subscribers -->
           <div class="rounded-2xl bg-white border border-amber-200 p-5 space-y-3">
-            <h4 class="text-sm font-black text-navy">🎃 萬聖節交換禮物報名管理</h4>
-            <div id="admin-rsvp-list" class="space-y-2"></div>
+            <h4 class="text-sm font-black text-navy">🎄 聖誕節活動搶先預約名單管理</h4>
+            <div id="admin-xmas-list" class="space-y-2"></div>
           </div>
         </div>
       </div>
@@ -1261,26 +1313,26 @@
   ========================================================= -->
   <script>
     /* =========================================================================
-       1. EXACT 17-MEMBER CREDENTIAL & ORG DATABASE
+       1. EXACT 17-MEMBER CREDENTIAL & ORG DATABASE (ENGLISH NAMES ONLY)
     ========================================================================= */
     const IPO_MEMBERS = [
-      { account: '14072@pnts', password: '676767', role: '教祖', name: 'Yi-Hsun', chineseName: '武意洵', dept: '最高領袖 · 教祖', color: '#D8A46F' },
-      { account: '14021@pnts', password: '958473', role: '副教祖', name: 'Anne', chineseName: '康羽安', dept: '副教祖 · 供品組組長', color: '#A594F9' },
-      { account: '14030@pnts', password: '387233', role: '副教祖', name: 'Mei', chineseName: '張瑄芮', dept: '副教祖', color: '#5C7AEA' },
-      { account: '14083@pnts', password: '573728', role: '副教祖', name: 'Bella', chineseName: '陳立恆', dept: '副教祖 · 資訊組組長', color: '#B8C0FF' },
-      { account: '14093@pnts', password: '216761', role: '副教祖', name: 'Heng', chineseName: '陳思語', dept: '副教祖', color: '#D4A3A3' },
-      { account: 'testm@pnts', password: 'pntexpo2025', role: '副教祖', name: 'Myaku Myaku', chineseName: '脈脈!?', dept: '副教祖 · 萬博跨次元特使', color: '#E63946' },
-      { account: '14133@pnts', password: '732892', role: '信徒', name: 'Jerry', chineseName: '郭昕穎', dept: '核心教徒', color: '#6A994E' },
-      { account: '14171@pnts', password: '847231', role: '信徒', name: 'Nathan', chineseName: '蕭于軒', dept: '核心教徒 · 活動組組長', color: '#81B29A' },
-      { account: '14120@pnts', password: '435627', role: '信徒', name: 'Spencer', chineseName: '游智鈞', dept: '核心教徒', color: '#E07A5F' },
-      { account: '14036@pnts', password: '637892', role: '信徒', name: 'Brian', chineseName: '廖翊伶', dept: '核心教徒', color: '#457B9D' },
-      { account: '14130@pnts', password: '958439', role: '信徒', name: 'Eunice', chineseName: '王子悅', dept: '核心教徒', color: '#F2CC8F' },
-      { account: '14243@pnts', password: '843723', role: '信徒', name: 'Charity', chineseName: '郭睿杰', dept: '核心教徒', color: '#9B5DE5' },
-      { account: '14190@pnts', password: '463783', role: '信徒', name: 'Kiwi', chineseName: '洪家瑩', dept: '核心教徒', color: '#52B788' },
-      { account: '14168@pnts', password: '738290', role: '信徒', name: 'Alissa', chineseName: '李思丞', dept: '核心教徒', color: '#F4A261' },
-      { account: '14177@pnts', password: '362783', role: '信徒', name: 'ELAINE', chineseName: '陳楚茜', dept: '核心教徒', color: '#48CAE4' },
-      { account: 'hank@pnts', password: '293023', role: '信徒', name: '品漢', chineseName: '林品漢 老師', dept: '核心教徒 · 指導老師', color: '#2A9D8F' },
-      { account: '14040@pnts', password: '452678', role: '信徒', name: 'Xiann', chineseName: 'Xiann', dept: '核心教徒', color: '#BC6C25' }
+      { account: '14072@pnts', password: '676767', role: '教祖', name: 'Yi-Hsun', dept: '最高領袖 · 教祖', color: '#D8A46F' },
+      { account: '14021@pnts', password: '958473', role: '副教祖', name: 'Anne', dept: '副教祖 · 供品組組長', color: '#A594F9' },
+      { account: '14030@pnts', password: '387233', role: '副教祖', name: 'Mei', dept: '副教祖', color: '#5C7AEA' },
+      { account: '14083@pnts', password: '573728', role: '副教祖', name: 'Bella', dept: '副教祖', color: '#B8C0FF' },
+      { account: '14093@pnts', password: '216761', role: '副教祖', name: 'Heng', dept: '副教祖 · 資訊組組長', color: '#D4A3A3' },
+      { account: 'testm@pnts', password: 'pntexpo2025', role: '副教祖', name: 'Myaku Myaku', dept: '副教祖 · 萬博跨次元特使', color: '#E63946' },
+      { account: '14133@pnts', password: '732892', role: '信徒', name: 'Jerry', dept: '核心教徒', color: '#6A994E' },
+      { account: '14171@pnts', password: '847231', role: '信徒', name: 'Nathan', dept: '核心教徒', color: '#81B29A' },
+      { account: '14120@pnts', password: '435627', role: '信徒', name: 'Spencer', dept: '核心教徒 · 活動組組長', color: '#E07A5F' },
+      { account: '14036@pnts', password: '637892', role: '信徒', name: 'Brian', dept: '核心教徒', color: '#457B9D' },
+      { account: '14130@pnts', password: '958439', role: '信徒', name: 'Eunice', dept: '核心教徒', color: '#F2CC8F' },
+      { account: '14243@pnts', password: '843723', role: '信徒', name: 'Charity', dept: '核心教徒', color: '#9B5DE5' },
+      { account: '14190@pnts', password: '463783', role: '信徒', name: 'Kiwi', dept: '核心教徒', color: '#52B788' },
+      { account: '14168@pnts', password: '738290', role: '信徒', name: 'Alissa', dept: '核心教徒', color: '#F4A261' },
+      { account: '14177@pnts', password: '362783', role: '信徒', name: 'ELAINE', dept: '核心教徒', color: '#48CAE4' },
+      { account: 'hank@pnts', password: '293023', role: '信徒', name: 'Hank', dept: '核心教徒 · 指導老師', color: '#2A9D8F' },
+      { account: '14040@pnts', password: '452678', role: '信徒', name: 'Xiann', dept: '核心教徒', color: '#BC6C25' }
     ];
 
     /* =========================================================================
@@ -1306,31 +1358,60 @@
       ` : '';
 
       if (variant === 'classic') {
-        return `<svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-xs">
+        return `<svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-sm">
           ${shellBase}
-            <rect x="31" y="45" width="58" height="32" rx="12" fill="${bandColor}" stroke="rgba(0,0,0,0.08)" stroke-width="1.5"/>
-            <circle cx="50" cy="58" r="2.7" fill="#19232E"/>
-            <circle cx="70" cy="58" r="2.7" fill="#19232E"/>
-            <path d="M56 64 Q60 68 64 64" stroke="#19232E" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <rect x="30" y="46" width="60" height="32" rx="13" fill="${bandColor}" stroke="rgba(0,0,0,0.08)" stroke-width="1.5"/>
+            <circle cx="51" cy="60" r="2.6" fill="#233140"/>
+            <circle cx="69" cy="60" r="2.6" fill="#233140"/>
+            <path d="M56 65 Q60 69 64 65" stroke="#233140" stroke-width="2.1" fill="none" stroke-linecap="round"/>
             ${glassesMarkup}
           </g>
         </svg>`;
       }
 
       if (variant === 'sprout') {
-        return `<svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-xs">
-          <path d="M60 28 C58 18 46 12 38 18 C44 26 54 28 60 28 Z" fill="#2D6A4F"/>
-          <path d="M60 28 C62 18 74 12 82 18 C76 26 66 28 60 28 Z" fill="#52B788"/>
-          <path d="M60 32 L60 24" stroke="#1B4332" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="60" cy="64" r="34" fill="#E5B97B" stroke="#C48B52" stroke-width="2.5"/>
-          <circle cx="60" cy="66" r="25" fill="#FDF8F0"/>
-          <circle cx="50" cy="64" r="3.5" fill="#233140"/>
-          <circle cx="70" cy="64" r="3.5" fill="#233140"/>
-          <ellipse cx="44" cy="70" rx="4" ry="2.4" fill="#F4A261" opacity="0.65"/>
-          <ellipse cx="76" cy="70" rx="4" ry="2.4" fill="#F4A261" opacity="0.65"/>
-          <path d="M56 70 Q60 74 64 70" stroke="#233140" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          <g transform="translate(46, 75) rotate(-22)">
-            <rect x="0" y="5" width="32" height="19" rx="9.5" fill="#D8A46F" stroke="#A66E38" stroke-width="2"/>
+        return `<svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-md">
+          ${shellBase}
+            <rect x="31" y="48" width="58" height="28" rx="12" fill="#84A98C"/>
+            <circle cx="51" cy="61" r="2.6" fill="#19232E"/>
+            <circle cx="69" cy="61" r="2.6" fill="#19232E"/>
+            <path d="M56 66 Q60 70 64 66" stroke="#19232E" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+          </g>
+          <!-- Twin Green Sprout Leaves -->
+          <path d="M74 22 C74 10 88 6 94 14 C88 22 78 24 74 22 Z" fill="#52B788"/>
+          <path d="M74 22 C66 12 54 12 52 20 C60 26 70 25 74 22 Z" fill="#74C69D"/>
+          <path d="M74 22 L72 30" stroke="#2D6A4F" stroke-width="2.4" stroke-linecap="round"/>
+        </svg>`;
+      }
+
+      if (variant === 'santa') {
+        return `<svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-md">
+          <!-- Twinkling Stars & Snowflakes -->
+          <circle cx="16" cy="26" r="2.2" fill="#FDE68A"/>
+          <circle cx="104" cy="22" r="2.5" fill="#FFFFFF"/>
+          <circle cx="106" cy="88" r="2" fill="#FDE68A"/>
+          <path d="M18 82 L18 90 M14 86 L22 86" stroke="#E0F2FE" stroke-width="1.8" stroke-linecap="round"/>
+          ${shellBase}
+            <!-- Festive Red Coat Band -->
+            <rect x="31" y="48" width="58" height="30" rx="12" fill="#DC2626"/>
+            <rect x="56" y="48" width="8" height="30" fill="#FFFFFF"/>
+            <circle cx="51" cy="61" r="2.7" fill="#19232E"/>
+            <circle cx="69" cy="61" r="2.7" fill="#19232E"/>
+            <path d="M56 66 Q60 70 64 66" stroke="#19232E" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          </g>
+          <!-- Red & White Santa Hat with Golden Bell -->
+          <g transform="translate(50, 2) rotate(18)">
+            <path d="M8 28 C12 8 34 4 46 16 L36 28 Z" fill="#DC2626"/>
+            <rect x="4" y="24" width="38" height="8" rx="4" fill="#FFFFFF"/>
+            <circle cx="47" cy="17" r="5" fill="#FBBF24" stroke="#B45309" stroke-width="1.2"/>
+            <circle cx="47" cy="18.5" r="1.3" fill="#78350F"/>
+          </g>
+          <!-- Wrapped Holiday Gift Box -->
+          <g transform="translate(64, 72) rotate(-8)">
+            <rect x="0" y="6" width="28" height="24" rx="5" fill="#15803D" stroke="#FFFFFF" stroke-width="1.5"/>
+            <rect x="11.5" y="6" width="5" height="24" fill="#FBBF24"/>
+            <rect x="0" y="15.5" width="28" height="5" fill="#FBBF24"/>
+            <path d="M14 6 C9 0 4 3 11 6 M14 6 C19 0 24 3 17 6" stroke="#FBBF24" stroke-width="2.2" fill="none"/>
           </g>
         </svg>`;
       }
@@ -1391,7 +1472,6 @@
 
       if (variant === 'myaku') {
         return `<svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-md">
-          <!-- Red & Blue Expo Ring Tribute -->
           <circle cx="60" cy="60" r="46" fill="none" stroke="#E63946" stroke-width="7" stroke-dasharray="18 8"/>
           <circle cx="60" cy="60" r="46" fill="none" stroke="#1D4ED8" stroke-width="7" stroke-dasharray="8 18" stroke-dashoffset="9"/>
           ${shellBase}
@@ -1413,20 +1493,21 @@
       SESSION: 'ipo_mp_session',
       PROFILES: 'ipo_mp_profiles',
       ANNOUNCEMENT: 'ipo_mp_announcement',
-      RSVP: 'ipo_mp_halloween_rsvp',
+      XMAS_EARLYBIRD: 'ipo_mp_xmas_earlybird',
+      XMAS_IDEAS: 'ipo_mp_xmas_ideas',
       WISHES: 'ipo_mp_wishes',
       ESG_COUNT: 'ipo_mp_esg_count'
     };
 
-    const DEFAULT_ANNOUNCEMENT = '即日起~11/30 公告：登入系統網址已升級為 IPO v2.0 會員系統，每天登入領 200P！';
+    const DEFAULT_ANNOUNCEMENT = '🎄 最新公告：2026 萬聖節活動已圓滿落幕！花生教聖誕節特別企劃即將公開（Coming Soon），每日登入領 200P！';
 
     const SKIN_SHOP = [
-      { id: 'classic', name: '經典原味', price: 0, variant: 'classic', band: '#FFFFFF', desc: '最純粹的 804 經典白肚兜造型' },
-      { id: 'witch', name: '萬聖巫師', price: 200, variant: 'witch', band: '#7C3AED', desc: '萬聖夜限定 BOO! 黑紫巫師帽' },
-      { id: 'pumpkin', name: '南瓜小幽靈', price: 200, variant: 'pumpkin', band: '#F97316', desc: '俏皮南瓜頭蓋萬聖幽靈造型' },
-      { id: 'esg', name: 'ESG 森林綠葉', price: 300, variant: 'esg', band: '#2D6A4F', desc: '守護二手考卷再生的永續大使' },
-      { id: 'cosmic', name: '宇宙太空人', price: 400, variant: 'cosmic', band: '#4F46E5', desc: '裝備量子頭盔探索多重宇宙' },
-      { id: 'myaku', name: '脈脈聯名限定', price: 500, variant: 'myaku', band: '#E63946', desc: '致敬紅藍細胞環的跨次元聯名款' }
+      { id: 'classic', name: 'Classic 原味經典', price: 0, variant: 'classic', band: '#FFFFFF', desc: '最純粹的 804 經典白肚兜造型' },
+      { id: 'santa', name: 'Santa 聖誕老公公 [NEW]', price: 200, variant: 'santa', band: '#DC2626', desc: '金鈴聖誕帽＋禮物盒歲末限定款' },
+      { id: 'cosmic', name: 'Space 宇宙太空人', price: 300, variant: 'cosmic', band: '#4F46E5', desc: '裝備量子頭盔探索多重宇宙' },
+      { id: 'esg', name: 'ESG 永續綠葉徽章', price: 250, variant: 'esg', band: '#2D6A4F', desc: '守護二手考卷再生的永續大使' },
+      { id: 'myaku', name: 'VIP 尊爵脈脈聯名', price: 400, variant: 'myaku', band: '#E63946', desc: '致敬紅藍細胞環的跨次元聯名款' },
+      { id: 'pumpkin', name: '2026 萬聖南瓜紀念款', price: 200, variant: 'pumpkin', band: '#F97316', desc: '紀念 2026.10.30 圓滿落幕的萬聖典藏' }
     ];
 
     function getTodayStr() {
@@ -1452,10 +1533,12 @@
       const member = IPO_MEMBERS.find(m => m.account === account);
       if (!all[account]) {
         all[account] = {
-          points: 500, // Starts at 500P for new logins as specified
+          points: 500,
           lastCheckin: '',
           lastFortune: '',
           lastEsgPledge: '',
+          lastXmasSub: false,
+          lastXmasIdea: '',
           unlockedSkins: ['classic'],
           equippedVariant: 'classic',
           equippedBand: member ? member.color : '#6B8E55'
@@ -1588,42 +1671,41 @@
     }
 
     /* =========================================================================
-       6. PAGE 1 INTERACTIONS: HERO CAROUSEL, ORACLE, HALLOWEEN RSVP
+       6. PAGE 1 INTERACTIONS: 3-SLIDE HERO CAROUSEL, ORACLE & XMAS BILLBOARD
     ========================================================================= */
     let heroIndex = 0;
     let heroTimer = null;
 
     function setHeroSlide(idx) {
       heroIndex = idx;
-      const s0 = document.getElementById('hero-slide-0');
-      const s1 = document.getElementById('hero-slide-1');
-      const d0 = document.getElementById('hero-dot-0');
-      const d1 = document.getElementById('hero-dot-1');
-      if (idx === 0) {
-        s0.classList.remove('hidden'); s0.classList.add('flex');
-        s1.classList.add('hidden'); s1.classList.remove('flex');
-        d0.className = 'w-6 h-2 rounded-full bg-peanut-caramel transition-all cursor-pointer';
-        d1.className = 'w-2.5 h-2 rounded-full bg-white/40 transition-all cursor-pointer';
-      } else {
-        s1.classList.remove('hidden'); s1.classList.add('flex');
-        s0.classList.add('hidden'); s0.classList.remove('flex');
-        d1.className = 'w-6 h-2 rounded-full bg-spooky-orange transition-all cursor-pointer';
-        d0.className = 'w-2.5 h-2 rounded-full bg-white/40 transition-all cursor-pointer';
+      const dotColors = ['bg-red-400', 'bg-peanut-caramel', 'bg-emerald-400'];
+      for (let i = 0; i < 3; i++) {
+        const slide = document.getElementById(`hero-slide-${i}`);
+        const dot = document.getElementById(`hero-dot-${i}`);
+        if (i === idx) {
+          slide.classList.remove('hidden');
+          slide.classList.add('flex');
+          dot.className = `w-6 h-2 rounded-full ${dotColors[i]} transition-all cursor-pointer`;
+        } else {
+          slide.classList.add('hidden');
+          slide.classList.remove('flex');
+          dot.className = 'w-2.5 h-2 rounded-full bg-white/40 transition-all cursor-pointer';
+        }
       }
     }
 
-    function nextHeroSlide() { setHeroSlide((heroIndex + 1) % 2); }
-    function prevHeroSlide() { setHeroSlide((heroIndex + 1) % 2); }
+    function nextHeroSlide() { setHeroSlide((heroIndex + 1) % 3); }
+    function prevHeroSlide() { setHeroSlide((heroIndex + 2) % 3); }
     function pauseHeroCarousel() { if (heroTimer) clearInterval(heroTimer); }
     function resumeHeroCarousel() {
       pauseHeroCarousel();
       heroTimer = setInterval(nextHeroSlide, 6000);
     }
 
-    function scrollToHalloweenSection() {
+    function scrollToChristmasSection() {
       navigateTo('#/home');
       setTimeout(() => {
-        const el = document.getElementById('home-halloween-section');
+        const el = document.getElementById('home-christmas-section');
         if (el) el.scrollIntoView({ behavior: 'smooth' });
       }, 80);
     }
@@ -1649,72 +1731,134 @@
       }, 380);
     }
 
-    // Halloween RSVP storage & rendering
-    function getHalloweenList() {
+    // Christmas Early-Bird Notification & Idea Wish Pool
+    function getChristmasSubscribers() {
       try {
-        const raw = localStorage.getItem(KEYS.RSVP);
+        const raw = localStorage.getItem(KEYS.XMAS_EARLYBIRD);
         if (raw) return JSON.parse(raw);
       } catch (e) {}
       return [
-        { id: 1, name: '康羽安 (Anne)', snack: '抹茶白巧克力餅乾（無花生）' },
-        { id: 2, name: '陳立恆 (Bella)', snack: '超酸檸檬軟糖（無花生）' }
+        { id: 1, name: 'Yi-Hsun', role: '教祖' },
+        { id: 2, name: 'Anne', role: '副教祖' },
+        { id: 3, name: 'Nathan', role: '信徒' }
       ];
     }
 
-    function saveHalloweenList(list) {
-      try { localStorage.setItem(KEYS.RSVP, JSON.stringify(list)); } catch (e) {}
+    function saveChristmasSubscribers(list) {
+      try { localStorage.setItem(KEYS.XMAS_EARLYBIRD, JSON.stringify(list)); } catch (e) {}
     }
 
-    function renderHalloweenList() {
-      const list = getHalloweenList();
-      document.getElementById('rsvp-count').textContent = list.length;
-      const box = document.getElementById('rsvp-live-list');
-      box.innerHTML = list.map(item => `
-        <div class="flex items-center justify-between gap-2 rounded-xl bg-white/5 px-3 py-2 text-xs">
-          <span class="font-bold text-white">🎃 ${escapeHTML(item.name)}</span>
-          <span class="text-slate-300 truncate">${escapeHTML(item.snack || '神秘無花生零食')}</span>
-        </div>
+    function renderChristmasBillboard() {
+      const subs = getChristmasSubscribers();
+      document.getElementById('xmas-sub-count').textContent = subs.length;
+      document.getElementById('xmas-sub-badges').innerHTML = subs.map(s => `
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-[11px] font-bold text-white">
+          🎄 ${escapeHTML(s.name)}
+        </span>
       `).join('');
 
-      // Also update Admin table if visible
-      const adminBox = document.getElementById('admin-rsvp-list');
+      const adminBox = document.getElementById('admin-xmas-list');
       if (adminBox) {
-        adminBox.innerHTML = list.length === 0
-          ? '<p class="text-xs text-slate-400">目前尚無報名資料。</p>'
-          : list.map(item => `
+        adminBox.innerHTML = subs.length === 0
+          ? '<p class="text-xs text-slate-400">目前尚無預約資料。</p>'
+          : subs.map(s => `
             <div class="flex items-center justify-between gap-2 rounded-xl bg-peanut-cream px-3 py-2 text-xs">
               <div>
-                <span class="font-black text-navy">${escapeHTML(item.name)}</span>
-                <span class="text-slate-500 ml-2">備註：${escapeHTML(item.snack || '無')}</span>
+                <span class="font-black text-navy">🎄 ${escapeHTML(s.name)}</span>
+                <span class="ml-2 px-2 py-0.5 rounded-md bg-peanut-sand text-peanut-deep font-bold">${escapeHTML(s.role || '信徒')}</span>
               </div>
-              <button onclick="removeHalloweenEntry(${item.id})" class="px-2.5 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold cursor-pointer">移除</button>
+              <button onclick="removeXmasSubscriber(${s.id})" class="px-2.5 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold cursor-pointer">移除</button>
             </div>
           `).join('');
       }
+
+      const ideas = getChristmasIdeas();
+      document.getElementById('xmas-ideas-list').innerHTML = ideas.map(item => `
+        <div class="rounded-xl bg-white/10 px-3.5 py-2 text-xs flex items-center justify-between gap-2">
+          <span class="text-white"><strong class="text-amber-300">${escapeHTML(item.author)}</strong>：${escapeHTML(item.text)}</span>
+          <span class="text-[10px] text-emerald-200 shrink-0">✨ 許願</span>
+        </div>
+      `).join('');
     }
 
-    function submitHalloweenRSVP(e) {
+    function subscribeChristmasEarlyBird() {
+      const member = getLoggedInMember();
+      const input = document.getElementById('xmas-sub-name-input');
+      const displayName = member ? member.name : input.value.trim();
+
+      if (!displayName) {
+        showToast('請輸入英文代號或先登入 @pnts 會員帳號！', 'warning');
+        return;
+      }
+
+      const subs = getChristmasSubscribers();
+      const alreadyExists = subs.some(s => s.name.toLowerCase() === displayName.toLowerCase());
+      if (!alreadyExists) {
+        subs.unshift({ id: Date.now(), name: displayName, role: member ? member.role : '訪客' });
+        saveChristmasSubscribers(subs);
+      }
+
+      if (member) {
+        const prof = getMemberProfile(member.account);
+        if (!prof.lastXmasSub) {
+          mutateMemberProfile(member.account, p => ({ ...p, points: p.points + 30, lastXmasSub: true }));
+          syncHeaderAuth();
+          renderChristmasBillboard();
+          showToast(`🎄 ${displayName} 已搶先預約聖誕公開通知！獲得 +30P 獎勵！`, 'success');
+          return;
+        }
+      }
+
+      input.value = '';
+      renderChristmasBillboard();
+      showToast(`🎄 ${displayName} 已加入聖誕節特別企劃搶先通知名單！`, 'success');
+    }
+
+    function removeXmasSubscriber(id) {
+      const updated = getChristmasSubscribers().filter(x => x.id !== id);
+      saveChristmasSubscribers(updated);
+      renderChristmasBillboard();
+      showToast('已移除該筆聖誕預約紀錄。', 'info');
+    }
+
+    function getChristmasIdeas() {
+      try {
+        const raw = localStorage.getItem(KEYS.XMAS_IDEAS);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return [
+        { id: 1, author: 'Anne', text: '希望有聖誕限定無花生薑餅人與熱可可派對！' },
+        { id: 2, author: 'Heng', text: '聖誕秘密任務抽卡＋限定 Santa Peanuto 徽章！' }
+      ];
+    }
+
+    function submitChristmasIdea(e) {
       e.preventDefault();
-      const nameInput = document.getElementById('rsvp-name-input');
-      const snackInput = document.getElementById('rsvp-snack-input');
-      const name = nameInput.value.trim();
-      if (!name) return;
+      const input = document.getElementById('xmas-idea-input');
+      const text = input.value.trim();
+      if (!text) return;
 
-      const list = getHalloweenList();
-      list.unshift({ id: Date.now(), name, snack: snackInput.value.trim() || '神秘無花生零食' });
-      saveHalloweenList(list);
-      nameInput.value = '';
-      snackInput.value = '';
-      document.getElementById('rsvp-safety-check').checked = false;
-      renderHalloweenList();
-      showToast(`🎃 報名成功！感謝 ${name} 遵守無花生安全守則！`, 'success');
-    }
+      const member = getLoggedInMember();
+      const author = member ? member.name : '804 Guest';
+      const ideas = getChristmasIdeas();
+      ideas.unshift({ id: Date.now(), author, text });
+      localStorage.setItem(KEYS.XMAS_IDEAS, JSON.stringify(ideas));
+      input.value = '';
 
-    function removeHalloweenEntry(id) {
-      const updated = getHalloweenList().filter(x => x.id !== id);
-      saveHalloweenList(updated);
-      renderHalloweenList();
-      showToast('已移除該筆萬聖節報名紀錄。', 'info');
+      if (member) {
+        const today = getTodayStr();
+        const prof = getMemberProfile(member.account);
+        if (prof.lastXmasIdea !== today) {
+          mutateMemberProfile(member.account, p => ({ ...p, points: p.points + 20, lastXmasIdea: today }));
+          syncHeaderAuth();
+          renderChristmasBillboard();
+          showToast('🌠 聖誕玩法許願投稿成功！獲得 +20P 獎勵！', 'success');
+          return;
+        }
+      }
+
+      renderChristmasBillboard();
+      showToast('🌠 您的聖誕玩法點子已成功投進許願池！', 'success');
     }
 
     /* =========================================================================
@@ -1777,7 +1921,7 @@
         if (activeMemberFilter === 'CADRE' && !m.dept.includes('組長')) return false;
         if (activeMemberFilter === 'BELIEVERS' && m.role !== '信徒') return false;
         if (query) {
-          const hay = `${m.chineseName} ${m.name} ${m.role} ${m.dept}`.toLowerCase();
+          const hay = `${m.name} ${m.role} ${m.dept}`.toLowerCase();
           if (!hay.includes(query)) return false;
         }
         return true;
@@ -1789,7 +1933,7 @@
           <div class="w-12 h-12 rounded-xl bg-peanut-cream p-1 shrink-0">${renderPeanutoSVG('classic', m.color)}</div>
           <div class="min-w-0">
             <span class="px-2 py-0.5 rounded-md text-[10px] font-black ${getRoleBadgeClass(m.role)}">${m.role}</span>
-            <h4 class="font-black text-navy text-base truncate mt-1">${m.chineseName} <span class="text-xs font-bold text-slate-400">${m.name}</span></h4>
+            <h4 class="font-black text-navy text-base truncate mt-1">${m.name}</h4>
             <p class="text-[11px] text-slate-500 truncate">${m.dept}</p>
           </div>
         </div>
@@ -1835,18 +1979,18 @@
         band: '#D8A46F',
         bg: 'from-[#1E293B] via-[#27364F] to-[#1E293B]'
       },
-      u1030: {
-        code: 'EARTH-1030',
-        title: 'Earth-1030 萬聖南瓜宇宙',
-        lore: '永恆萬聖夜次元！所有糖果零食皆通過無花生結界守護，巫師與南瓜花生寶寶在此舉辦狂歡交換派對。',
-        variant: 'witch',
-        band: '#7C3AED',
-        bg: 'from-[#281845] via-[#4C1D95] to-[#7C2D12]'
+      u1225: {
+        code: 'EARTH-1225',
+        title: 'Earth-1225 聖誕奇蹟宇宙',
+        lore: '雪花紛飛的歲末奇蹟次元！Santa Peanuto 駕著花生雪橇穿梭星空，準備為 804 信徒揭曉聖誕神秘驚喜！',
+        variant: 'santa',
+        band: '#DC2626',
+        bg: 'from-[#143626] via-[#1B4332] to-[#7F1D1D]'
       },
       u3417: {
         code: 'EARTH-3417',
         title: 'Earth-3417 合歡山巔峰宇宙',
-        lore: '雲海之上的高山遠征宇宙！11/1 遠征隊在此插下 IPO 旗幟，見證高山雲霧與花生的壯闊奇景。',
+        lore: '雲海之上的高山遠征宇宙！遠征隊在此插下 IPO 旗幟，見證高山雲霧與花生的壯闊奇景。',
         variant: 'sprout',
         band: '#38BDF8',
         bg: 'from-[#0C4A6E] via-[#0369A1] to-[#1E293B]'
@@ -1854,7 +1998,7 @@
       u2025: {
         code: 'EARTH-2025',
         title: 'Earth-2025 脈脈萬博宇宙',
-        lore: '由副教祖脈脈!? 連結的未來博覽會次元，紅藍細胞環與花生能量共振出無限創意！',
+        lore: '由副教祖 Myaku Myaku!? 連結的未來博覽會次元，紅藍細胞環與花生能量共振出無限創意！',
         variant: 'myaku',
         band: '#E63946',
         bg: 'from-[#1E3A8A] via-[#312E81] to-[#881337]'
@@ -2021,7 +2165,7 @@
       getMemberProfile(found.account);
       syncHeaderAuth();
       refreshMemberPage();
-      showToast(`🎉 登入成功！歡迎 [${found.role}] ${found.chineseName} (${found.name})！`, 'success');
+      showToast(`🎉 登入成功！歡迎 [${found.role}] ${found.name}！`, 'success');
     }
 
     function logoutUser() {
@@ -2092,7 +2236,6 @@
       badge.className = `px-3 py-1 rounded-full text-xs font-black ${getRoleBadgeClass(member.role)}`;
 
       document.getElementById('dash-avatar-box').innerHTML = renderPeanutoSVG(prof.equippedVariant, prof.equippedBand);
-      document.getElementById('dash-cn-name').textContent = member.chineseName;
       document.getElementById('dash-en-name').textContent = member.name;
       document.getElementById('dash-dept-title').textContent = member.dept;
       document.getElementById('dash-account').textContent = member.account;
@@ -2147,7 +2290,7 @@
         adminPanel.classList.remove('hidden');
         document.getElementById('admin-banner-textarea').value = getAnnouncementText();
         renderAdminMembersTable();
-        renderHalloweenList();
+        renderChristmasBillboard();
       } else {
         adminPanel.classList.add('hidden');
       }
@@ -2207,15 +2350,15 @@
       showToast(`已套用「${skin.name}」！`, 'info');
     }
 
-    // Wish Wall
+    // Wish Wall (English Names Only)
     function getWishes() {
       try {
         const raw = localStorage.getItem(KEYS.WISHES);
         if (raw) return JSON.parse(raw);
       } catch (e) {}
       return [
-        { id: 1, role: '教祖', chineseName: '武意洵', name: 'Yi-Hsun', text: '願所有 804 信徒段考歐趴，永遠相信花生、尊重花生！', likes: 12 },
-        { id: 2, role: '副教祖', chineseName: '康羽安', name: 'Anne', text: '供品組祝福大家每天都吃飽飽、快樂沒煩惱！', likes: 9 }
+        { id: 1, role: '教祖', name: 'Yi-Hsun', text: '願所有 804 信徒段考歐趴，永遠相信花生、尊重花生！', likes: 12 },
+        { id: 2, role: '副教祖', name: 'Anne', text: '供品組祝福大家每天都吃飽飽、快樂沒煩惱！', likes: 9 }
       ];
     }
 
@@ -2226,7 +2369,7 @@
           <div class="space-y-1">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded-md text-[10px] font-black ${getRoleBadgeClass(w.role)}">${w.role}</span>
-              <span class="text-xs font-black text-navy">${escapeHTML(w.chineseName)} (${escapeHTML(w.name)})</span>
+              <span class="text-xs font-black text-navy">${escapeHTML(w.name)}</span>
             </div>
             <p class="text-xs sm:text-sm text-slate-700">${escapeHTML(w.text)}</p>
           </div>
@@ -2245,7 +2388,7 @@
       const text = input.value.trim();
       if (!text) return;
       const wishes = getWishes();
-      wishes.unshift({ id: Date.now(), role: member.role, chineseName: member.chineseName, name: member.name, text, likes: 1 });
+      wishes.unshift({ id: Date.now(), role: member.role, name: member.name, text, likes: 1 });
       localStorage.setItem(KEYS.WISHES, JSON.stringify(wishes));
       input.value = '';
       renderWishWall();
@@ -2289,7 +2432,7 @@
         return `
           <tr>
             <td class="py-2 px-2"><span class="px-2 py-0.5 rounded-md text-[10px] font-black ${getRoleBadgeClass(m.role)}">${m.role}</span></td>
-            <td class="py-2 px-2 font-bold text-navy">${m.chineseName} (${m.name})</td>
+            <td class="py-2 px-2 font-bold text-navy">${m.name}</td>
             <td class="py-2 px-2 font-mono text-xs text-slate-500">${m.account}</td>
             <td class="py-2 px-2 font-black text-peanut-deep">🥜 ${prof.points}P</td>
             <td class="py-2 px-2 text-right">
@@ -2308,7 +2451,7 @@
       mutateMemberProfile(targetAccount, p => ({ ...p, points: p.points + 100 }));
       syncHeaderAuth();
       refreshMemberPage();
-      showToast(`👑 已賜予 ${target.chineseName} (${target.name}) +100P 祝福點數！`, 'success');
+      showToast(`👑 已賜予 ${target.name} +100P 祝福點數！`, 'success');
     }
 
     function escapeHTML(str) {
@@ -2322,19 +2465,20 @@
       // Populate static SVG illustrations
       document.getElementById('header-brand-logo').innerHTML = renderPeanutoSVG('classic', '#6B8E55');
       document.getElementById('footer-peanut-svg').innerHTML = renderPeanutoSVG('classic', '#D8A46F');
+      document.getElementById('home-hero-santa-svg').innerHTML = renderPeanutoSVG('santa');
       document.getElementById('home-hero-cosmic-svg').innerHTML = renderPeanutoSVG('cosmic');
-      document.getElementById('home-hero-witch-svg').innerHTML = renderPeanutoSVG('witch');
+      document.getElementById('home-hero-esg-svg').innerHTML = renderPeanutoSVG('esg');
       document.getElementById('home-oracle-peanut').innerHTML = renderPeanutoSVG('classic', '#D8A46F');
-      document.getElementById('halloween-event-pumpkin').innerHTML = renderPeanutoSVG('pumpkin');
+      document.getElementById('christmas-billboard-santa').innerHTML = renderPeanutoSVG('santa');
       document.getElementById('esg-page-mascot').innerHTML = renderPeanutoSVG('esg');
       document.getElementById('login-page-mascot').innerHTML = renderPeanutoSVG('sprout');
       document.getElementById('fortune-card-front-svg').innerHTML = renderPeanutoSVG('sprout');
 
-      // 4 Iconic Peanuto variants on Page 1
+      // 4 Iconic Peanuto variants on Page 1 (Classic, Sprout, Santa [NEW], Space)
       document.getElementById('peanuto-var-1').innerHTML = renderPeanutoSVG('classic', '#FFFFFF');
-      document.getElementById('peanuto-var-2').innerHTML = renderPeanutoSVG('classic', '#6B8E55');
-      document.getElementById('peanuto-var-3').innerHTML = renderPeanutoSVG('classic', '#F472B6');
-      document.getElementById('peanuto-var-4').innerHTML = renderPeanutoSVG('classic', '#233140', true);
+      document.getElementById('peanuto-var-2').innerHTML = renderPeanutoSVG('sprout');
+      document.getElementById('peanuto-var-3').innerHTML = renderPeanutoSVG('santa');
+      document.getElementById('peanuto-var-4').innerHTML = renderPeanutoSVG('cosmic');
 
       // 6 Colorful Peanutos surrounding 教旨 on Page 2
       const purposeColors = ['#6B8E55', '#A594F9', '#9CA3AF', '#D8A46F', '#52B788', '#F472B6'];
@@ -2348,9 +2492,16 @@
         el.innerHTML = renderPeanutoSVG('classic', el.dataset.orgPeanut);
       });
 
+      // Pre-fill Christmas subscriber input if logged in
+      const curMember = getLoggedInMember();
+      if (curMember) {
+        const subInput = document.getElementById('xmas-sub-name-input');
+        if (subInput) subInput.value = curMember.name;
+      }
+
       // Hydrate state & initial route
       applyGlobalAnnouncement();
-      renderHalloweenList();
+      renderChristmasBillboard();
       renderMemberDirectory();
       renderEsgCount();
       switchParallelUniverse('u804');
