@@ -104,7 +104,7 @@
         </p>
       </div>
       <div class="flex items-center gap-3 shrink-0">
-        <span id="cloud-sync-badge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 text-[11px] font-bold text-amber-200">
+        <span id="cloud-sync-badge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/10 text-[11px] font-bold text-amber-200">
           🔄 雲端連線中
         </span>
         <button type="button" onclick="navigateTo('#/login')" class="text-xs font-extrabold text-amber-300 hover:text-amber-200 underline underline-offset-4 cursor-pointer">
@@ -259,7 +259,6 @@
 
       <!-- 2. Three Live Status Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <!-- Status 1: 本學期遶境資訊 -->
         <div class="rounded-3xl bg-white border border-peanut-light/70 p-6 shadow-xs flex flex-col justify-between space-y-3">
           <div class="flex items-center justify-between">
             <span class="px-2.5 py-1 rounded-xl bg-peanut-sand text-peanut-deep text-xs font-black">🏔️ 本學期遶境資訊</span>
@@ -271,7 +270,6 @@
           <p class="text-xs text-slate-500">國際花生組織 IPO 活動部公告</p>
         </div>
 
-        <!-- Status 2: 萬聖節活動已圓滿結束 -->
         <div class="rounded-3xl bg-white border border-peanut-light/70 p-6 shadow-xs flex flex-col justify-between space-y-3">
           <div class="flex items-center justify-between">
             <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-700 text-xs font-black">🎃 2026 萬聖節回顧</span>
@@ -283,7 +281,6 @@
           <p class="text-xs text-slate-500">下一站：🎄 聖誕節特別企劃即將公開</p>
         </div>
 
-        <!-- Status 3: 每日挑戰領點數！ -->
         <div onclick="navigateTo('#/login')" class="rounded-3xl bg-gradient-to-br from-amber-400 to-peanut-caramel text-navy-dark p-6 shadow-md hover:shadow-xl transition cursor-pointer flex flex-col justify-between space-y-3">
           <div class="flex items-center justify-between">
             <span class="px-2.5 py-1 rounded-xl bg-navy text-peanut-cream text-xs font-black">🎮 每日信仰挑戰</span>
@@ -346,7 +343,6 @@
 
       <!-- 4. Peanuto Mascot & Interactive Peanut Oracle -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        <!-- Left: Peanuto Character Showcase & Origin Intro -->
         <div class="lg:col-span-7 rounded-3xl bg-white border border-peanut-light/70 p-6 sm:p-8 shadow-xs flex flex-col justify-between space-y-6">
           <div class="space-y-3">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-peanut-sand text-peanut-deep text-xs font-black">
@@ -358,7 +354,6 @@
             </p>
           </div>
 
-          <!-- 4 Signature Peanuto Mascot Cards -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div class="rounded-2xl bg-peanut-cream border border-peanut-light/60 p-3 text-center space-y-1.5">
               <div id="mascot-card-1" class="w-16 h-16 mx-auto"></div>
@@ -383,7 +378,6 @@
           </div>
         </div>
 
-        <!-- Right: Interactive Peanut Oracle -->
         <div class="lg:col-span-5 rounded-3xl bg-gradient-to-br from-navy to-navy-dark text-white p-6 sm:p-8 shadow-xl flex flex-col justify-between space-y-5 relative overflow-hidden">
           <div class="space-y-2 relative z-10">
             <span class="px-2.5 py-1 rounded-lg bg-amber-400/20 text-amber-300 text-xs font-black">🔮 每日花生神諭</span>
@@ -426,7 +420,6 @@
           </div>
         </div>
 
-        <!-- 3 Mystery Teaser Clues -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="rounded-2xl bg-white/10 border border-white/15 p-5 space-y-2">
             <span class="text-[11px] font-black text-amber-300 tracking-wider">CLUE 01 · MYSTERY GIFT</span>
@@ -447,7 +440,6 @@
           </div>
         </div>
 
-        <!-- Interactive Early-Bird Notification + Idea Wish Pool -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           <div class="lg:col-span-5 rounded-2xl bg-white/10 border border-white/15 p-5 sm:p-6 space-y-4">
             <div class="space-y-1">
@@ -741,7 +733,7 @@
               <span class="text-xl font-black text-esg-dark"><span id="esg-pledge-count">0</span> 張考卷重生</span>
             </div>
             <button type="button" onclick="pledgeEsgAction()" class="w-full py-3 rounded-xl bg-esg-dark hover:bg-esg-mid text-white font-black text-xs sm:text-sm shadow-sm transition cursor-pointer">
-              🌱 響應 PNT ESG 減碳行動 (會員領 +30P)
+              🌱 響應 PNT ESG 減碳行動 (會員每日首響 +30P)
             </button>
           </div>
         </div>
@@ -909,7 +901,6 @@
           <p class="text-[11px] text-center text-slate-400">支援輸入完整帳號（如 14072@pnts）或簡稱（如 14072、testm、hank）自動補全。</p>
         </div>
 
-        <!-- Public Preview of Member Points Leaderboard -->
         <div class="max-w-3xl mx-auto rounded-3xl bg-white border border-peanut-light/70 p-6 sm:p-8 shadow-sm space-y-4">
           <div class="flex items-center justify-between">
             <div>
@@ -976,7 +967,7 @@
           <div class="lg:col-span-7 rounded-3xl bg-[#1E1610] text-white border border-[#3E2F23] p-6 sm:p-7 shadow-xl flex flex-col justify-between space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div>
-                <span class="text-[11px] font-black tracking-wider text-[#E6B87D] uppercase">DAILY CHALLENGE · 每日三選一</span>
+                <span class="text-[11px] font-black tracking-wider text-[#E6B87D] uppercase">DAILY CHALLENGE · 每日三選一（限領一次）</span>
                 <h3 class="text-xl sm:text-2xl font-black text-white">每天可選擇一項挑戰</h3>
               </div>
               <span id="daily-challenge-status-pill" class="px-3 py-1 rounded-full bg-[#33261C] border border-[#5A4535] text-xs font-black text-[#F3C683]">
@@ -1401,6 +1392,7 @@
 
     const CLOUD_STATE = {
       loaded: false,
+      serverToday: '',
       announcement: DEFAULT_ANNOUNCEMENT,
       esgCount: 0,
       xmasEarlybird: [],
@@ -1410,6 +1402,24 @@
     };
 
     let inFlightPosts = 0;
+
+    function normalizeClientDate(val) {
+      if (!val) return '';
+      const s = String(val).trim();
+      const isoMatch = s.match(/^(\d{4}-\d{2}-\d{2})/);
+      if (isoMatch) return isoMatch[1];
+      const parsed = new Date(s);
+      if (!isNaN(parsed.getTime())) {
+        return `${parsed.getFullYear()}-${String(parsed.getMonth() + 1).padStart(2, '0')}-${String(parsed.getDate()).padStart(2, '0')}`;
+      }
+      return '';
+    }
+
+    function getTodayStr() {
+      if (CLOUD_STATE.serverToday) return CLOUD_STATE.serverToday;
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
 
     function updateSyncBadge(status) {
       const badge = document.getElementById('cloud-sync-badge');
@@ -1429,11 +1439,25 @@
     function applyCloudPayload(data) {
       if (!data || !data.ok) return;
       CLOUD_STATE.loaded = true;
+      if (data.serverToday) CLOUD_STATE.serverToday = String(data.serverToday);
       CLOUD_STATE.announcement = data.announcement || DEFAULT_ANNOUNCEMENT;
       CLOUD_STATE.esgCount = Number(data.esgCount || 0);
       CLOUD_STATE.xmasEarlybird = data.xmasEarlybird || [];
       CLOUD_STATE.xmasIdeas = data.xmasIdeas || [];
-      CLOUD_STATE.profiles = data.profiles || {};
+
+      const rawProfiles = data.profiles || {};
+      const normalizedProfiles = {};
+      Object.keys(rawProfiles).forEach(acc => {
+        const p = rawProfiles[acc];
+        normalizedProfiles[acc] = {
+          ...p,
+          lastChallengeDate: normalizeClientDate(p.lastChallengeDate),
+          lastFortune: normalizeClientDate(p.lastFortune),
+          lastEsgPledge: normalizeClientDate(p.lastEsgPledge),
+          lastXmasIdea: normalizeClientDate(p.lastXmasIdea)
+        };
+      });
+      CLOUD_STATE.profiles = normalizedProfiles;
       CLOUD_STATE.wishes = data.wishes || [];
 
       applyGlobalAnnouncement();
@@ -1457,9 +1481,9 @@
     }
 
     async function syncFromCloud() {
-      if (!GAS_WEB_APP_URL.startsWith('http')) return;
-      if (inFlightPosts > 0) return;
-      if (typeof challengeRunning !== 'undefined' && challengeRunning) return;
+      if (!GAS_WEB_APP_URL.startsWith('http')) return false;
+      if (inFlightPosts > 0) return false;
+      if (typeof challengeRunning !== 'undefined' && challengeRunning) return false;
 
       try {
         const res = await fetch(`${GAS_WEB_APP_URL}?t=${Date.now()}`, {
@@ -1469,9 +1493,10 @@
         const data = await res.json();
         applyCloudPayload(data);
         updateSyncBadge('ok');
+        return true;
       } catch (err) {
         updateSyncBadge('error');
-        console.warn('IPO 雲端連線異常，請確認 GAS 部署權限是否設為「所有人」：', err);
+        return false;
       }
     }
 
@@ -1494,7 +1519,7 @@
       } catch (err) {
         inFlightPosts = Math.max(0, inFlightPosts - 1);
         updateSyncBadge('error');
-        showToast('⚠️ 雲端寫入受阻，請確認 GAS 部署「誰可以存取」已設為「所有人」', 'warning');
+        showToast('⚠️ 雲端同步延遲，請確認網路連線狀態', 'warning');
         return false;
       }
     }
@@ -1507,11 +1532,6 @@
       { id: 'myaku', name: 'VIP 尊爵脈脈聯名', price: 400, variant: 'myaku', band: '#E63946', desc: '致敬紅藍細胞環的跨次元聯名款' },
       { id: 'pumpkin', name: '2026 萬聖南瓜紀念款', price: 200, variant: 'pumpkin', band: '#F97316', desc: '紀念 2026.10.30 圓滿落幕的萬聖典藏' }
     ];
-
-    function getTodayStr() {
-      const d = new Date();
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    }
 
     function getLoggedInMember() {
       const acc = safeGetItem(KEYS.SESSION);
@@ -1719,12 +1739,12 @@
         const today = getTodayStr();
         if (member) {
           const prof = getMemberProfile(member.account);
-          if (prof.lastFortune !== today) {
+          if (normalizeClientDate(prof.lastFortune) !== today) {
             mutateMemberProfile(member.account, p => ({ ...p, points: p.points + 20, lastFortune: today }));
             syncHeaderAuth();
             renderLeaderboards();
             showToast(`🔮 每日首次求籤成功！${member.name} 獲得 +20P！`, 'success');
-            pushToCloud({ action: 'claimDailyBonus', account: member.account, field: 'lastFortune', date: today, delta: 20 });
+            pushToCloud({ action: 'claimDailyBonus', account: member.account, field: 'lastFortune', delta: 20 });
           }
         }
       }, 650);
@@ -1840,7 +1860,7 @@
         showToast('✨ 聖誕活動點子已成功送出！', 'success');
       }
       renderChristmasBillboard();
-      pushToCloud({ action: 'postXmasIdea', account: member.account, author: member.name, text, date: today });
+      pushToCloud({ action: 'postXmasIdea', account: member.account, author: member.name, text });
     }
 
     /* =========================================================================
@@ -1894,7 +1914,7 @@
     }
 
     /* =========================================================================
-       9. PAGE 5 INTERACTIONS: PNT ESG PLEDGE (+30P)
+       9. PAGE 5 INTERACTIONS: PNT ESG PLEDGE (+30P ONCE PER DAY)
     ========================================================================= */
     function renderEsgCount() {
       const el = document.getElementById('esg-pledge-count');
@@ -1909,18 +1929,18 @@
       const today = getTodayStr();
       if (member) {
         const prof = getMemberProfile(member.account);
-        if (prof.lastEsgPledge !== today) {
+        if (normalizeClientDate(prof.lastEsgPledge) !== today) {
           mutateMemberProfile(member.account, p => ({ ...p, points: p.points + 30, lastEsgPledge: today }));
           syncHeaderAuth();
           renderLeaderboards();
           showToast(`🌱 感謝 ${member.name} 響應 PNT ESG 減碳行動！獲得 +30P 永續點數！`, 'success');
         } else {
-          showToast('🌱 已響應 IPO ESG BAG 二手考卷永續行動！', 'success');
+          showToast('🌱 今日已領過 ESG 加分囉，感謝再次響應環保行動！', 'info');
         }
       } else {
         showToast('🌱 已響應 IPO ESG BAG 二手考卷永續行動！', 'success');
       }
-      pushToCloud({ action: 'pledgeEsg', account: member ? member.account : '', date: today });
+      pushToCloud({ action: 'pledgeEsg', account: member ? member.account : '' });
     }
 
     /* =========================================================================
@@ -1997,7 +2017,7 @@
 
     /* =========================================================================
        11. PAGE 7 INTERACTIONS: APP INSTALL TUTORIAL TABS
-    ========================================================================= */
+    ======================================================= */
     const APP_TUTORIALS = {
       iphone: {
         title: '📱 iPhone（Safari 瀏覽器）安裝步驟',
@@ -2198,12 +2218,17 @@
     let challengeInterval = null;
     let whackSpawnTimer = null;
     let challengeRunning = false;
+    let challengeWinSubmitted = false;
+
+    function isDailyChallengeDone(prof, today) {
+      return normalizeClientDate(prof.lastChallengeDate) === today;
+    }
 
     function renderDailyChallengeCards(prof, today) {
-      const doneToday = prof.lastChallengeDate === today;
+      const doneToday = isDailyChallengeDone(prof, today);
       const statusPill = document.getElementById('daily-challenge-status-pill');
       if (doneToday) {
-        statusPill.textContent = '✓ 今日已完成挑戰 (+200P)';
+        statusPill.textContent = '🔒 今日已完成挑戰 (+200P · 明日重置)';
         statusPill.className = 'px-3 py-1 rounded-full bg-emerald-950 border border-emerald-500/40 text-xs font-black text-emerald-300';
       } else {
         statusPill.textContent = '今日尚餘 1 次獎勵機會';
@@ -2215,16 +2240,18 @@
         const badge = document.getElementById(`challenge-badge-${type}`);
         if (!card || !badge) return;
         if (doneToday) {
+          card.setAttribute('aria-disabled', 'true');
           if (prof.lastChallengeType === type) {
-            card.className = 'w-full text-left rounded-2xl bg-emerald-950/60 border border-emerald-500/50 p-4 flex items-center justify-between gap-4 transition cursor-pointer';
-            badge.textContent = '✓ 已完成';
+            card.className = 'w-full text-left rounded-2xl bg-emerald-950/60 border border-emerald-500/50 p-4 flex items-center justify-between gap-4 transition cursor-not-allowed';
+            badge.textContent = '✓ 今日已完成';
             badge.className = 'text-sm sm:text-base font-black text-emerald-300 shrink-0';
           } else {
-            card.className = 'w-full text-left rounded-2xl bg-[#241B13] border border-[#382A1E] opacity-65 p-4 flex items-center justify-between gap-4 transition cursor-pointer';
-            badge.textContent = '明日再戰';
+            card.className = 'w-full text-left rounded-2xl bg-[#241B13] border border-[#382A1E] opacity-55 p-4 flex items-center justify-between gap-4 transition cursor-not-allowed';
+            badge.textContent = '🔒 今日已鎖定';
             badge.className = 'text-xs sm:text-sm font-bold text-[#A89888] shrink-0';
           }
         } else {
+          card.removeAttribute('aria-disabled');
           card.className = 'w-full text-left rounded-2xl bg-[#2B2017] hover:bg-[#36281D] border border-[#4A3829] p-4 flex items-center justify-between gap-4 transition group cursor-pointer';
           badge.textContent = '+200 P';
           badge.className = 'text-base sm:text-lg font-black text-[#F3C683] shrink-0';
@@ -2238,20 +2265,26 @@
       if (whackSpawnTimer) { clearTimeout(whackSpawnTimer); whackSpawnTimer = null; }
     }
 
-    function openChallengeArena(type) {
+    async function openChallengeArena(type) {
       const member = getLoggedInMember();
       if (!member) {
         showToast('請先登入 @pnts 會員帳號再參加每日挑戰！', 'warning');
         return;
       }
+
+      // 先向雲端試算表確認最新紀錄，防止換裝置或雙開分頁重複領獎
+      await syncFromCloud();
+
       const prof = getMemberProfile(member.account);
       const today = getTodayStr();
-      if (prof.lastChallengeDate === today) {
-        showToast('您今天已經完成一項挑戰並領取 +200P 囉，明天再來選擇新挑戰！', 'info');
+      if (isDailyChallengeDone(prof, today)) {
+        refreshMemberPage();
+        showToast('🔒 您今天已經完成一項挑戰並領取 +200P 囉，明天再來選擇新挑戰！', 'info');
         return;
       }
 
       stopAllChallengeTimers();
+      challengeWinSubmitted = false;
       activeChallengeType = type;
       const meta = CHALLENGE_META[type];
       document.getElementById('arena-title').textContent = meta.title;
@@ -2281,7 +2314,15 @@
 
     function startActiveChallenge() {
       if (!activeChallengeType) return;
+      const member = getLoggedInMember();
+      if (member && isDailyChallengeDone(getMemberProfile(member.account), getTodayStr())) {
+        closeChallengeArena();
+        showToast('🔒 今日已完成挑戰並鎖定，明天再來吧！', 'info');
+        return;
+      }
+
       stopAllChallengeTimers();
+      challengeWinSubmitted = false;
       challengeRunning = true;
       document.getElementById('arena-start-btn').textContent = '🔄 重新開始';
 
@@ -2291,13 +2332,16 @@
     }
 
     function handleChallengeWin() {
+      if (challengeWinSubmitted) return;
+      challengeWinSubmitted = true;
       stopAllChallengeTimers();
+
       const member = getLoggedInMember();
       if (!member) return;
       const today = getTodayStr();
       const prof = getMemberProfile(member.account);
 
-      if (prof.lastChallengeDate !== today) {
+      if (!isDailyChallengeDone(prof, today)) {
         mutateMemberProfile(member.account, p => ({
           ...p,
           points: p.points + 200,
@@ -2313,11 +2357,11 @@
         <div class="text-center space-y-3 py-6">
           <div class="text-5xl">🎉</div>
           <h4 class="text-2xl font-black text-emerald-400">挑戰成功！獲得 +200 P</h4>
-          <p class="text-xs text-peanut-sand">點數已即時上傳至全班雲端排行榜！</p>
+          <p class="text-xs text-peanut-sand">點數已即時上傳至全班雲端排行榜，今日挑戰額度已鎖定！</p>
         </div>
       `;
-      showToast(`🏆 挑戰成功！${member.name} 獲得 +200 P！`, 'success');
-      pushToCloud({ action: 'completeChallenge', account: member.account, challengeType: activeChallengeType, date: today });
+      showToast(`🏆 挑戰成功！${member.name} 獲得 +200 P（今日挑戰已鎖定）！`, 'success');
+      pushToCloud({ action: 'completeChallenge', account: member.account, challengeType: activeChallengeType });
     }
 
     function handleChallengeFail(reasonText) {
@@ -2508,7 +2552,7 @@
           points: prof.points,
           equippedVariant: prof.equippedVariant,
           equippedBand: prof.equippedBand,
-          doneToday: prof.lastChallengeDate === today
+          doneToday: isDailyChallengeDone(prof, today)
         };
       }).sort((a, b) => (b.points - a.points) || (a.origIdx - b.origIdx));
 
@@ -2762,7 +2806,6 @@
       const initialHash = window.location.hash || '#/home';
       renderActiveRoute(ROUTES[initialHash] ? initialHash : '#/home');
 
-      // Start Google Sheets live cloud sync (every 5 seconds)
       syncFromCloud();
       setInterval(syncFromCloud, 5000);
     });
