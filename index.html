@@ -103,9 +103,14 @@
           🎄 最新公告：2026 萬聖節活動已圓滿落幕！花生教聖誕節特別企劃即將公開（Coming Soon），每日完成一項挑戰領 200P！
         </p>
       </div>
-      <button type="button" onclick="navigateTo('#/login')" class="shrink-0 text-xs font-extrabold text-amber-300 hover:text-amber-200 underline underline-offset-4 cursor-pointer">
-        每日挑戰 & 排行榜 →
-      </button>
+      <div class="flex items-center gap-3 shrink-0">
+        <span id="cloud-sync-badge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 text-[11px] font-bold text-amber-200">
+          🔄 雲端連線中
+        </span>
+        <button type="button" onclick="navigateTo('#/login')" class="text-xs font-extrabold text-amber-300 hover:text-amber-200 underline underline-offset-4 cursor-pointer">
+          每日挑戰 & 排行榜 →
+        </button>
+      </div>
     </div>
   </div>
 
@@ -401,7 +406,6 @@
 
       <!-- 5. Christmas Special Event COMING SOON Billboard -->
       <div id="christmas-event-section" class="rounded-3xl bg-gradient-to-br from-[#163828] via-[#1B4332] to-[#233140] text-white p-6 sm:p-10 shadow-2xl border-2 border-red-400/40 space-y-8 relative overflow-hidden">
-        <!-- Decorative Snowflakes -->
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-white/15 pb-7">
           <div class="flex items-start sm:items-center gap-4">
             <div id="xmas-billboard-mascot" class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 animate-float"></div>
@@ -415,7 +419,6 @@
             </div>
           </div>
 
-          <!-- Status Pill -->
           <div class="rounded-2xl bg-white/10 border border-white/15 px-5 py-3.5 text-center shrink-0">
             <p class="text-[11px] font-bold text-amber-300 uppercase tracking-wider">PROJECT STATUS</p>
             <p class="text-lg sm:text-xl font-black text-white">🎁 企劃最高機密籌備中</p>
@@ -446,7 +449,6 @@
 
         <!-- Interactive Early-Bird Notification + Idea Wish Pool -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          <!-- Left: Early-Bird Notification Sign-up -->
           <div class="lg:col-span-5 rounded-2xl bg-white/10 border border-white/15 p-5 sm:p-6 space-y-4">
             <div class="space-y-1">
               <h3 class="text-base sm:text-lg font-black text-amber-300">🔔 搶先預約聖誕活動公開通知</h3>
@@ -464,7 +466,6 @@
             </div>
           </div>
 
-          <!-- Right: Christmas Event Idea Wish Pool -->
           <div class="lg:col-span-7 rounded-2xl bg-white/10 border border-white/15 p-5 sm:p-6 space-y-4">
             <div class="space-y-1">
               <h3 class="text-base sm:text-lg font-black text-amber-300">✨ 聖誕活動玩法許願池</h3>
@@ -492,7 +493,6 @@
         <p class="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">我們相信——花生，不只是一種食物，更是一種生活態度。</p>
       </div>
 
-      <!-- 3-Second Calm Reflection Box -->
       <div class="rounded-3xl bg-navy text-white p-7 sm:p-10 shadow-xl relative overflow-hidden">
         <div class="max-w-2xl space-y-4 relative z-10">
           <span class="text-xs font-black text-amber-300 tracking-wider">DAILY RITUAL · 每日三秒冥想</span>
@@ -505,7 +505,6 @@
         </div>
       </div>
 
-      <!-- Four Core Spirits -->
       <div class="space-y-4">
         <h2 class="text-xl sm:text-2xl font-black text-navy text-center">花生教四大核心精神</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -532,7 +531,6 @@
         </div>
       </div>
 
-      <!-- Full Scripture & Supreme Guiding Principle -->
       <div class="rounded-3xl bg-white border border-peanut-light/80 p-7 sm:p-10 shadow-xs space-y-6">
         <div class="space-y-4 text-sm sm:text-base text-slate-700 leading-relaxed">
           <p>
@@ -566,9 +564,7 @@
         <p class="text-sm sm:text-base text-slate-600">神明庇佑之下，由教祖領軍、五大副教祖與三大幹部共同守護 804 花生教。</p>
       </div>
 
-      <!-- Visual Hierarchy Org Chart -->
       <div class="rounded-3xl bg-navy text-white p-6 sm:p-10 shadow-xl space-y-6">
-        <!-- Tier 1: 神明 & 教祖 -->
         <div class="flex flex-col items-center">
           <div class="px-8 py-3 rounded-2xl bg-[#C86D51] text-white font-black text-base sm:text-lg shadow-md">
             ✨ 神明 (Deity)
@@ -581,9 +577,7 @@
           <div class="w-3/4 max-w-2xl h-0.5 bg-white/30"></div>
         </div>
 
-        <!-- Tier 2: 3 Columns (副教祖 / 幹部 / 教徒) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <!-- Column 1: 副教祖 -->
           <div class="rounded-2xl bg-peanut-caramel/20 border border-peanut-caramel/40 p-5 space-y-3">
             <h3 class="text-center text-lg font-black text-amber-300 border-b border-white/15 pb-2">副教祖 (5)</h3>
             <ul class="space-y-2 text-sm font-bold">
@@ -595,7 +589,6 @@
             </ul>
           </div>
 
-          <!-- Column 2: 幹部 -->
           <div class="rounded-2xl bg-peanut-caramel/20 border border-peanut-caramel/40 p-5 space-y-3">
             <h3 class="text-center text-lg font-black text-amber-300 border-b border-white/15 pb-2">組織幹部 (3)</h3>
             <div class="space-y-3 text-sm">
@@ -614,7 +607,6 @@
             </div>
           </div>
 
-          <!-- Column 3: 教徒 -->
           <div class="rounded-2xl bg-peanut-caramel/20 border border-peanut-caramel/40 p-5 space-y-3">
             <h3 class="text-center text-lg font-black text-amber-300 border-b border-white/15 pb-2">核心教徒 (11)</h3>
             <div class="grid grid-cols-2 gap-2 text-xs sm:text-sm font-bold">
@@ -634,7 +626,6 @@
         </div>
       </div>
 
-      <!-- Filterable & Searchable Member Directory -->
       <div class="space-y-5">
         <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
           <div class="flex flex-wrap gap-2">
@@ -670,7 +661,6 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- 5 Organizational Goals -->
         <div class="lg:col-span-7 rounded-3xl bg-white border border-peanut-light/70 p-7 sm:p-8 shadow-xs space-y-5">
           <h2 class="text-xl sm:text-2xl font-black text-navy">🌐 IPO 五大組織宗旨</h2>
           <div class="space-y-3 text-sm sm:text-base">
@@ -692,7 +682,6 @@
           </div>
         </div>
 
-        <!-- 4-Tier Global Structure -->
         <div class="lg:col-span-5 rounded-3xl bg-white border border-peanut-light/70 p-7 sm:p-8 shadow-xs flex flex-col justify-between space-y-6">
           <div class="space-y-4">
             <h2 class="text-xl sm:text-2xl font-black text-navy">🏛️ 全球組織架構</h2>
@@ -722,7 +711,6 @@
          PAGE 5: PNT ESG (#/pnt-esg)
     ======================================================= -->
     <section id="page-pnt-esg" class="page-view hidden max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-10">
-      <!-- Green Hill Banner -->
       <div class="rounded-3xl bg-gradient-to-br from-esg-dark via-esg-mid to-[#40916C] text-white p-8 sm:p-12 shadow-xl relative overflow-hidden">
         <div class="max-w-2xl space-y-4 relative z-10">
           <span class="px-3 py-1 rounded-full bg-white/15 text-esg-mint text-xs font-black tracking-widest">#PNTESG · 國際花生組織永續發展</span>
@@ -734,7 +722,6 @@
         </div>
       </div>
 
-      <!-- Story + 4-Step Folding Guide -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         <div class="lg:col-span-6 rounded-3xl bg-white border border-esg-mid/30 p-7 sm:p-8 shadow-xs flex flex-col justify-between space-y-6">
           <div class="space-y-4">
@@ -748,7 +735,6 @@
             </p>
           </div>
 
-          <!-- Interactive Carbon Pledge Counter -->
           <div class="rounded-2xl bg-esg-mint/70 border border-esg-mid/30 p-5 space-y-3">
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-esg-dark">🌍 全校信徒響應次數</span>
@@ -760,7 +746,6 @@
           </div>
         </div>
 
-        <!-- 4-Step Visual Guide -->
         <div class="lg:col-span-6 rounded-3xl bg-white border border-esg-mid/30 p-7 sm:p-8 shadow-xs space-y-5">
           <h3 class="text-xl font-black text-esg-dark">📐 IPO ESG BAG 四步驟製作指南</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -810,7 +795,6 @@
           <div id="universe-hero-svg" class="w-36 h-36 sm:w-44 sm:h-44 shrink-0 animate-float"></div>
         </div>
 
-        <!-- Parallel Dimension Switcher -->
         <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-2">
           <button type="button" onclick="switchParallelUniverse('u804')" data-univ="u804" class="univ-btn px-3 py-3 rounded-2xl bg-amber-400 text-navy-dark font-black text-xs text-center cursor-pointer">🌍 804 主宇宙</button>
           <button type="button" onclick="switchParallelUniverse('uhalloween')" data-univ="uhalloween" class="univ-btn px-3 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs text-center cursor-pointer">🎃 2026 萬聖宇宙</button>
@@ -819,7 +803,6 @@
           <button type="button" onclick="switchParallelUniverse('umyaku')" data-univ="umyaku" class="univ-btn px-3 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs text-center col-span-2 sm:col-span-1 cursor-pointer">🔴 脈脈聯名宇宙</button>
         </div>
 
-        <!-- Active Universe Detail Card -->
         <div id="universe-detail-box" class="rounded-2xl bg-white/10 border border-white/15 p-6 flex flex-col sm:flex-row items-center gap-6">
           <div id="universe-detail-mascot" class="w-24 h-24 shrink-0"></div>
           <div class="space-y-1.5 text-center sm:text-left">
@@ -832,7 +815,6 @@
         </div>
       </div>
 
-      <!-- Interactive Peanuto Wardrobe Customizer -->
       <div class="rounded-3xl bg-white border border-peanut-light/70 p-7 sm:p-10 shadow-xs grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
         <div class="md:col-span-5 flex flex-col items-center justify-center bg-peanut-cream peanut-pattern-bg rounded-3xl p-8 border border-peanut-light/60 space-y-3">
           <div id="customizer-preview-svg" class="w-40 h-40 sm:w-48 sm:h-48 animate-float"></div>
@@ -883,7 +865,6 @@
         <p class="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">免去 App Store 繁瑣下載，直接將國際花生組織官網加入主畫面，一秒啟動原生級體驗！</p>
       </div>
 
-      <!-- Device Tabs -->
       <div class="flex flex-wrap justify-center gap-2.5">
         <button type="button" onclick="selectAppOsTab('iphone')" data-os="iphone" class="os-tab-btn px-5 py-2.5 rounded-2xl bg-navy text-white text-xs sm:text-sm font-black cursor-pointer">📱 For iPhone</button>
         <button type="button" onclick="selectAppOsTab('ipad')" data-os="ipad" class="os-tab-btn px-5 py-2.5 rounded-2xl bg-white border border-peanut-light text-navy text-xs sm:text-sm font-bold cursor-pointer">📟 For iPad</button>
@@ -891,7 +872,6 @@
         <button type="button" onclick="selectAppOsTab('pc')" data-os="pc" class="os-tab-btn px-5 py-2.5 rounded-2xl bg-white border border-peanut-light text-navy text-xs sm:text-sm font-bold cursor-pointer">🖥️ For PC / Android</button>
       </div>
 
-      <!-- Tutorial Card -->
       <div id="app-tutorial-box" class="rounded-3xl bg-white border border-peanut-light/80 p-7 sm:p-10 shadow-sm space-y-6"></div>
     </section>
 
@@ -900,7 +880,7 @@
     ======================================================= -->
     <section id="page-login" class="page-view hidden max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-10">
 
-      <!-- VIEW A: LOGIN FORM + PUBLIC LEADERBOARD (Shown when logged out) -->
+      <!-- VIEW A: LOGIN FORM + PUBLIC LEADERBOARD -->
       <div id="login-page-form-box" class="space-y-10">
         <div class="max-w-md mx-auto rounded-3xl bg-white border border-peanut-light/80 p-7 sm:p-9 shadow-xl space-y-6">
           <div class="text-center space-y-2">
@@ -933,7 +913,7 @@
         <div class="max-w-3xl mx-auto rounded-3xl bg-white border border-peanut-light/70 p-6 sm:p-8 shadow-sm space-y-4">
           <div class="flex items-center justify-between">
             <div>
-              <span class="text-xs font-black text-peanut-roasted uppercase tracking-wider">LIVE RANKING</span>
+              <span class="text-xs font-black text-peanut-roasted uppercase tracking-wider">LIVE CLOUD RANKING</span>
               <h2 class="text-xl sm:text-2xl font-black text-navy">🏆 全員點數積分排行榜</h2>
             </div>
             <span class="text-xs font-bold text-slate-500">登入後完成每日挑戰可累積 P 點數</span>
@@ -944,13 +924,12 @@
 
       <!-- VIEW B: LOGGED-IN MEMBER DASHBOARD -->
       <div id="member-dashboard-box" class="hidden space-y-8">
-        <!-- Top Action Bar -->
         <div class="flex flex-wrap items-center justify-between gap-4 bg-white rounded-3xl border border-peanut-light/70 px-6 py-4 shadow-2xs">
           <div class="flex items-center gap-3">
             <span class="text-2xl">🪪</span>
             <div>
               <h1 class="text-xl sm:text-2xl font-black text-navy">IPO 會員專屬空間</h1>
-              <p class="text-xs text-slate-500">歡迎回到國際花生組織信徒中心</p>
+              <p class="text-xs text-slate-500">歡迎回到國際花生組織信徒中心（全班即時雲端連線）</p>
             </div>
           </div>
           <button type="button" onclick="logoutUser()" class="px-4 py-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-black text-xs sm:text-sm border border-rose-200 transition cursor-pointer">
@@ -958,7 +937,6 @@
           </button>
         </div>
 
-        <!-- Digital ID Card + Daily 1-of-3 Challenge Selector -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           <!-- Holographic IPO Official Digital ID Card -->
           <div class="lg:col-span-5">
@@ -1006,9 +984,7 @@
               </span>
             </div>
 
-            <!-- 3 Challenge Cards -->
             <div class="space-y-3">
-              <!-- Challenge 1: 花生翻牌 -->
               <button type="button" onclick="openChallengeArena('flip')" id="challenge-card-flip" class="w-full text-left rounded-2xl bg-[#2B2017] hover:bg-[#36281D] border border-[#4A3829] p-4 flex items-center justify-between gap-4 transition group cursor-pointer">
                 <div class="flex items-center gap-4 min-w-0">
                   <div class="w-12 h-12 rounded-2xl bg-[#3A2C20] border border-[#5C4634] flex items-center justify-center text-[#E6B87D] shrink-0 group-hover:scale-105 transition-transform">
@@ -1024,7 +1000,6 @@
                 <span id="challenge-badge-flip" class="text-base sm:text-lg font-black text-[#F3C683] shrink-0">+200 P</span>
               </button>
 
-              <!-- Challenge 2: 打花生 -->
               <button type="button" onclick="openChallengeArena('whack')" id="challenge-card-whack" class="w-full text-left rounded-2xl bg-[#2B2017] hover:bg-[#36281D] border border-[#4A3829] p-4 flex items-center justify-between gap-4 transition group cursor-pointer">
                 <div class="flex items-center gap-4 min-w-0">
                   <div class="w-12 h-12 rounded-2xl bg-[#3A2C20] border border-[#5C4634] flex items-center justify-center text-[#E6B87D] shrink-0 group-hover:scale-105 transition-transform">
@@ -1040,7 +1015,6 @@
                 <span id="challenge-badge-whack" class="text-base sm:text-lg font-black text-[#F3C683] shrink-0">+200 P</span>
               </button>
 
-              <!-- Challenge 3: 數字順序 -->
               <button type="button" onclick="openChallengeArena('sequence')" id="challenge-card-sequence" class="w-full text-left rounded-2xl bg-[#2B2017] hover:bg-[#36281D] border border-[#4A3829] p-4 flex items-center justify-between gap-4 transition group cursor-pointer">
                 <div class="flex items-center gap-4 min-w-0">
                   <div class="w-12 h-12 rounded-2xl bg-[#3A2C20] border border-[#5C4634] flex items-center justify-center text-[#E6B87D] shrink-0 group-hover:scale-105 transition-transform">
@@ -1059,7 +1033,7 @@
           </div>
         </div>
 
-        <!-- 全體成員分數排行榜 (Member Points Leaderboard) -->
+        <!-- 全體成員分數排行榜 -->
         <div class="rounded-3xl bg-white border border-peanut-light/70 p-7 sm:p-8 shadow-xs space-y-5">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
@@ -1092,7 +1066,7 @@
         <div class="rounded-3xl bg-white border border-peanut-light/70 p-7 sm:p-8 shadow-xs space-y-5">
           <div>
             <h3 class="text-xl sm:text-2xl font-black text-navy">🙏 804 花生祈願牆</h3>
-            <p class="text-xs text-slate-500">發表你的真實祈願並為夥伴們按讚集氣（無任何預設假留言）</p>
+            <p class="text-xs text-slate-500">發表你的真實祈願並為夥伴們按讚集氣（全班即時同步）</p>
           </div>
           <form onsubmit="postMemberWish(event)" class="flex flex-col sm:flex-row gap-2.5">
             <input id="wish-input" type="text" required maxlength="120" placeholder="寫下你的祈願或花生箴言..." class="flex-1 px-4 py-3 rounded-2xl bg-peanut-cream border border-peanut-light text-sm focus:outline-none focus:border-peanut-caramel" />
@@ -1113,7 +1087,6 @@
                 <p class="text-xs text-amber-800">最高指揮權限：更新全站公告、賜予信徒 +100P 祝福點數、管理聖誕節預約名單與重置分數。</p>
               </div>
             </div>
-            <!-- Two-step Zero Reset Button -->
             <div id="admin-reset-box" class="flex items-center gap-2">
               <button type="button" id="admin-reset-step1" onclick="showAdminResetConfirm()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black shadow-xs cursor-pointer">
                 🔄 全員點數歸零
@@ -1126,7 +1099,6 @@
             </div>
           </div>
 
-          <!-- Global Announcement Editor -->
           <div class="rounded-2xl bg-white p-5 border border-amber-200 space-y-3">
             <label class="block text-xs font-black text-navy">📢 編輯全站即時公告橫幅</label>
             <div class="flex flex-col sm:flex-row gap-2.5">
@@ -1137,7 +1109,6 @@
             </div>
           </div>
 
-          <!-- Member Roster & Blessing Points + Christmas Early-Bird Management -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="rounded-2xl bg-white p-5 border border-amber-200 space-y-3">
               <h4 class="text-sm font-black text-navy">📋 全體信徒名冊與賜福（17 人）</h4>
@@ -1193,7 +1164,6 @@
         <button type="button" onclick="closeChallengeArena()" class="w-9 h-9 rounded-full bg-[#2B2017] hover:bg-[#3A2C20] text-[#E6B87D] font-black cursor-pointer">✕</button>
       </div>
 
-      <!-- HUD: Timer & Progress -->
       <div class="grid grid-cols-2 gap-3">
         <div class="rounded-2xl bg-[#2B2017] border border-[#4A3829] px-4 py-3 flex items-center justify-between">
           <span class="text-xs font-bold text-[#A89888]">剩餘時間</span>
@@ -1205,10 +1175,8 @@
         </div>
       </div>
 
-      <!-- Interactive Playfield -->
       <div id="arena-board" class="min-h-[250px] flex flex-col items-center justify-center"></div>
 
-      <!-- Bottom Action Controls -->
       <div class="flex items-center justify-between gap-3 pt-2">
         <button type="button" onclick="closeChallengeArena()" class="px-4 py-2.5 rounded-xl bg-[#2B2017] hover:bg-[#3A2C20] text-[#A89888] text-xs font-bold cursor-pointer">
           返回會員中心
@@ -1228,7 +1196,7 @@
   ========================================================= -->
   <script>
     /* =========================================================================
-       0. SAFE STORAGE WRAPPER (Prevents crashes in sandboxed iframes)
+       0. SAFE STORAGE WRAPPER (Only used for per-device login session)
     ========================================================================= */
     const _memStorage = {};
     function safeGetItem(key) {
@@ -1421,19 +1389,115 @@
     }
 
     /* =========================================================================
-       3. STORAGE & STATE MANAGEMENT (ALL NUMBERS ZEROED, NO FAKE QUOTES)
+       3. CLOUD STATE & STORAGE MANAGEMENT (GOOGLE APPS SCRIPT + SHEETS)
     ========================================================================= */
+    const GAS_WEB_APP_URL = "https://script.google.com/a/macros/kcis.com.tw/s/AKfycbwLkCcIquJhvcyfIwGm3VcIAx_5zkr9WTbnHN_6CLJnKt6tj9sWveh10AJNbkfNcWuu/exec";
+
     const KEYS = {
-      SESSION: 'ipo_v3_session',
-      PROFILES: 'ipo_v3_profiles',
-      ANNOUNCEMENT: 'ipo_v3_announcement',
-      XMAS_EARLYBIRD: 'ipo_v3_xmas_earlybird',
-      XMAS_IDEAS: 'ipo_v3_xmas_ideas',
-      WISHES: 'ipo_v3_wishes',
-      ESG_COUNT: 'ipo_v3_esg_count'
+      SESSION: 'ipo_v3_session'
     };
 
     const DEFAULT_ANNOUNCEMENT = '🎄 最新公告：2026 萬聖節活動已圓滿落幕！花生教聖誕節特別企劃即將公開（Coming Soon），每日完成一項挑戰領 200P！';
+
+    const CLOUD_STATE = {
+      loaded: false,
+      announcement: DEFAULT_ANNOUNCEMENT,
+      esgCount: 0,
+      xmasEarlybird: [],
+      xmasIdeas: [],
+      profiles: {},
+      wishes: []
+    };
+
+    let inFlightPosts = 0;
+
+    function updateSyncBadge(status) {
+      const badge = document.getElementById('cloud-sync-badge');
+      if (!badge) return;
+      if (status === 'ok') {
+        badge.textContent = '🟢 全班即時連線';
+        badge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-[11px] font-bold text-emerald-300';
+      } else if (status === 'syncing') {
+        badge.textContent = '🔄 同步中...';
+        badge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/30 text-[11px] font-bold text-amber-200';
+      } else if (status === 'error') {
+        badge.textContent = '⚠️ 雲端權限待確認';
+        badge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-500/25 border border-rose-400/40 text-[11px] font-bold text-rose-200';
+      }
+    }
+
+    function applyCloudPayload(data) {
+      if (!data || !data.ok) return;
+      CLOUD_STATE.loaded = true;
+      CLOUD_STATE.announcement = data.announcement || DEFAULT_ANNOUNCEMENT;
+      CLOUD_STATE.esgCount = Number(data.esgCount || 0);
+      CLOUD_STATE.xmasEarlybird = data.xmasEarlybird || [];
+      CLOUD_STATE.xmasIdeas = data.xmasIdeas || [];
+      CLOUD_STATE.profiles = data.profiles || {};
+      CLOUD_STATE.wishes = data.wishes || [];
+
+      applyGlobalAnnouncement();
+      renderChristmasBillboard();
+      renderEsgCount();
+      syncHeaderAuth();
+      renderLeaderboards();
+      renderWishWall();
+
+      const dashBox = document.getElementById('member-dashboard-box');
+      if (dashBox && !dashBox.classList.contains('hidden')) {
+        const activeId = document.activeElement ? document.activeElement.id : '';
+        const savedDraft = activeId === 'admin-banner-textarea'
+          ? document.getElementById('admin-banner-textarea').value
+          : null;
+        refreshMemberPage();
+        if (savedDraft !== null) {
+          document.getElementById('admin-banner-textarea').value = savedDraft;
+        }
+      }
+    }
+
+    async function syncFromCloud() {
+      if (!GAS_WEB_APP_URL.startsWith('http')) return;
+      if (inFlightPosts > 0) return;
+      if (typeof challengeRunning !== 'undefined' && challengeRunning) return;
+
+      try {
+        const res = await fetch(`${GAS_WEB_APP_URL}?t=${Date.now()}`, {
+          method: 'GET',
+          redirect: 'follow'
+        });
+        const data = await res.json();
+        applyCloudPayload(data);
+        updateSyncBadge('ok');
+      } catch (err) {
+        updateSyncBadge('error');
+        console.warn('IPO 雲端連線異常，請確認 GAS 部署權限是否設為「所有人」：', err);
+      }
+    }
+
+    async function pushToCloud(payload) {
+      if (!GAS_WEB_APP_URL.startsWith('http')) return false;
+      inFlightPosts++;
+      updateSyncBadge('syncing');
+      try {
+        const res = await fetch(GAS_WEB_APP_URL, {
+          method: 'POST',
+          redirect: 'follow',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        inFlightPosts = Math.max(0, inFlightPosts - 1);
+        applyCloudPayload(data);
+        updateSyncBadge('ok');
+        return true;
+      } catch (err) {
+        inFlightPosts = Math.max(0, inFlightPosts - 1);
+        updateSyncBadge('error');
+        showToast('⚠️ 雲端寫入受阻，請確認 GAS 部署「誰可以存取」已設為「所有人」', 'warning');
+        return false;
+      }
+    }
 
     const SKIN_SHOP = [
       { id: 'classic', name: 'Classic 原味經典', price: 0, variant: 'classic', band: '#FFFFFF', desc: '最純粹的 804 經典白肚兜造型' },
@@ -1449,24 +1513,15 @@
       return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     }
 
-    function getProfiles() {
-      try { return JSON.parse(safeGetItem(KEYS.PROFILES) || '{}'); } catch (e) { return {}; }
-    }
-
-    function saveProfiles(obj) {
-      safeSetItem(KEYS.PROFILES, JSON.stringify(obj));
-    }
-
     function getLoggedInMember() {
       const acc = safeGetItem(KEYS.SESSION);
       return acc ? IPO_MEMBERS.find(m => m.account === acc) || null : null;
     }
 
     function getMemberProfile(account) {
-      const all = getProfiles();
       const member = IPO_MEMBERS.find(m => m.account === account);
-      if (!all[account]) {
-        all[account] = {
+      if (!CLOUD_STATE.profiles[account]) {
+        CLOUD_STATE.profiles[account] = {
           points: 0,
           lastChallengeDate: '',
           lastChallengeType: '',
@@ -1478,17 +1533,14 @@
           equippedVariant: 'classic',
           equippedBand: member ? member.color : '#6B8E55'
         };
-        saveProfiles(all);
       }
-      return all[account];
+      return CLOUD_STATE.profiles[account];
     }
 
     function mutateMemberProfile(account, fn) {
-      const all = getProfiles();
       const cur = getMemberProfile(account);
-      all[account] = fn({ ...cur });
-      saveProfiles(all);
-      return all[account];
+      CLOUD_STATE.profiles[account] = fn({ ...cur });
+      return CLOUD_STATE.profiles[account];
     }
 
     /* =========================================================================
@@ -1627,7 +1679,7 @@
     }
 
     function getAnnouncementText() {
-      return safeGetItem(KEYS.ANNOUNCEMENT) || DEFAULT_ANNOUNCEMENT;
+      return CLOUD_STATE.announcement || DEFAULT_ANNOUNCEMENT;
     }
 
     function applyGlobalAnnouncement() {
@@ -1635,7 +1687,9 @@
       const bannerEl = document.getElementById('global-banner-text');
       if (bannerEl) bannerEl.textContent = txt;
       const adminInput = document.getElementById('admin-banner-textarea');
-      if (adminInput) adminInput.value = txt;
+      if (adminInput && document.activeElement !== adminInput) {
+        adminInput.value = txt;
+      }
     }
 
     /* =========================================================================
@@ -1670,22 +1724,18 @@
             syncHeaderAuth();
             renderLeaderboards();
             showToast(`🔮 每日首次求籤成功！${member.name} 獲得 +20P！`, 'success');
+            pushToCloud({ action: 'claimDailyBonus', account: member.account, field: 'lastFortune', date: today, delta: 20 });
           }
         }
       }, 650);
     }
 
-    // Christmas Early-Bird Notification & Idea Wish Pool (Zero pre-filled fake entries)
     function getChristmasSubscribers() {
-      try {
-        const raw = safeGetItem(KEYS.XMAS_EARLYBIRD);
-        if (raw) return JSON.parse(raw);
-      } catch (e) {}
-      return [];
+      return CLOUD_STATE.xmasEarlybird || [];
     }
 
-    function saveChristmasSubscribers(list) {
-      safeSetItem(KEYS.XMAS_EARLYBIRD, JSON.stringify(list));
+    function getChristmasIdeas() {
+      return CLOUD_STATE.xmasIdeas || [];
     }
 
     function renderChristmasBillboard() {
@@ -1739,13 +1789,12 @@
         return;
       }
 
-      subs.unshift({
+      CLOUD_STATE.xmasEarlybird.unshift({
         id: Date.now(),
         account: member.account,
         name: member.name,
         role: member.role
       });
-      saveChristmasSubscribers(subs);
 
       const prof = getMemberProfile(member.account);
       if (!prof.lastXmasSub) {
@@ -1755,21 +1804,14 @@
       }
       renderChristmasBillboard();
       showToast(`🎄 預約成功！${member.name} 已登記聖誕通知並獲得 +30P！`, 'success');
+      pushToCloud({ action: 'subXmas', account: member.account, name: member.name, role: member.role });
     }
 
     function removeXmasSubscriber(id) {
-      const updated = getChristmasSubscribers().filter(s => s.id !== id);
-      saveChristmasSubscribers(updated);
+      CLOUD_STATE.xmasEarlybird = CLOUD_STATE.xmasEarlybird.filter(s => String(s.id) !== String(id));
       renderChristmasBillboard();
       showToast('已從聖誕預約名單中移除該筆紀錄。', 'info');
-    }
-
-    function getChristmasIdeas() {
-      try {
-        const raw = safeGetItem(KEYS.XMAS_IDEAS);
-        if (raw) return JSON.parse(raw);
-      } catch (e) {}
-      return [];
+      pushToCloud({ action: 'removeXmasSub', id });
     }
 
     function postChristmasIdea(e) {
@@ -1784,14 +1826,13 @@
       const text = input.value.trim();
       if (!text) return;
 
-      const list = getChristmasIdeas();
-      list.unshift({ id: Date.now(), author: member.name, text });
-      safeSetItem(KEYS.XMAS_IDEAS, JSON.stringify(list));
+      CLOUD_STATE.xmasIdeas.unshift({ id: Date.now(), author: member.name, text });
       input.value = '';
 
       const prof = getMemberProfile(member.account);
+      const today = getTodayStr();
       if (!prof.lastXmasIdea) {
-        mutateMemberProfile(member.account, p => ({ ...p, points: p.points + 20, lastXmasIdea: getTodayStr() }));
+        mutateMemberProfile(member.account, p => ({ ...p, points: p.points + 20, lastXmasIdea: today }));
         syncHeaderAuth();
         renderLeaderboards();
         showToast(`✨ 許願已投入！${member.name} 獲得 +20P 點數！`, 'success');
@@ -1799,6 +1840,7 @@
         showToast('✨ 聖誕活動點子已成功送出！', 'success');
       }
       renderChristmasBillboard();
+      pushToCloud({ action: 'postXmasIdea', account: member.account, author: member.name, text, date: today });
     }
 
     /* =========================================================================
@@ -1855,13 +1897,12 @@
        9. PAGE 5 INTERACTIONS: PNT ESG PLEDGE (+30P)
     ========================================================================= */
     function renderEsgCount() {
-      const count = Number(safeGetItem(KEYS.ESG_COUNT) || 0);
-      document.getElementById('esg-pledge-count').textContent = count;
+      const el = document.getElementById('esg-pledge-count');
+      if (el) el.textContent = CLOUD_STATE.esgCount;
     }
 
     function pledgeEsgAction() {
-      const next = Number(safeGetItem(KEYS.ESG_COUNT) || 0) + 1;
-      safeSetItem(KEYS.ESG_COUNT, String(next));
+      CLOUD_STATE.esgCount += 1;
       renderEsgCount();
 
       const member = getLoggedInMember();
@@ -1873,10 +1914,13 @@
           syncHeaderAuth();
           renderLeaderboards();
           showToast(`🌱 感謝 ${member.name} 響應 PNT ESG 減碳行動！獲得 +30P 永續點數！`, 'success');
-          return;
+        } else {
+          showToast('🌱 已響應 IPO ESG BAG 二手考卷永續行動！', 'success');
         }
+      } else {
+        showToast('🌱 已響應 IPO ESG BAG 二手考卷永續行動！', 'success');
       }
-      showToast('🌱 已響應 IPO ESG BAG 二手考卷永續行動！', 'success');
+      pushToCloud({ action: 'pledgeEsg', account: member ? member.account : '', date: today });
     }
 
     /* =========================================================================
@@ -2036,6 +2080,7 @@
       getMemberProfile(found.account);
       syncHeaderAuth();
       refreshMemberPage();
+      syncFromCloud();
       showToast(`🥜 歡迎回來，${found.role} ${found.name}！`, 'success');
     }
 
@@ -2086,7 +2131,6 @@
       const prof = getMemberProfile(member.account);
       const today = getTodayStr();
 
-      // Update ID card
       const badge = document.getElementById('dash-role-badge');
       badge.textContent = member.role;
       badge.className = `px-3 py-1 rounded-full text-xs font-black ${getRoleBadgeClass(member.role)}`;
@@ -2098,10 +2142,8 @@
       document.getElementById('dash-points').textContent = prof.points;
       document.getElementById('shop-balance').textContent = prof.points;
 
-      // Update Daily 1-of-3 Challenge status
       renderDailyChallengeCards(prof, today);
 
-      // Render Skin Shop
       document.getElementById('dash-skin-shop').innerHTML = SKIN_SHOP.map(skin => {
         const unlocked = prof.unlockedSkins.includes(skin.id);
         const equipped = prof.equippedVariant === skin.variant && (skin.id !== 'classic' || prof.equippedBand === '#FFFFFF');
@@ -2127,14 +2169,15 @@
         `;
       }).join('');
 
-      // Render Wish Wall
       renderWishWall();
 
-      // Admin Panel (教祖 & 副教祖 only)
       const adminPanel = document.getElementById('dash-admin-panel');
       if (member.role === '教祖' || member.role === '副教祖') {
         adminPanel.classList.remove('hidden');
-        document.getElementById('admin-banner-textarea').value = getAnnouncementText();
+        const bannerInput = document.getElementById('admin-banner-textarea');
+        if (document.activeElement !== bannerInput) {
+          bannerInput.value = getAnnouncementText();
+        }
         renderAdminMembersTable();
         renderChristmasBillboard();
       } else {
@@ -2270,10 +2313,11 @@
         <div class="text-center space-y-3 py-6">
           <div class="text-5xl">🎉</div>
           <h4 class="text-2xl font-black text-emerald-400">挑戰成功！獲得 +200 P</h4>
-          <p class="text-xs text-peanut-sand">點數已即時入帳並更新至全體成員排行榜！</p>
+          <p class="text-xs text-peanut-sand">點數已即時上傳至全班雲端排行榜！</p>
         </div>
       `;
       showToast(`🏆 挑戰成功！${member.name} 獲得 +200 P！`, 'success');
+      pushToCloud({ action: 'completeChallenge', account: member.account, challengeType: activeChallengeType, date: today });
     }
 
     function handleChallengeFail(reasonText) {
@@ -2288,7 +2332,6 @@
       `;
     }
 
-    // Challenge 1: 花生翻牌 (Match 6 pairs within 45s)
     function initFlipChallenge() {
       const icons = ['🥜', '🌱', '🎅', '🌌', '🌿', '🎄'];
       const deck = [...icons, ...icons].sort(() => Math.random() - 0.5);
@@ -2350,7 +2393,6 @@
       }, 100);
     }
 
-    // Challenge 2: 打花生 (Hit 12 peanuts within 20s)
     function initWhackChallenge() {
       let hits = 0;
       let activeHole = -1;
@@ -2407,7 +2449,6 @@
       }, 100);
     }
 
-    // Challenge 3: 數字順序 (Tap 1 to 12 in order within 15s)
     function initSequenceChallenge() {
       const nums = Array.from({ length: 12 }, (_, i) => i + 1).sort(() => Math.random() - 0.5);
       let nextExpected = 1;
@@ -2536,6 +2577,7 @@
       syncHeaderAuth();
       refreshMemberPage();
       showToast(`🎉 已兌換並套用「${skin.name}」！`, 'success');
+      pushToCloud({ action: 'buySkin', account: member.account, skin });
     }
 
     function equipShopSkin(skinId) {
@@ -2553,19 +2595,12 @@
       syncHeaderAuth();
       refreshMemberPage();
       showToast(`✨ 數位信徒證已換上「${skin.name}」！`, 'info');
+      pushToCloud({ action: 'equipSkin', account: member.account, skin });
     }
 
-    // Wish Wall (Zero pre-filled fake wishes)
+    // Wish Wall
     function getWishes() {
-      try {
-        const raw = safeGetItem(KEYS.WISHES);
-        if (raw) return JSON.parse(raw);
-      } catch (e) {}
-      return [];
-    }
-
-    function saveWishes(list) {
-      safeSetItem(KEYS.WISHES, JSON.stringify(list));
+      return CLOUD_STATE.wishes || [];
     }
 
     function renderWishWall() {
@@ -2598,27 +2633,30 @@
       const text = input.value.trim();
       if (!text) return;
 
-      const list = getWishes();
-      list.unshift({ id: Date.now(), role: member.role, name: member.name, text, likes: 1 });
-      saveWishes(list);
+      CLOUD_STATE.wishes.unshift({ id: Date.now(), role: member.role, name: member.name, text, likes: 1 });
       input.value = '';
       renderWishWall();
-      showToast('🙏 祈願已張貼至 804 花生祈願牆！', 'success');
+      showToast('🙏 祈願已同步張貼至全班祈願牆！', 'success');
+      pushToCloud({ action: 'postWish', role: member.role, name: member.name, text });
     }
 
     function likeWish(id) {
-      const list = getWishes().map(w => w.id === id ? { ...w, likes: w.likes + 1 } : w);
-      saveWishes(list);
+      const target = CLOUD_STATE.wishes.find(w => String(w.id) === String(id));
+      if (target) target.likes += 1;
       renderWishWall();
+      pushToCloud({ action: 'likeWish', id });
     }
 
     // Admin Controls (教祖 & 副教祖)
     function saveAdminAnnouncement() {
       const val = document.getElementById('admin-banner-textarea').value.trim();
       if (!val) return;
-      safeSetItem(KEYS.ANNOUNCEMENT, val);
+      CLOUD_STATE.announcement = val;
       applyGlobalAnnouncement();
-      showToast('📢 全站即時公告已更新！', 'success');
+      showToast('📢 正在推播全站即時公告給全班...', 'info');
+      pushToCloud({ action: 'updateAnnouncement', text: val }).then((ok) => {
+        if (ok) showToast('📢 全站即時公告已同步更新！', 'success');
+      });
     }
 
     function renderAdminMembersTable() {
@@ -2650,6 +2688,7 @@
       syncHeaderAuth();
       refreshMemberPage();
       showToast(`👑 已賜予 ${target.name} +100P 祝福點數！`, 'success');
+      pushToCloud({ action: 'addPoints', account: targetAccount, delta: 100 });
     }
 
     function showAdminResetConfirm() {
@@ -2679,12 +2718,13 @@
           lastXmasIdea: ''
         }));
       });
-      safeSetItem(KEYS.ESG_COUNT, '0');
+      CLOUD_STATE.esgCount = 0;
       renderEsgCount();
       cancelAdminResetConfirm();
       syncHeaderAuth();
       refreshMemberPage();
       showToast('🔄 已將全體 17 名成員的點數與統計數字全部歸零！', 'info');
+      pushToCloud({ action: 'resetAllScores' });
     }
 
     function escapeHTML(str) {
@@ -2695,7 +2735,6 @@
        13. INITIALIZATION ON DOM READY
     ========================================================================= */
     document.addEventListener('DOMContentLoaded', () => {
-      // Render SVG Illustrations
       document.getElementById('nav-brand-svg').innerHTML = renderPeanutoSVG('sprout', '#6B8E55');
       document.getElementById('home-hero-santa-svg').innerHTML = renderPeanutoSVG('santa', '#DC2626');
       document.getElementById('home-hero-cosmic-svg').innerHTML = renderPeanutoSVG('cosmic', '#4F46E5');
@@ -2709,7 +2748,6 @@
       document.getElementById('universe-hero-svg').innerHTML = renderPeanutoSVG('cosmic', '#4F46E5');
       document.getElementById('login-page-mascot').innerHTML = renderPeanutoSVG('sprout', '#6B8E55');
 
-      // Hydrate state & initial route
       applyGlobalAnnouncement();
       renderChristmasBillboard();
       renderMemberDirectory();
@@ -2723,6 +2761,10 @@
 
       const initialHash = window.location.hash || '#/home';
       renderActiveRoute(ROUTES[initialHash] ? initialHash : '#/home');
+
+      // Start Google Sheets live cloud sync (every 5 seconds)
+      syncFromCloud();
+      setInterval(syncFromCloud, 5000);
     });
   </script>
 </body>
