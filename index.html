@@ -1,2857 +1,479 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>國際花生組織 IPO · 花生教官方網站</title>
-  <!-- Google Fonts: Inter + Noto Sans TC -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet" />
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Inter"', '"Noto Sans TC"', 'sans-serif']
-          },
-          colors: {
-            navy: {
-              DEFAULT: '#233140',
-              dark: '#18222D',
-              light: '#32455A'
-            },
-            peanut: {
-              cream: '#FDF8F0',
-              sand: '#F5E6D3',
-              light: '#EDD0A8',
-              caramel: '#D8A46F',
-              deep: '#9C6635',
-              shell: '#E8C391'
-            },
-            esg: {
-              DEFAULT: '#1B4332',
-              mid: '#2D6A4F',
-              sage: '#52B788',
-              mint: '#D8F3DC'
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酪梨航空 Avocado Airlines - 訂票系統</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sage: {
+                            50: '#f4f7f4',
+                            100: '#e3ebe3',
+                            200: '#c7d7c7',
+                            300: '#a3bfa3',
+                            400: '#84a384',
+                            500: '#648564', // 主鼠尾草綠
+                            600: '#4d6b4d',
+                            700: '#3f563f',
+                            800: '#344634',
+                            900: '#2c3b2c',
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    };
-  </script>
-  <style>
-    html { scroll-behavior: smooth; }
-    body { background-color: #FDF8F0; color: #1E293B; overflow-x: hidden; }
-    @keyframes floatSlow {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-7px) rotate(1.5deg); }
-    }
-    .animate-float { animation: floatSlow 4.2s ease-in-out infinite; }
-    @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .page-enter { animation: fadeSlide 0.25s ease-out forwards; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  </style>
+    </script>
+    <!-- FullCalendar CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .fc-event { cursor: pointer; border-radius: 6px; padding: 2px 4px; }
+        .fc-header-toolbar { font-size: 0.9rem; }
+        .fc-button-primary { background-color: #648564 !important; border-color: #648564 !important; }
+        .fc-button-primary:hover { background-color: #4d6b4d !important; border-color: #4d6b4d !important; }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-peanut-caramel selection:text-white">
+<body class="bg-[#f7f9f7] font-sans text-slate-700">
 
-  <!-- =========================================================
-       TOP GLOBAL ANNOUNCEMENT BAR + CLOUD SYNC BADGE
-  ========================================================= -->
-  <div class="bg-navy-dark text-peanut-cream text-xs sm:text-sm py-2.5 px-4 border-b border-white/10">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-      <div class="flex items-center gap-2 min-w-0 flex-1">
-        <span class="shrink-0 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-black bg-red-600 text-white tracking-wider">
-          🎄 聖誕企劃預告
-        </span>
-        <p id="global-banner-text" class="truncate font-semibold text-peanut-sand">
-          🎄 最新公告：2026 萬聖節活動已圓滿落幕！花生教聖誕節特別企劃即將公開（Coming Soon），每日完成一項挑戰領 200P！
-        </p>
-      </div>
-      <div class="flex items-center gap-3 shrink-0">
-        <span id="cloud-sync-badge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 text-[10px] font-bold text-amber-200">
-          🟡 單機模式（尚未綁定試算表）
-        </span>
-        <button type="button" onclick="navigateTo('#/login')" class="text-xs font-extrabold text-amber-300 hover:text-amber-200 underline underline-offset-4 cursor-pointer">
-          每日挑戰 & 排行榜 →
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- =========================================================
-       STICKY MULTI-PAGE NAVIGATION BAR
-  ========================================================= -->
-  <header class="sticky top-0 z-40 bg-navy/95 backdrop-blur-md text-white shadow-lg border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <!-- Brand Logo -->
-        <button type="button" onclick="navigateTo('#/home')" class="flex items-center gap-3 text-left group cursor-pointer focus:outline-none">
-          <div class="w-10 h-10 rounded-2xl bg-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-            <svg viewBox="0 0 64 64" class="w-8 h-8">
-              <g transform="rotate(-24 32 32)">
-                <path d="M32 6 C42 6 47 14 45 23 C43.5 29 43.5 35 45 41 C47 50 42 58 32 58 C22 58 17 50 19 41 C20.5 35 20.5 29 19 23 C17 14 22 6 32 6 Z" fill="#E8C391" stroke="#C5935A" stroke-width="2.5"/>
-                <path d="M23 16 L41 16 M21 24 L43 24 M21 40 L43 40 M23 48 L41 48 M27 9 L27 55 M37 9 L37 55" stroke="#C5935A" stroke-width="1.3" opacity="0.6"/>
-                <rect x="17" y="25" width="30" height="14" rx="6" fill="#6B8E55"/>
-              </g>
-            </svg>
-          </div>
-          <div>
-            <div class="flex items-center gap-1.5">
-              <span class="font-black text-base sm:text-lg tracking-tight text-white">國際花生組織 IPO</span>
-              <span class="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-extrabold rounded-md bg-peanut-caramel text-navy-dark">花生教</span>
+    <!-- 導覽列 -->
+    <nav class="bg-sage-600 text-white shadow-sm border-b border-sage-700">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('booking')">
+                <span class="text-2xl">🥑</span>
+                <span class="font-semibold text-lg tracking-wider text-sage-50">Avocado Airlines 酪梨航空</span>
             </div>
-            <p class="text-[11px] text-peanut-light/90 font-medium tracking-wide">International Peanut Org.</p>
-          </div>
-        </button>
-
-        <!-- Desktop Navigation Links -->
-        <nav class="hidden lg:flex items-center gap-1" id="desktop-nav">
-          <button type="button" data-route="#/home" onclick="navigateTo('#/home')" class="nav-link px-3 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer">首頁</button>
-          <button type="button" data-route="#/purpose" onclick="navigateTo('#/purpose')" class="nav-link px-3 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer">教旨 Purpose</button>
-          <button type="button" data-route="#/member" onclick="navigateTo('#/member')" class="nav-link px-3 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer">成員 Member</button>
-          <button type="button" data-route="#/ipo-intro" onclick="navigateTo('#/ipo-intro')" class="nav-link px-3 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer">IPO 簡介</button>
-          <button type="button" data-route="#/pnt-esg" onclick="navigateTo('#/pnt-esg')" class="nav-link px-3 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer">PNT ESG</button>
-          <button type="button" data-route="#/studio" onclick="navigateTo('#/studio')" class="nav-link px-3 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer">🎨 花生工作室</button>
-          <a href="https://sites.google.com/kcis.com.tw/pnt-world" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl text-sm font-bold text-indigo-200 hover:text-white hover:bg-indigo-500/25 transition-all inline-flex items-center gap-1">
-            🌌 花生宇宙 <span class="text-[10px] opacity-80">↗</span>
-          </a>
-          <button type="button" data-route="#/app" onclick="navigateTo('#/app')" class="nav-link px-3 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer">下載 APP</button>
-        </nav>
-
-        <!-- Right Auth Button + Mobile Drawer Toggle -->
-        <div class="flex items-center gap-2">
-          <button type="button" id="header-auth-btn" onclick="navigateTo('#/login')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-peanut-caramel hover:bg-amber-500 text-navy-dark font-black text-xs sm:text-sm shadow-md transition-all cursor-pointer">
-            <span>🔐 會員登入</span>
-          </button>
-          <button type="button" onclick="toggleMobileMenu()" aria-label="開啟選單" class="lg:hidden p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white cursor-pointer">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mobile Navigation Drawer -->
-    <div id="mobile-menu" class="hidden lg:hidden bg-navy-dark border-t border-white/10 px-4 pt-3 pb-5 space-y-1.5">
-      <button type="button" data-route="#/home" onclick="navigateTo('#/home')" class="mobile-nav-link w-full text-left px-4 py-3 rounded-xl text-sm font-bold block cursor-pointer">🏠 首頁 Home</button>
-      <button type="button" data-route="#/purpose" onclick="navigateTo('#/purpose')" class="mobile-nav-link w-full text-left px-4 py-3 rounded-xl text-sm font-bold block cursor-pointer">📜 教旨 Purpose</button>
-      <button type="button" data-route="#/member" onclick="navigateTo('#/member')" class="mobile-nav-link w-full text-left px-4 py-3 rounded-xl text-sm font-bold block cursor-pointer">👥 成員組織 Member</button>
-      <button type="button" data-route="#/ipo-intro" onclick="navigateTo('#/ipo-intro')" class="mobile-nav-link w-full text-left px-4 py-3 rounded-xl text-sm font-bold block cursor-pointer">🌍 IPO 簡介 Intro</button>
-      <button type="button" data-route="#/pnt-esg" onclick="navigateTo('#/pnt-esg')" class="mobile-nav-link w-full text-left px-4 py-3 rounded-xl text-sm font-bold block cursor-pointer">🌿 PNT ESG 永續發展</button>
-      <button type="button" data-route="#/studio" onclick="navigateTo('#/studio')" class="mobile-nav-link w-full text-left px-4 py-3 rounded-xl text-sm font-bold block cursor-pointer">🎨 花生工作室 Studio</button>
-      <a href="https://sites.google.com/kcis.com.tw/pnt-world" target="_blank" rel="noopener noreferrer" class="w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-indigo-200 hover:bg-white/10 flex items-center justify-between">
-        <span>🌌 前往花生宇宙 (External)</span>
-        <span class="text-xs">↗</span>
-      </a>
-      <button type="button" data-route="#/app" onclick="navigateTo('#/app')" class="mobile-nav-link w-full text-left px-4 py-3 rounded-xl text-sm font-bold block cursor-pointer">📱 下載花生教 APP</button>
-      <button type="button" data-route="#/login" onclick="navigateTo('#/login')" class="mobile-nav-link w-full text-left px-4 py-3 rounded-xl text-sm font-bold bg-peanut-caramel/20 text-amber-300 block cursor-pointer">🔐 會員專區 / 每日挑戰 & 排行榜</button>
-    </div>
-  </header>
-
-  <!-- =========================================================
-       MAIN MULTI-PAGE VIEWPORT
-  ========================================================= -->
-  <main class="flex-1">
-
-    <!-- =======================================================
-         PAGE 1: #/home (首頁)
-    ======================================================= -->
-    <section id="page-home" class="page-view hidden">
-      <!-- Hero Carousel Banner -->
-      <div class="relative overflow-hidden bg-navy text-white">
-        <div id="hero-slide-0" class="transition-all duration-500 bg-gradient-to-br from-[#143628] via-navy to-[#3B1822] py-14 sm:py-20 px-4">
-          <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
-              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-500/20 border border-red-400/40 text-amber-200 text-xs font-extrabold tracking-wide">
-                <span>🎄 IPO 歲末特別企劃 · COMING SOON</span>
-              </div>
-              <h1 class="text-3xl sm:text-5xl font-black leading-tight tracking-tight">
-                花生教聖誕節特別企劃<br/>
-                <span class="text-amber-300">活動即將公開！</span>
-              </h1>
-              <p class="text-slate-200 text-sm sm:text-base max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                感謝全體教徒熱情參與！<strong>2026 萬聖節交換禮物活動已圓滿落幕</strong>。花生教聖誕神秘驚喜企劃正在緊鑼密鼓籌備中，活動規則與神秘彩蛋即將揭曉！
-              </p>
-              <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
-                <a href="#xmas-preview-card" class="px-6 py-3.5 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-black text-sm shadow-xl transition-all">
-                  🎄 搶先鎖定聖誕預告
-                </a>
-                <button type="button" onclick="navigateTo('#/login')" class="px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm transition-all cursor-pointer">
-                  🏆 每日挑戰 & 分數排行
+            <div class="flex space-x-3">
+                <button onclick="switchTab('booking')" class="px-4 py-2 rounded-lg text-sm bg-sage-700/50 hover:bg-sage-700 transition">
+                    <i class="fa-solid fa-plane-departure mr-1.5"></i> 線上訂票
                 </button>
-              </div>
-            </div>
-            <div class="lg:col-span-5 flex justify-center">
-              <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-3xl bg-white/5 border border-white/15 backdrop-blur-sm flex items-center justify-center shadow-2xl animate-float">
-                <div id="hero-santa-mascot" class="w-52 h-52"></div>
-                <span class="absolute -top-3 -right-3 px-3 py-1 rounded-full bg-amber-400 text-navy-dark font-black text-xs shadow-lg">
-                  COMING SOON
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="hero-slide-1" class="hidden transition-all duration-500 bg-gradient-to-br from-navy-dark via-navy to-[#3A2B4C] py-14 sm:py-20 px-4">
-          <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
-              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/40 text-indigo-200 text-xs font-extrabold tracking-wide">
-                <span>🌌 MULTIVERSE OF PEANUT</span>
-              </div>
-              <h2 class="text-3xl sm:text-5xl font-black leading-tight tracking-tight">
-                花生の多重宇宙<br/>
-                <span class="text-peanut-caramel">準備好了！出發 →</span>
-              </h2>
-              <p class="text-slate-200 text-sm sm:text-base max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                從 804 教室出發，連結校園、合歡山與無限次元的 Peanut 宇宙。探索官方花生宇宙網站，或在花生工作室為你的 Peanuto 換上專屬造型！
-              </p>
-              <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
-                <a href="https://sites.google.com/kcis.com.tw/pnt-world" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-sm shadow-xl transition-all inline-flex items-center gap-1.5">
-                  🌌 前往花生宇宙網站 <span>↗</span>
-                </a>
-                <button type="button" onclick="navigateTo('#/studio')" class="px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm transition-all cursor-pointer">
-                  🎨 進入花生工作室
+                <button id="nav-admin-btn" onclick="openAdminModal()" class="px-4 py-2 bg-sage-800 text-sage-100 rounded-lg text-sm hover:bg-sage-900 transition shadow-sm">
+                    <i class="fa-solid fa-user-gear mr-1.5"></i> 管理員登入
                 </button>
-              </div>
             </div>
-            <div class="lg:col-span-5 flex justify-center">
-              <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-3xl bg-white/5 border border-white/15 backdrop-blur-sm flex items-center justify-center shadow-2xl animate-float">
-                <div id="hero-cosmic-mascot" class="w-52 h-52"></div>
-                <span class="absolute -bottom-3 px-4 py-1 rounded-full bg-indigo-500 text-white font-black text-xs shadow-lg">
-                  One Peanut, One World.
-                </span>
-              </div>
-            </div>
-          </div>
         </div>
+    </nav>
 
-        <!-- Carousel Controls -->
-        <div class="max-w-7xl mx-auto px-4 pb-5 flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <button type="button" onclick="setHeroSlide(0)" id="dot-0" class="w-8 h-2.5 rounded-full bg-amber-400 transition-all cursor-pointer" aria-label="第一張輪播"></button>
-            <button type="button" onclick="setHeroSlide(1)" id="dot-1" class="w-2.5 h-2.5 rounded-full bg-white/30 transition-all cursor-pointer" aria-label="第二張輪播"></button>
-          </div>
-          <div class="flex items-center gap-2">
-            <button type="button" onclick="toggleHeroSlide()" class="px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-white cursor-pointer">
-              切換看板 ⇄
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3 Quick Status Cards -->
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="rounded-2xl bg-white p-5 shadow-md border border-peanut-light/60 flex items-start gap-4">
-            <div class="w-11 h-11 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl shrink-0">🏔️</div>
-            <div>
-              <span class="text-[11px] font-extrabold uppercase tracking-wider text-peanut-deep">遶境與遠征資訊</span>
-              <h3 class="font-black text-navy text-base mt-0.5">本學期遶境已圓滿結束</h3>
-              <p class="text-xs text-slate-600 mt-1">與花生一起征服合歡山！敬請期待下一次遶境遊行通知。</p>
-            </div>
-          </div>
-
-          <div class="rounded-2xl bg-white p-5 shadow-md border border-peanut-light/60 flex items-start gap-4">
-            <div class="w-11 h-11 rounded-2xl bg-red-100 text-red-700 flex items-center justify-center text-xl shrink-0">🎄</div>
-            <div>
-              <span class="text-[11px] font-extrabold uppercase tracking-wider text-red-600">節慶活動狀態</span>
-              <h3 class="font-black text-navy text-base mt-0.5">聖誕節企劃即將公開</h3>
-              <p class="text-xs text-slate-600 mt-1">2026.10.30 萬聖節活動已圓滿落幕，聖誕驚喜敬請期待！</p>
-            </div>
-          </div>
-
-          <div class="rounded-2xl bg-white p-5 shadow-md border border-peanut-light/60 flex items-start gap-4">
-            <div class="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl shrink-0">🎯</div>
-            <div>
-              <span class="text-[11px] font-extrabold uppercase tracking-wider text-esg-mid">信徒每日挑戰任務</span>
-              <h3 class="font-black text-navy text-base mt-0.5">每天可選擇一項挑戰！</h3>
-              <p class="text-xs text-slate-600 mt-1">
-                花生翻牌、打花生或數字順序三選一，過關即賺 <strong>+200P</strong>！
-                <button type="button" onclick="navigateTo('#/login')" class="text-peanut-deep font-black underline ml-1 cursor-pointer">前往挑戰 →</button>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 6 Multi-Page Quick Portals -->
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="flex items-end justify-between mb-6">
-          <div>
-            <h2 class="text-2xl font-black text-navy">🧭 探索花生教分頁與宇宙傳送門</h2>
-            <p class="text-sm text-slate-600 mt-1">點擊卡片快速傳送至各主題頁面</p>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          <button type="button" onclick="navigateTo('#/purpose')" class="group rounded-2xl bg-white hover:bg-navy p-5 text-left shadow-sm hover:shadow-xl border border-peanut-light/60 transition-all cursor-pointer">
-            <div class="w-11 h-11 rounded-2xl bg-peanut-sand group-hover:bg-white/15 flex items-center justify-center text-2xl mb-3">📜</div>
-            <div class="font-black text-navy group-hover:text-white text-base">教旨</div>
-            <div class="text-xs text-slate-500 group-hover:text-peanut-light mt-0.5">Purpose</div>
-          </button>
-
-          <button type="button" onclick="navigateTo('#/member')" class="group rounded-2xl bg-white hover:bg-navy p-5 text-left shadow-sm hover:shadow-xl border border-peanut-light/60 transition-all cursor-pointer">
-            <div class="w-11 h-11 rounded-2xl bg-peanut-sand group-hover:bg-white/15 flex items-center justify-center text-2xl mb-3">👥</div>
-            <div class="font-black text-navy group-hover:text-white text-base">成員組織</div>
-            <div class="text-xs text-slate-500 group-hover:text-peanut-light mt-0.5">Member</div>
-          </button>
-
-          <button type="button" onclick="navigateTo('#/ipo-intro')" class="group rounded-2xl bg-white hover:bg-navy p-5 text-left shadow-sm hover:shadow-xl border border-peanut-light/60 transition-all cursor-pointer">
-            <div class="w-11 h-11 rounded-2xl bg-peanut-sand group-hover:bg-white/15 flex items-center justify-center text-2xl mb-3">🌍</div>
-            <div class="font-black text-navy group-hover:text-white text-base">IPO 簡介</div>
-            <div class="text-xs text-slate-500 group-hover:text-peanut-light mt-0.5">IPO Intro</div>
-          </button>
-
-          <button type="button" onclick="navigateTo('#/pnt-esg')" class="group rounded-2xl bg-white hover:bg-esg p-5 text-left shadow-sm hover:shadow-xl border border-peanut-light/60 transition-all cursor-pointer">
-            <div class="w-11 h-11 rounded-2xl bg-esg-mint group-hover:bg-white/15 flex items-center justify-center text-2xl mb-3">🌿</div>
-            <div class="font-black text-navy group-hover:text-white text-base">PNT ESG</div>
-            <div class="text-xs text-slate-500 group-hover:text-emerald-200 mt-0.5">永續紙袋計畫</div>
-          </button>
-
-          <button type="button" onclick="navigateTo('#/studio')" class="group rounded-2xl bg-white hover:bg-amber-900 p-5 text-left shadow-sm hover:shadow-xl border border-peanut-light/60 transition-all cursor-pointer">
-            <div class="w-11 h-11 rounded-2xl bg-amber-100 group-hover:bg-white/15 flex items-center justify-center text-2xl mb-3">🎨</div>
-            <div class="font-black text-navy group-hover:text-white text-base">花生工作室</div>
-            <div class="text-xs text-slate-500 group-hover:text-amber-200 mt-0.5">Studio 造型訂製</div>
-          </button>
-
-          <a href="https://sites.google.com/kcis.com.tw/pnt-world" target="_blank" rel="noopener noreferrer" class="group rounded-2xl bg-white hover:bg-indigo-950 p-5 text-left shadow-sm hover:shadow-xl border border-indigo-200 transition-all block">
-            <div class="w-11 h-11 rounded-2xl bg-indigo-100 group-hover:bg-white/15 flex items-center justify-center text-2xl mb-3">🌌</div>
-            <div class="font-black text-navy group-hover:text-white text-base flex items-center gap-1">花生宇宙 <span class="text-xs">↗</span></div>
-            <div class="text-xs text-indigo-600 group-hover:text-indigo-200 mt-0.5">PNT World 官網</div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Origin Story + Peanuto Showcase + Peanut Oracle -->
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div class="lg:col-span-7 rounded-3xl bg-white p-6 sm:p-8 shadow-md border border-peanut-light/70 space-y-6">
-            <div class="flex items-center justify-between flex-wrap gap-2">
-              <span class="px-3 py-1 rounded-full bg-peanut-sand text-peanut-deep font-black text-xs">ABOUT PEANUTISM</span>
-              <span class="text-xs font-bold text-slate-400">804 神秘起源檔案</span>
-            </div>
-            <h2 class="text-2xl sm:text-3xl font-black text-navy">起源故事：一切從花生開始</h2>
-            <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
-              花生教，是由 <strong>804 同學</strong> 共同發展出的神秘組織（？）。沒有人知道它從何而來，也沒有人知道為什麼是「花生」。唯一可以確定的是——<strong>花生，就是一切的起點。</strong>
-            </p>
-            <div class="rounded-2xl bg-peanut-cream border-l-4 border-peanut-caramel p-4">
-              <p class="text-xs font-bold text-peanut-deep uppercase tracking-wider">花生教核心精神</p>
-              <p class="text-lg sm:text-xl font-black text-navy mt-1">「相信花生，尊重花生，傳播花生。」</p>
-            </div>
-
-            <div>
-              <h3 class="text-sm font-black text-navy mb-3">Peanuto 花生寶寶 · Official Character of IPO</h3>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="home-mascot-gallery"></div>
-            </div>
-          </div>
-
-          <div class="lg:col-span-5 rounded-3xl bg-navy text-white p-6 sm:p-8 shadow-xl flex flex-col justify-between space-y-6">
-            <div class="space-y-2">
-              <span class="px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 font-black text-xs">DAILY ORACLE</span>
-              <h3 class="text-2xl font-black">「如果是花生，會怎麼做？」</h3>
-              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                遇到上課發呆、段考抉擇或人生難題時，請誠心搖一搖花生神諭，獲取今日花生啟示！
-              </p>
-            </div>
-
-            <div class="rounded-2xl bg-white/10 border border-white/15 p-5 text-center space-y-3">
-              <div id="home-oracle-peanut" class="w-24 h-24 mx-auto"></div>
-              <p id="home-oracle-text" class="text-base sm:text-lg font-black text-amber-300 min-h-[3.5rem] flex items-center justify-center">
-                點擊下方按鈕，聆聽花生的智慧指引 ✨
-              </p>
-            </div>
-
-            <div class="space-y-2.5">
-              <button type="button" onclick="drawHomeOracle()" class="w-full py-3.5 px-5 rounded-2xl bg-peanut-caramel hover:bg-amber-400 text-navy-dark font-black text-sm shadow-lg transition-all cursor-pointer">
-                🥜 搖一搖花生神諭（+20P 每日限一次）
-              </button>
-              <p class="text-[11px] text-center text-slate-400">登入會員後抽每日簽詩可自動獲得 +20P 信仰點數</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Christmas Event Coming Soon Billboard -->
-      <div id="xmas-preview-card" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div class="rounded-3xl bg-gradient-to-br from-[#163829] via-[#1E2E3D] to-[#4A1C24] text-white p-6 sm:p-10 shadow-2xl border border-amber-300/20 relative overflow-hidden">
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div class="lg:col-span-7 space-y-5">
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="px-3 py-1 rounded-full bg-red-600 text-white font-black text-xs tracking-wider">🎄 CHRISTMAS SPECIAL · COMING SOON</span>
-                <span class="px-3 py-1 rounded-full bg-white/10 text-slate-300 font-bold text-xs">2026.10.30 萬聖節活動已圓滿結束</span>
-              </div>
-              <h2 class="text-2xl sm:text-4xl font-black leading-tight">
-                花生教 2026 聖誕節神秘企劃<br/>
-                <span class="text-amber-300">即將公開 · 敬請期待！</span>
-              </h2>
-              <p class="text-sm sm:text-base text-slate-200 leading-relaxed">
-                延續萬聖節的歡樂傳統，全新升級的聖誕限定企劃正在秘密準備中！活動日期、交換驚喜規則與神祕任務將於近期正式揭曉。
-              </p>
-
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-                <div class="rounded-2xl bg-white/10 border border-white/15 p-3.5">
-                  <div class="text-lg mb-1">🎁</div>
-                  <div class="font-black text-xs text-amber-300">神秘交換驚喜</div>
-                  <p class="text-[11px] text-slate-300 mt-1">全新歲末抽獎與祝福機制籌備中</p>
+    <!-- 主要內容區 -->
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        
+        <!-- 1. 前台訂票區塊 -->
+        <div id="section-booking" class="space-y-8">
+            <!-- 搜尋/訂票卡片 -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-sage-100">
+                <div class="border-b border-sage-100 pb-4 mb-6">
+                    <h2 class="text-xl font-semibold text-sage-800 flex items-center gap-2">
+                        <i class="fa-solid fa-compass text-sage-500"></i> 預訂您的完美旅程
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">選擇您的目的地與日期，即刻開啟美好航程</p>
                 </div>
-                <div class="rounded-2xl bg-white/10 border border-white/15 p-3.5">
-                  <div class="text-lg mb-1">🛡️</div>
-                  <div class="font-black text-xs text-emerald-300">教祖安全守則</div>
-                  <p class="text-[11px] text-slate-300 mt-1">延續最高原則：嚴禁任何花生及含花生製品</p>
-                </div>
-                <div class="rounded-2xl bg-white/10 border border-white/15 p-3.5">
-                  <div class="text-lg mb-1">🎅</div>
-                  <div class="font-black text-xs text-rose-300">聖誕限定造型</div>
-                  <p class="text-[11px] text-slate-300 mt-1">Santa Peanuto 限定造型搶先登場</p>
-                </div>
-              </div>
 
-              <!-- Early-Bird RSVP -->
-              <div class="rounded-2xl bg-black/25 border border-white/15 p-4 sm:p-5 space-y-3">
-                <div class="flex flex-wrap items-center justify-between gap-2">
-                  <div>
-                    <h4 class="font-black text-sm text-amber-300">🔔 搶先預約聖誕活動公開通知（+30P）</h4>
-                    <p class="text-xs text-slate-300">登入會員點擊預約，正式公開時第一時間加入名單！</p>
-                  </div>
-                  <button type="button" onclick="subscribeChristmasNotice()" class="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-navy-dark font-black text-xs shadow-md transition-all cursor-pointer">
-                    ✨ 我要預約通知 (+30P)
-                  </button>
-                </div>
-                <div class="flex items-center justify-between text-xs text-slate-300 pt-1 border-t border-white/10">
-                  <span>目前搶先預約信徒：<strong id="xmas-sub-count" class="text-amber-300">0</strong> 人</span>
-                  <span id="xmas-sub-status" class="text-emerald-300 font-bold"></span>
-                </div>
-                <div id="xmas-sub-badges" class="flex flex-wrap gap-1.5"></div>
-              </div>
-            </div>
-
-            <!-- Right Santa Mascot + Christmas Idea Wish Pool (with Delete Button) -->
-            <div class="lg:col-span-5 space-y-4">
-              <div class="rounded-3xl bg-white/10 border border-white/15 p-6 text-center space-y-3">
-                <div id="xmas-card-mascot" class="w-40 h-40 mx-auto animate-float"></div>
-                <div class="inline-block px-3 py-1 rounded-full bg-red-600/80 text-white text-xs font-black">
-                  Santa Peanuto 正在打包禮物中...
-                </div>
-              </div>
-
-              <div class="rounded-2xl bg-white/10 border border-white/15 p-4 space-y-2.5">
-                <div class="flex items-center justify-between">
-                  <label class="block text-xs font-black text-amber-300">💭 聖誕玩法許願池（+20P）</label>
-                  <span class="text-[10px] text-slate-300">本人或管理員可刪除</span>
-                </div>
-                <div class="flex gap-2">
-                  <input type="text" id="xmas-idea-input" maxlength="60" placeholder="寫下你希望聖誕節玩什麼..." class="flex-1 px-3 py-2 rounded-xl bg-white/15 border border-white/20 text-white placeholder-slate-300 text-xs focus:outline-none focus:border-amber-300" />
-                  <button type="button" onclick="submitChristmasIdea()" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-navy-dark font-black text-xs shrink-0 cursor-pointer">
-                    許願
-                  </button>
-                </div>
-                <div id="xmas-idea-list" class="space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs text-slate-200"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =======================================================
-         PAGE 2: #/purpose (教旨 Purpose)
-    ======================================================= -->
-    <section id="page-purpose" class="page-view hidden py-12 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-5xl mx-auto space-y-10">
-        <div class="rounded-3xl bg-navy text-white p-8 sm:p-12 shadow-xl relative overflow-hidden">
-          <div class="relative z-10 max-w-2xl space-y-4">
-            <span class="px-3 py-1 rounded-full bg-peanut-caramel text-navy-dark font-black text-xs">PURPOSE OF PEANUTISM</span>
-            <h1 class="text-3xl sm:text-5xl font-black">花生教教旨</h1>
-            <p class="text-peanut-light text-sm sm:text-base leading-relaxed">
-              我們相信——花生，不只是一種食物，更是一種生活態度。
-            </p>
-          </div>
-          <div id="purpose-hero-mascot" class="hidden sm:block w-44 h-44 absolute right-8 bottom-4 opacity-90"></div>
-        </div>
-
-        <div class="rounded-3xl bg-white p-6 sm:p-10 shadow-md border border-peanut-light/70 space-y-8">
-          <div class="rounded-2xl bg-peanut-cream p-6 border border-peanut-light text-center space-y-2">
-            <p class="text-sm text-slate-600 font-bold">無論你今天心情好不好，只要看到花生，就應該先冷靜三秒，然後思考：</p>
-            <p class="text-2xl sm:text-3xl font-black text-navy">「為什麼不是兩顆？」</p>
-          </div>
-
-          <div>
-            <h2 class="text-xl font-black text-navy mb-4">🥜 四大核心精神</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div class="rounded-2xl bg-peanut-sand/60 p-5 border border-peanut-light">
-                <div class="text-2xl mb-2">🕊️</div>
-                <h3 class="font-black text-navy text-lg">和平</h3>
-                <p class="text-xs text-slate-600 mt-1">以花生的溫潤化解一切課業與日常紛爭。</p>
-              </div>
-              <div class="rounded-2xl bg-peanut-sand/60 p-5 border border-peanut-light">
-                <div class="text-2xl mb-2">🤝</div>
-                <h3 class="font-black text-navy text-lg">團結</h3>
-                <p class="text-xs text-slate-600 mt-1">一顆花生很渺小，聚在一起就是一盤堅果。</p>
-              </div>
-              <div class="rounded-2xl bg-peanut-sand/60 p-5 border border-peanut-light">
-                <div class="text-2xl mb-2">🍱</div>
-                <h3 class="font-black text-navy text-lg">吃飽</h3>
-                <p class="text-xs text-slate-600 mt-1">能量充足，才能全心全力推廣花生精神。</p>
-              </div>
-              <div class="rounded-2xl bg-peanut-sand/60 p-5 border border-peanut-light">
-                <div class="text-2xl mb-2">♻️</div>
-                <h3 class="font-black text-navy text-lg">不要浪費花生</h3>
-                <p class="text-xs text-slate-600 mt-1">讓每一顆花生都找到屬於自己的位置。</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-            <div class="space-y-3 text-sm sm:text-base text-slate-700 leading-relaxed">
-              <p>我們不強迫任何人信仰花生。<strong>因為真正的花生信徒，會自己走過來。</strong></p>
-              <p>因此，無論你是會員、VIP，還是目前只是路過的花生觀察員，只要你願意尊重花生、珍惜花生、在適當的時候吃花生——你，就是花生教的一份子。</p>
-            </div>
-            <div class="rounded-2xl bg-navy text-white p-6 space-y-2 shadow-lg">
-              <span class="text-xs font-extrabold text-amber-300 tracking-wider uppercase">花生教最高指導原則</span>
-              <p class="text-xl sm:text-2xl font-black leading-snug">
-                「花生可以沒有你，<br/>但你不能沒有花生。」
-              </p>
-              <p class="text-xs text-slate-300 pt-2">● 花生教｜今日也要好好信仰花生。</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =======================================================
-         PAGE 3: #/member (成員組織 Member - DYNAMIC ROSTER)
-    ======================================================= -->
-    <section id="page-member" class="page-view hidden py-12 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-6xl mx-auto space-y-10">
-        <div class="text-center max-w-2xl mx-auto space-y-2">
-          <span class="px-3 py-1 rounded-full bg-peanut-sand text-peanut-deep font-black text-xs">IPO ORGANIZATION CHART</span>
-          <h1 class="text-3xl sm:text-4xl font-black text-navy">國際花生組織 · 組織架構與成員</h1>
-          <p class="text-sm text-slate-600">全站採用官方英文代號呈現（教祖／副教祖可於會員專區後台即時調整名單）</p>
-        </div>
-
-        <!-- Visual Org Tree (Dynamically Rendered) -->
-        <div class="rounded-3xl bg-navy text-white p-6 sm:p-10 shadow-xl space-y-8">
-          <div class="flex flex-col items-center">
-            <div class="px-8 py-4 rounded-2xl bg-[#C86D51] text-white font-black text-lg shadow-lg border border-white/20">
-              ✨ 神明
-            </div>
-            <div class="w-0.5 h-6 bg-white/40"></div>
-            <div id="org-tree-leaders" class="flex flex-wrap justify-center gap-3"></div>
-            <div class="w-0.5 h-6 bg-white/40"></div>
-            <div class="w-3/4 max-w-2xl h-0.5 bg-white/40"></div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Vice Leaders -->
-            <div class="rounded-2xl bg-peanut-caramel/90 text-navy-dark p-6 shadow-lg space-y-4">
-              <h3 class="text-xl font-black text-center border-b border-navy-dark/15 pb-3">副教祖</h3>
-              <ul id="org-tree-vices" class="space-y-2.5 font-extrabold text-sm"></ul>
-            </div>
-
-            <!-- Cadres -->
-            <div class="rounded-2xl bg-peanut-caramel/90 text-navy-dark p-6 shadow-lg space-y-4">
-              <h3 class="text-xl font-black text-center border-b border-navy-dark/15 pb-3">幹部</h3>
-              <div id="org-tree-cadres" class="space-y-3 text-center"></div>
-            </div>
-
-            <!-- Believers -->
-            <div class="rounded-2xl bg-peanut-caramel/90 text-navy-dark p-6 shadow-lg space-y-4">
-              <h3 class="text-xl font-black text-center border-b border-navy-dark/15 pb-3">信徒</h3>
-              <ul id="org-tree-believers" class="grid grid-cols-2 gap-2 font-bold text-sm"></ul>
-            </div>
-          </div>
-        </div>
-
-        <!-- Filterable Member Directory -->
-        <div class="space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-3">
-            <h2 class="text-xl font-black text-navy">🪪 官方成員名錄（<span id="member-total-count">17</span> 名）</h2>
-            <div class="flex flex-wrap gap-2" id="member-filter-btns">
-              <button type="button" onclick="filterMembers('ALL')" class="member-filter-btn px-3.5 py-1.5 rounded-xl bg-navy text-white text-xs font-bold cursor-pointer">全部成員</button>
-              <button type="button" onclick="filterMembers('教祖')" class="member-filter-btn px-3.5 py-1.5 rounded-xl bg-white text-navy border border-peanut-light text-xs font-bold cursor-pointer">教祖</button>
-              <button type="button" onclick="filterMembers('副教祖')" class="member-filter-btn px-3.5 py-1.5 rounded-xl bg-white text-navy border border-peanut-light text-xs font-bold cursor-pointer">副教祖</button>
-              <button type="button" onclick="filterMembers('幹部')" class="member-filter-btn px-3.5 py-1.5 rounded-xl bg-white text-navy border border-peanut-light text-xs font-bold cursor-pointer">幹部</button>
-              <button type="button" onclick="filterMembers('信徒')" class="member-filter-btn px-3.5 py-1.5 rounded-xl bg-white text-navy border border-peanut-light text-xs font-bold cursor-pointer">信徒</button>
-            </div>
-          </div>
-          <div id="member-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =======================================================
-         PAGE 4: #/ipo-intro (IPO 簡介)
-    ======================================================= -->
-    <section id="page-ipo-intro" class="page-view hidden py-12 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-5xl mx-auto space-y-10">
-        <div class="rounded-3xl bg-gradient-to-r from-[#5D3A1A] via-[#8B5A2B] to-[#B07A45] text-white p-8 sm:p-12 shadow-xl">
-          <span class="px-3 py-1 rounded-full bg-white/20 text-white font-black text-xs">INTERNATIONAL PEANUT ORG.</span>
-          <h1 class="text-3xl sm:text-5xl font-black mt-3">國際花生組織 IPO</h1>
-          <p class="text-amber-100 text-base sm:text-lg font-bold mt-2">核心理念：「One Peanut, One World.」一顆花生，一個世界。</p>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div class="lg:col-span-7 rounded-3xl bg-white p-6 sm:p-8 shadow-md border border-peanut-light/70 space-y-5">
-            <h2 class="text-2xl font-black text-navy">關於 IPO</h2>
-            <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-              IPO（International Peanut Organization），中文稱為「國際花生組織」，是花生教最高級別的國際組織，致力於推廣花生文化、維護花生權益，並促進世界各地花生信徒之間的交流。
-            </p>
-            <h3 class="text-lg font-black text-navy pt-2">五大組織宗旨</h3>
-            <ul class="space-y-3 text-sm text-slate-700">
-              <li class="flex items-start gap-2.5"><span class="text-peanut-deep font-black">01</span><span><strong>推廣花生文化：</strong>讓花生走進每個人的生活。</span></li>
-              <li class="flex items-start gap-2.5"><span class="text-peanut-deep font-black">02</span><span><strong>維護花生地位：</strong>確保花生受到應有的尊重。</span></li>
-              <li class="flex items-start gap-2.5"><span class="text-peanut-deep font-black">03</span><span><strong>連結花生信徒：</strong>建立全球花生愛好者交流平台。</span></li>
-              <li class="flex items-start gap-2.5"><span class="text-peanut-deep font-black">04</span><span><strong>宣傳花生精神：</strong>讓更多人了解花生教的理念。</span></li>
-              <li class="flex items-start gap-2.5"><span class="text-peanut-deep font-black">05</span><span><strong>推動國際合作：</strong>促進各地「花生教」組織交流。</span></li>
-            </ul>
-          </div>
-
-          <div class="lg:col-span-5 rounded-3xl bg-navy text-white p-6 sm:p-8 shadow-xl flex flex-col justify-between space-y-6">
-            <div>
-              <h3 class="text-xl font-black text-amber-300 mb-4">🌐 全球組織架構層級</h3>
-              <div class="space-y-2 text-center font-black text-sm">
-                <div class="p-3 rounded-xl bg-white/15 border border-white/20">IPO 國際總部</div>
-                <div class="text-amber-300">↓</div>
-                <div class="p-3 rounded-xl bg-white/10 border border-white/15">各國花生委員會</div>
-                <div class="text-amber-300">↓</div>
-                <div class="p-3 rounded-xl bg-white/10 border border-white/15">地區花生分部</div>
-                <div class="text-amber-300">↓</div>
-                <div class="p-3.5 rounded-xl bg-peanut-caramel text-navy-dark shadow-md">804 班級／校園花生教（核心成員）</div>
-              </div>
-            </div>
-            <div class="rounded-2xl bg-white/10 p-4 text-xs text-slate-200 leading-relaxed">
-              <strong>■ IPO 最高原則：</strong><br/>
-              花生不是食物，花生是一種精神。無論世界身在何處，只要相信花生、尊重花生、支持花生，你就是花生教的一份子。
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =======================================================
-         PAGE 5: #/pnt-esg (PNT ESG 永續發展)
-    ======================================================= -->
-    <section id="page-pnt-esg" class="page-view hidden py-12 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-5xl mx-auto space-y-10">
-        <div class="rounded-3xl bg-gradient-to-br from-esg via-esg-mid to-[#3A7D5C] text-white p-8 sm:p-12 shadow-xl">
-          <span class="px-3 py-1 rounded-full bg-white/20 text-emerald-100 font-black text-xs tracking-wider">#PNTESG · PROTECT NATURE, PROTECT FUTURE</span>
-          <h1 class="text-3xl sm:text-5xl font-black mt-3">國際花生組織永續發展</h1>
-          <p class="text-emerald-100 text-sm sm:text-base mt-2 max-w-2xl">
-            從一張寫完的二手考卷開始，讓資源循環，讓永續在 804 校園發生。
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div class="lg:col-span-7 rounded-3xl bg-white p-6 sm:p-8 shadow-md border border-emerald-200 space-y-5">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-esg-mint text-esg font-black text-xs">
-              🛍️ IPO ESG BAG 專案故事
-            </div>
-            <h2 class="text-2xl font-black text-navy">二手考卷的華麗重生</h2>
-            <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-              你有想過，考完、寫完的考卷，最後都去了哪裡嗎？沒錯，是回收；更可惜的是，有些甚至直接被丟棄、焚燒。
-            </p>
-            <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-              國際花生組織（IPO）在規劃活動時思考：包裝一定要使用全新的材料嗎？於是我們將目光放回最熟悉的校園生活——<strong>二手考卷</strong>。透過簡單的裁切、摺疊與裝飾，原本即將被淘汰的考卷，搖身一變成為實用的 <strong>「IPO ESG BAG」</strong>。
-            </p>
-
-            <div class="pt-2">
-              <h3 class="text-sm font-black text-esg mb-3">📐 IPO ESG BAG 四步驟手作圖解</h3>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                <div class="rounded-2xl bg-peanut-cream p-3 border border-emerald-200">
-                  <div class="text-xs font-black text-esg mb-1">STEP 1</div>
-                  <div class="h-14 flex items-center justify-center">
-                    <div class="w-10 h-12 bg-white border border-slate-400 rounded-sm flex flex-col justify-between p-1">
-                      <span class="text-[8px] text-red-600 font-black text-right">100</span>
-                      <div class="space-y-0.5"><div class="h-0.5 bg-slate-300"></div><div class="h-0.5 bg-slate-300"></div></div>
+                <form id="booking-form" onsubmit="handleBooking(event)" class="grid grid-cols-1 md:grid-cols-4 gap-5">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1.5">目的地區域</label>
+                        <select id="book-region" onchange="filterRoutesByRegion()" class="w-full bg-sage-50/50 border border-sage-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-sage-400 text-slate-700">
+                            <option value="ALL">全部區域</option>
+                            <option value="Northeast Asia">東北亞 (Northeast Asia)</option>
+                            <option value="China Region">中港澳 (China Region)</option>
+                            <option value="South East Asia">東南亞 (South East Asia)</option>
+                            <option value="Middle East / India">中東 / 印度 (Middle East / India)</option>
+                            <option value="Europe">歐洲 (Europe)</option>
+                            <option value="Oceania">大洋洲 (Oceania)</option>
+                            <option value="America">美洲 (America)</option>
+                            <option value="Africa">非洲 (Africa)</option>
+                        </select>
                     </div>
-                  </div>
-                  <p class="text-[11px] font-bold text-slate-700 mt-1">準備寫完的考卷</p>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1.5">航班航線</label>
+                        <select id="book-route" required class="w-full bg-sage-50/50 border border-sage-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-sage-400 text-slate-700">
+                            <!-- JS 動態生成 -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1.5">出發日期</label>
+                        <input type="date" id="book-date" required class="w-full bg-sage-50/50 border border-sage-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-sage-400 text-slate-700">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1.5">乘客姓名</label>
+                        <input type="text" id="book-passenger" placeholder="例如：林雅婷" required class="w-full bg-sage-50/50 border border-sage-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-sage-400 text-slate-700">
+                    </div>
+                    <div class="md:col-span-4 flex justify-end mt-2">
+                        <button type="submit" class="bg-sage-600 text-white font-medium px-8 py-3 rounded-xl hover:bg-sage-700 transition shadow-sm flex items-center gap-2">
+                            <span>確認預訂</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 航點一覽表 -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-sage-100">
+                <h3 class="text-lg font-semibold text-sage-800 mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-earth-americas text-sage-500"></i> 航點總覽 (Routes)
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-sage-50/80 text-sage-700 text-xs uppercase tracking-wider border-b border-sage-100">
+                                <th class="p-3.5">區域</th>
+                                <th class="p-3.5">代碼</th>
+                                <th class="p-3.5">城市</th>
+                                <th class="p-3.5">航班號</th>
+                                <th class="p-3.5">飛航日</th>
+                                <th class="p-3.5">機型</th>
+                                <th class="p-3.5">起飛時間 (TPE)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="routes-table-body" class="divide-y divide-sage-50 text-sm">
+                            <!-- 動態填入 -->
+                        </tbody>
+                    </table>
                 </div>
-                <div class="rounded-2xl bg-peanut-cream p-3 border border-emerald-200">
-                  <div class="text-xs font-black text-esg mb-1">STEP 2</div>
-                  <div class="h-14 flex items-center justify-center">
-                    <div class="w-12 h-8 bg-white border border-slate-400 rounded-sm border-dashed"></div>
-                  </div>
-                  <p class="text-[11px] font-bold text-slate-700 mt-1">對折並預留黏貼邊</p>
+            </div>
+        </div>
+
+        <!-- 2. 後台管理區塊 (登入後顯示) -->
+        <div id="section-admin" class="hidden space-y-6">
+            <div class="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-sage-100">
+                <div class="flex items-center space-x-3">
+                    <span class="bg-sage-100 text-sage-800 text-xs px-3 py-1 rounded-full font-medium">後台管理員</span>
+                    <h2 class="text-lg font-semibold text-slate-800">控制台主頁</h2>
                 </div>
-                <div class="rounded-2xl bg-peanut-cream p-3 border border-emerald-200">
-                  <div class="text-xs font-black text-esg mb-1">STEP 3</div>
-                  <div class="h-14 flex items-center justify-center">
-                    <div class="w-11 h-9 bg-white border-2 border-esg-mid rounded-sm"></div>
-                  </div>
-                  <p class="text-[11px] font-bold text-slate-700 mt-1">底部展開折出袋底</p>
+                <button onclick="adminLogout()" class="text-xs text-rose-500 hover:text-rose-700 font-medium px-3 py-1.5 rounded-lg border border-rose-100 hover:bg-rose-50 transition">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i> 登出系統
+                </button>
+            </div>
+
+            <!-- 後台 Tab 切換 -->
+            <div class="flex space-x-2 border-b border-sage-200/60 pb-1">
+                <button id="btn-tab-calendar" onclick="switchAdminTab('calendar')" class="px-5 py-2.5 text-sm font-medium border-b-2 border-sage-600 text-sage-700 transition">
+                    <i class="fa-regular fa-calendar-days mr-1.5"></i> 出發日曆 (訂票結果)
+                </button>
+                <button id="btn-tab-orders" onclick="switchAdminTab('orders')" class="px-5 py-2.5 text-sm font-medium text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-receipt mr-1.5"></i> 所有訂票紀錄
+                </button>
+                <button id="btn-tab-routes" onclick="switchAdminTab('routes')" class="px-5 py-2.5 text-sm font-medium text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-plane mr-1.5"></i> 航線資料管理
+                </button>
+            </div>
+
+            <!-- 日曆面板 -->
+            <div id="admin-panel-calendar" class="bg-white p-8 rounded-2xl shadow-sm border border-sage-100">
+                <h3 class="text-base font-semibold mb-6 text-slate-700">航班與旅客出發日曆</h3>
+                <div id="calendar"></div>
+            </div>
+
+            <!-- 訂票紀錄面板 -->
+            <div id="admin-panel-orders" class="hidden bg-white p-8 rounded-2xl shadow-sm border border-sage-100">
+                <h3 class="text-base font-semibold mb-6 text-slate-700">所有訂票總覽</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-sage-50/80 text-sage-700 text-xs uppercase tracking-wider">
+                                <th class="p-3.5">訂單ID</th>
+                                <th class="p-3.5">乘客</th>
+                                <th class="p-3.5">航班編號</th>
+                                <th class="p-3.5">目的地</th>
+                                <th class="p-3.5">出發日期</th>
+                                <th class="p-3.5">起飛時間</th>
+                                <th class="p-3.5">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body" class="divide-y divide-sage-50 text-sm">
+                            <!-- 動態填入 -->
+                        </tbody>
+                    </table>
                 </div>
-                <div class="rounded-2xl bg-peanut-cream p-3 border border-emerald-200">
-                  <div class="text-xs font-black text-esg mb-1">STEP 4</div>
-                  <div class="h-14 flex items-center justify-center">
-                    <div class="w-10 h-11 bg-white border-2 border-esg rounded-md shadow-sm flex items-center justify-center text-xs">🥜</div>
-                  </div>
-                  <p class="text-[11px] font-bold text-slate-700 mt-1">封口貼上花生貼紙</p>
+            </div>
+
+            <!-- 航線管理面板 -->
+            <div id="admin-panel-routes" class="hidden bg-white p-8 rounded-2xl shadow-sm border border-sage-100 space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-base font-semibold text-slate-700">航線設置與維護</h3>
                 </div>
-              </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-sage-50/80 text-sage-700 text-xs uppercase tracking-wider">
+                                <th class="p-3.5">區域</th>
+                                <th class="p-3.5">代碼</th>
+                                <th class="p-3.5">城市</th>
+                                <th class="p-3.5">航班號</th>
+                                <th class="p-3.5">時間</th>
+                                <th class="p-3.5">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-routes-table-body" class="divide-y divide-sage-50 text-sm">
+                            <!-- 動態填入 -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
-          </div>
-
-          <div class="lg:col-span-5 rounded-3xl bg-esg text-white p-6 sm:p-8 shadow-xl space-y-5">
-            <h3 class="text-xl font-black">🌱 加入 #PNTESG 減碳響應</h3>
-            <p class="text-xs sm:text-sm text-emerald-100 leading-relaxed">
-              每次活動改用二手考卷紙袋，就能減少一個全新塑膠袋與紙袋消耗。點擊下方按鈕響應永續行動（登入會員每日可獲得 +30P）！
-            </p>
-            <div class="rounded-2xl bg-white/10 border border-white/15 p-5 text-center">
-              <div class="text-xs text-emerald-200 font-bold">全站累計環保紙袋響應次數</div>
-              <div id="esg-pledge-count" class="text-4xl font-black text-amber-300 mt-1">0</div>
-              <div class="text-[11px] text-emerald-100 mt-1">張二手考卷獲得新生</div>
-            </div>
-            <button type="button" onclick="pledgeEsgAction()" class="w-full py-3.5 px-5 rounded-2xl bg-esg-sage hover:bg-emerald-400 text-navy-dark font-black text-sm shadow-lg transition-all cursor-pointer">
-              ♻️ 我支持考卷紙袋再生（+30P）
-            </button>
-          </div>
         </div>
-      </div>
-    </section>
+    </div>
 
-    <!-- =======================================================
-         PAGE 6: #/studio (花生工作室 Studio)
-    ======================================================= -->
-    <section id="page-studio" class="page-view hidden py-12 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-5xl mx-auto space-y-10">
-        <div class="rounded-3xl bg-gradient-to-r from-[#2D1F3D] via-navy to-[#3D2B1F] text-white p-8 sm:p-10 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <span class="px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 font-black text-xs">PEANUT STUDIO · 造型訂製工坊</span>
-            <h1 class="text-3xl sm:text-4xl font-black mt-3">🎨 花生工作室</h1>
-            <p class="text-slate-300 text-sm sm:text-base mt-2 max-w-xl">
-              在這裡自由搭配 Peanuto 的專屬肚兜顏色與限定造型！想探索完整多重宇宙世界觀，請點擊右側傳送門前往「花生宇宙」。
-            </p>
-          </div>
-          <a href="https://sites.google.com/kcis.com.tw/pnt-world" target="_blank" rel="noopener noreferrer" class="shrink-0 px-5 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs sm:text-sm shadow-lg transition-all inline-flex items-center gap-1.5">
-            🌌 前往花生宇宙官網 <span>↗</span>
-          </a>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div class="lg:col-span-5 rounded-3xl bg-white p-6 sm:p-8 shadow-md border border-peanut-light text-center space-y-4">
-            <span class="text-xs font-black text-peanut-deep uppercase tracking-wider">即時造型預覽台</span>
-            <div id="universe-preview-mascot" class="w-56 h-56 mx-auto animate-float"></div>
-            <div id="universe-preview-label" class="font-black text-navy text-lg">經典原味花生寶寶</div>
-            <button type="button" onclick="saveStudioLookToProfile()" class="w-full py-3 px-4 rounded-2xl bg-navy hover:bg-navy-light text-white font-black text-xs sm:text-sm shadow-md cursor-pointer">
-              💾 套用為我的信徒證頭像（需登入）
-            </button>
-          </div>
-
-          <div class="lg:col-span-7 rounded-3xl bg-white p-6 sm:p-8 shadow-md border border-peanut-light space-y-6">
-            <div>
-              <h3 class="text-sm font-black text-navy mb-3">1. 選擇造型主題</h3>
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5" id="universe-variant-btns"></div>
+    <!-- Admin 登入彈窗 -->
+    <div id="login-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-5 border border-sage-100">
+            <div class="flex justify-between items-center border-b border-sage-100 pb-3">
+                <h3 class="text-lg font-semibold text-slate-800">管理員登入</h3>
+                <button onclick="closeAdminModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div>
-              <h3 class="text-sm font-black text-navy mb-3">2. 選擇肚兜代表色</h3>
-              <div class="flex flex-wrap gap-2.5" id="universe-color-btns"></div>
-            </div>
-            <div class="rounded-2xl bg-peanut-cream p-4 border border-peanut-light text-xs text-slate-600 space-y-1">
-              <p class="font-black text-navy">💡 工作室小提示：</p>
-              <p>未解鎖的限定造型可於 <button type="button" onclick="navigateTo('#/login')" class="text-peanut-deep font-black underline cursor-pointer">會員專區 → 點數造型兌換所</button> 使用每天挑戰賺取的點數免費兌換！</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =======================================================
-         PAGE 7: #/app (下載花生教 APP)
-    ======================================================= -->
-    <section id="page-app" class="page-view hidden py-12 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-5xl mx-auto space-y-8">
-        <div class="text-center max-w-2xl mx-auto space-y-2">
-          <span class="px-3 py-1 rounded-full bg-peanut-sand text-peanut-deep font-black text-xs">PWA MOBILE & DESKTOP APP</span>
-          <h1 class="text-3xl sm:text-4xl font-black text-navy">歡迎下載「花生教 APP」</h1>
-          <p class="text-sm text-slate-600">免去 App Store 審核，直接將官網加入主畫面，隨時隨地完成每日挑戰與查看排行！</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="rounded-3xl bg-white p-6 shadow-md border border-peanut-light space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center text-2xl">📱</div>
-            <h3 class="text-lg font-black text-navy">For iPhone (Safari)</h3>
-            <ol class="text-xs sm:text-sm text-slate-600 space-y-2 list-decimal list-inside">
-              <li>使用 <strong>Safari</strong> 瀏覽器開啟本官網。</li>
-              <li>點擊底部工具列正中央的 <strong>「分享」圖示（方框向上箭頭）</strong>。</li>
-              <li>向下滑動並點選 <strong>「加入主畫面 (Add to Home Screen)」</strong>。</li>
-              <li>點擊右上角 <strong>「新增」</strong>，桌面即出現花生教 APP 圖示！</li>
-            </ol>
-          </div>
-
-          <div class="rounded-3xl bg-white p-6 shadow-md border border-peanut-light space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-indigo-900 text-white flex items-center justify-center text-2xl">📲</div>
-            <h3 class="text-lg font-black text-navy">For iPad (iPadOS)</h3>
-            <ol class="text-xs sm:text-sm text-slate-600 space-y-2 list-decimal list-inside">
-              <li>使用 <strong>Safari</strong> 開啟國際花生組織官網。</li>
-              <li>點擊右上角網址列旁的 <strong>「分享」按鈕</strong>。</li>
-              <li>選擇 <strong>「加入主畫面」</strong> 並確認名稱為「花生教」。</li>
-              <li>支援全螢幕獨立視窗開啟，就像原生 iPad App！</li>
-            </ol>
-          </div>
-
-          <div class="rounded-3xl bg-white p-6 shadow-md border border-peanut-light space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-peanut-deep text-white flex items-center justify-center text-2xl">💻</div>
-            <h3 class="text-lg font-black text-navy">For PC / Mac (Chrome / Edge)</h3>
-            <ol class="text-xs sm:text-sm text-slate-600 space-y-2 list-decimal list-inside">
-              <li>使用 <strong>Chrome</strong> 或 <strong>Edge</strong> 開啟本網站。</li>
-              <li>點擊網址列最右側的 <strong>「安裝應用程式（電腦＋向下箭頭）」</strong> 圖示。</li>
-              <li>點擊 <strong>「安裝 (Install)」</strong> 即可釘選至桌面與 Dock。</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =======================================================
-         PAGE 8: #/login (會員專區 / 每日挑戰 / 排行榜 / 管理後台)
-    ======================================================= -->
-    <section id="page-login" class="page-view hidden py-10 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-6xl mx-auto">
-
-        <!-- VIEW A: LOGIN FORM (WHEN LOGGED OUT) -->
-        <div id="member-logged-out-view" class="max-w-lg mx-auto">
-          <div class="rounded-3xl bg-white p-6 sm:p-10 shadow-xl border border-peanut-light space-y-6">
-            <div class="text-center space-y-2">
-              <div id="login-mascot-box" class="w-24 h-24 mx-auto"></div>
-              <span class="px-3 py-1 rounded-full bg-peanut-sand text-peanut-deep font-black text-xs">IPO MEMBER PORTAL</span>
-              <h1 class="text-2xl sm:text-3xl font-black text-navy">登入花生教會員系統</h1>
-              <p class="text-xs sm:text-sm text-slate-500">登入後可每天選擇一項挑戰賺取 200P、查看全體積分排行與編輯留言</p>
-            </div>
-
-            <form onsubmit="handleMemberLogin(event)" class="space-y-4">
-              <div>
-                <label for="login-account" class="block text-xs font-black text-navy mb-1.5">會員帳號（可輸入完整 @pnts 或學號前綴）</label>
-                <input type="text" id="login-account" required placeholder="例如：14072@pnts 或 14072" class="w-full px-4 py-3 rounded-2xl bg-peanut-cream border border-peanut-light text-sm font-bold text-navy focus:outline-none focus:border-peanut-caramel" />
-              </div>
-              <div>
-                <label for="login-password" class="block text-xs font-black text-navy mb-1.5">通行密碼</label>
-                <input type="password" id="login-password" required placeholder="請輸入密碼" class="w-full px-4 py-3 rounded-2xl bg-peanut-cream border border-peanut-light text-sm font-bold text-navy focus:outline-none focus:border-peanut-caramel" />
-              </div>
-              <div id="login-error-msg" class="hidden rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold p-3"></div>
-              <button type="submit" class="w-full py-3.5 px-5 rounded-2xl bg-navy hover:bg-navy-light text-white font-black text-sm shadow-lg transition-all cursor-pointer">
-                🥜 登入花生教
-              </button>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">帳號</label>
+                    <input type="text" id="admin-user" required class="w-full bg-sage-50/50 border border-sage-200 rounded-xl p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sage-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">密碼</label>
+                    <input type="password" id="admin-pass" required class="w-full bg-sage-50/50 border border-sage-200 rounded-xl p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sage-400">
+                </div>
+                <p class="text-xs text-slate-400">預設：admin / avocado123</p>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeAdminModal()" class="px-4 py-2 border border-slate-200 text-slate-600 text-sm rounded-xl hover:bg-slate-50">取消</button>
+                    <button type="submit" class="px-5 py-2 bg-sage-600 text-white text-sm rounded-xl hover:bg-sage-700 transition">登入</button>
+                </div>
             </form>
-
-            <div class="pt-4 border-t border-slate-100 space-y-2">
-              <p class="text-[11px] font-bold text-slate-400 text-center">快速填入帳號（僅自動帶入帳號，仍需輸入正確密碼）</p>
-              <div id="login-quick-chips" class="flex flex-wrap justify-center gap-1.5"></div>
-            </div>
-          </div>
         </div>
-
-        <!-- VIEW B: MEMBER DASHBOARD (WHEN LOGGED IN) -->
-        <div id="member-logged-in-view" class="hidden space-y-8">
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-            <!-- Digital Believer ID Card -->
-            <div class="lg:col-span-5 rounded-3xl bg-gradient-to-br from-navy via-navy-light to-[#3A2D24] text-white p-6 sm:p-8 shadow-xl flex flex-col justify-between relative overflow-hidden">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <span id="card-role-badge" class="px-3 py-1 rounded-full bg-amber-400 text-navy-dark font-black text-xs">信徒</span>
-                  <h2 id="card-member-name" class="text-2xl sm:text-3xl font-black mt-3">Member</h2>
-                  <p id="card-member-account" class="text-xs font-mono text-peanut-light mt-1">account@pnts</p>
-                  <p id="card-member-dept" class="text-xs font-bold text-emerald-300 mt-1"></p>
-                </div>
-                <div id="card-avatar-svg" class="w-24 h-24 rounded-2xl bg-white/10 p-1.5 border border-white/15 shrink-0"></div>
-              </div>
-
-              <div class="mt-6 pt-5 border-t border-white/15 flex items-end justify-between">
-                <div>
-                  <span class="text-[11px] text-slate-300 font-bold uppercase">目前信仰點數</span>
-                  <div class="text-3xl sm:text-4xl font-black text-amber-300"><span id="card-points-value">0</span> <span class="text-base">P</span></div>
-                  <div class="text-[11px] text-emerald-300 font-bold mt-0.5">目前全教排名：第 <span id="card-rank-value">-</span> 名</div>
-                </div>
-                <button type="button" onclick="handleMemberLogout()" class="px-4 py-2 rounded-xl bg-white/15 hover:bg-rose-500/80 text-white text-xs font-bold transition-all cursor-pointer">
-                  登出帳號
-                </button>
-              </div>
-            </div>
-
-            <!-- Daily 3-in-1 Challenge Center -->
-            <div class="lg:col-span-7 rounded-3xl bg-white p-6 sm:p-8 shadow-md border border-peanut-light flex flex-col justify-between space-y-5">
-              <div class="flex flex-wrap items-start justify-between gap-2">
-                <div>
-                  <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-black text-xs">DAILY CHALLENGE · 每日三選一</span>
-                  <h3 class="text-xl sm:text-2xl font-black text-navy mt-2">每日信仰挑戰（完成任一項即領 +200P）</h3>
-                  <p class="text-xs sm:text-sm text-slate-600 mt-1">每位信徒每天可從下方三項挑戰中選擇一項完成，通關即刻入帳！</p>
-                </div>
-                <span id="daily-challenge-status-badge" class="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-black">
-                  今日尚未完成挑戰
-                </span>
-              </div>
-
-              <!-- 3 Challenge Selection Cards -->
-              <div class="space-y-3" id="challenge-selector-list">
-                <button type="button" onclick="startDailyChallenge('memory')" id="btn-chal-memory" class="w-full rounded-2xl bg-[#241B14] hover:bg-[#33261C] text-white p-4 flex items-center justify-between gap-4 text-left border border-amber-500/25 shadow-md transition-all cursor-pointer group">
-                  <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-amber-300 text-xl shrink-0 group-hover:scale-105 transition-transform">
-                      ✨
-                    </div>
-                    <div>
-                      <div class="font-black text-base text-white">花生翻牌</div>
-                      <div class="text-xs text-amber-200/75 mt-0.5">45 秒內配對全部 6 組圖案</div>
-                    </div>
-                  </div>
-                  <div class="font-black text-amber-300 text-base shrink-0">+200 P</div>
-                </button>
-
-                <button type="button" onclick="startDailyChallenge('whack')" id="btn-chal-whack" class="w-full rounded-2xl bg-[#241B14] hover:bg-[#33261C] text-white p-4 flex items-center justify-between gap-4 text-left border border-amber-500/25 shadow-md transition-all cursor-pointer group">
-                  <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-amber-300 text-xl shrink-0 group-hover:scale-105 transition-transform">
-                      ⚡
-                    </div>
-                    <div>
-                      <div class="font-black text-base text-white">打花生</div>
-                      <div class="text-xs text-amber-200/75 mt-0.5">20 秒內點中 12 顆花生</div>
-                    </div>
-                  </div>
-                  <div class="font-black text-amber-300 text-base shrink-0">+200 P</div>
-                </button>
-
-                <button type="button" onclick="startDailyChallenge('sequence')" id="btn-chal-sequence" class="w-full rounded-2xl bg-[#241B14] hover:bg-[#33261C] text-white p-4 flex items-center justify-between gap-4 text-left border border-amber-500/25 shadow-md transition-all cursor-pointer group">
-                  <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-amber-300 text-xl shrink-0 group-hover:scale-105 transition-transform">
-                      🚩
-                    </div>
-                    <div>
-                      <div class="font-black text-base text-white">數字順序</div>
-                      <div class="text-xs text-amber-200/75 mt-0.5">15 秒內依序點完 1 到 12</div>
-                    </div>
-                  </div>
-                  <div class="font-black text-amber-300 text-base shrink-0">+200 P</div>
-                </button>
-              </div>
-
-              <!-- Interactive Challenge Game Arena -->
-              <div id="challenge-arena" class="hidden rounded-2xl bg-peanut-cream border-2 border-peanut-caramel p-5 space-y-4">
-                <div class="flex items-center justify-between gap-2 border-b border-peanut-light pb-3">
-                  <div>
-                    <h4 id="arena-title" class="font-black text-navy text-base">挑戰進行中</h4>
-                    <p id="arena-subtitle" class="text-xs text-slate-600">加油！</p>
-                  </div>
-                  <div class="flex items-center gap-3">
-                    <span class="px-3 py-1 rounded-xl bg-navy text-amber-300 font-black text-xs">
-                      剩餘時間：<span id="arena-timer">45</span>s
-                    </span>
-                    <button type="button" onclick="closeChallengeArena()" class="px-2.5 py-1 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold cursor-pointer">
-                      放棄
-                    </button>
-                  </div>
-                </div>
-                <div id="arena-board" class="min-h-[210px] flex items-center justify-center"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Full Member Score Leaderboard -->
-          <div class="rounded-3xl bg-white p-6 sm:p-8 shadow-md border border-peanut-light space-y-4">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h3 class="text-xl font-black text-navy">🏆 全體成員分數排行榜</h3>
-                <p class="text-xs text-slate-500">所有成員初始分數皆為 0P，透過每日挑戰與活動累積積分（支援管理員自訂加減分）</p>
-              </div>
-              <span class="px-3 py-1 rounded-full bg-peanut-sand text-peanut-deep text-xs font-black">即時積分排名</span>
-            </div>
-            <div id="member-leaderboard-list" class="grid grid-cols-1 md:grid-cols-2 gap-2.5"></div>
-          </div>
-
-          <!-- Skin Redemption Shop & 804 Wish Wall -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div class="lg:col-span-6 rounded-3xl bg-white p-6 sm:p-8 shadow-md border border-peanut-light space-y-4">
-              <div class="flex items-center justify-between">
-                <h3 class="text-xl font-black text-navy">🛍️ 點數造型兌換所</h3>
-                <span class="text-xs font-bold text-slate-400">兌換後永久解鎖</span>
-              </div>
-              <div id="member-skin-shop" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
-            </div>
-
-            <div class="lg:col-span-6 rounded-3xl bg-white p-6 sm:p-8 shadow-md border border-peanut-light space-y-4">
-              <div class="flex items-center justify-between">
-                <h3 class="text-xl font-black text-navy">🙏 804 花生祈願牆</h3>
-                <span class="text-xs font-bold text-slate-400">本人或管理員可刪除留言</span>
-              </div>
-              <div class="flex gap-2">
-                <input type="text" id="wish-input" maxlength="80" placeholder="寫下你的祈願或對花生的信仰宣言..." class="flex-1 px-4 py-2.5 rounded-2xl bg-peanut-cream border border-peanut-light text-xs sm:text-sm focus:outline-none focus:border-peanut-caramel" />
-                <button type="button" onclick="postNewWish()" class="px-4 py-2.5 rounded-2xl bg-navy hover:bg-navy-light text-white font-black text-xs sm:text-sm shrink-0 cursor-pointer">
-                  發布
-                </button>
-              </div>
-              <div id="wish-wall-container" class="space-y-2.5 max-h-96 overflow-y-auto pr-1"></div>
-            </div>
-          </div>
-
-          <!-- ===================================================
-               ADMIN PANEL (ONLY VISIBLE TO 教祖 & 副教祖)
-          =================================================== -->
-          <div id="admin-control-panel" class="hidden rounded-3xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 p-6 sm:p-8 shadow-lg space-y-8">
-            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-amber-200 pb-4">
-              <div>
-                <span class="px-3 py-1 rounded-full bg-amber-500 text-white font-black text-xs">ADMIN CONTROL CENTER</span>
-                <h3 class="text-xl font-black text-navy mt-2">👑 教祖／副教祖專屬管理後台</h3>
-              </div>
-              <div class="flex flex-wrap items-center gap-2">
-                <button type="button" onclick="resetAllScoresConfirm()" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs shadow-sm cursor-pointer">
-                  🔄 全體點數歸零
-                </button>
-              </div>
-            </div>
-
-            <!-- Row 1: Announcement & Custom Score Adjustment -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <!-- Global Banner Editor -->
-              <div class="rounded-2xl bg-white p-5 border border-amber-200 space-y-3">
-                <h4 class="font-black text-sm text-navy">📢 修改全站即時公告</h4>
-                <textarea id="admin-banner-textarea" rows="3" class="w-full p-3 rounded-xl bg-peanut-cream border border-peanut-light text-xs sm:text-sm text-navy focus:outline-none"></textarea>
-                <div class="flex gap-2">
-                  <button type="button" onclick="saveAdminAnnouncement()" class="px-4 py-2 rounded-xl bg-navy text-white font-black text-xs cursor-pointer">儲存新公告</button>
-                  <button type="button" onclick="resetAdminAnnouncement()" class="px-4 py-2 rounded-xl bg-slate-200 text-slate-700 font-bold text-xs cursor-pointer">恢復預設</button>
-                </div>
-              </div>
-
-              <!-- Custom Add / Subtract Points Tool -->
-              <div class="rounded-2xl bg-white p-5 border border-amber-200 space-y-3">
-                <h4 class="font-black text-sm text-navy">⚖️ 客製化加減分系統（支援任意正負數）</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
-                  <select id="admin-score-member-select" class="sm:col-span-5 px-3 py-2.5 rounded-xl bg-peanut-cream border border-peanut-light text-xs font-bold text-navy focus:outline-none"></select>
-                  <input type="number" id="admin-score-delta-input" value="50" step="1" placeholder="輸入分數 (如 50 或 -30)" class="sm:col-span-4 px-3 py-2.5 rounded-xl bg-peanut-cream border border-peanut-light text-xs font-black text-navy focus:outline-none" />
-                  <button type="button" onclick="applyCustomScoreAdjustment()" class="sm:col-span-3 px-3 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs cursor-pointer">
-                    執行加減分
-                  </button>
-                </div>
-                <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                  <span class="text-[11px] text-slate-500 font-bold">快速填入：</span>
-                  <button type="button" onclick="setAdminScoreDelta(-100)" class="px-2.5 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 font-black text-xs cursor-pointer">-100P</button>
-                  <button type="button" onclick="setAdminScoreDelta(-50)" class="px-2.5 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 font-black text-xs cursor-pointer">-50P</button>
-                  <button type="button" onclick="setAdminScoreDelta(-10)" class="px-2.5 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 font-black text-xs cursor-pointer">-10P</button>
-                  <button type="button" onclick="setAdminScoreDelta(10)" class="px-2.5 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-black text-xs cursor-pointer">+10P</button>
-                  <button type="button" onclick="setAdminScoreDelta(50)" class="px-2.5 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-black text-xs cursor-pointer">+50P</button>
-                  <button type="button" onclick="setAdminScoreDelta(100)" class="px-2.5 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-black text-xs cursor-pointer">+100P</button>
-                </div>
-                <p class="text-[11px] text-slate-500">提示：輸入負數（例如 <code class="font-mono bg-slate-100 px-1 rounded">-30</code>）並點擊執行即可扣分。</p>
-              </div>
-            </div>
-
-            <!-- Row 2: Student / Member Roster Management -->
-            <div class="rounded-2xl bg-white p-5 sm:p-6 border border-amber-200 space-y-5">
-              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
-                <div>
-                  <h4 class="font-black text-base text-navy">👥 調整同學名單（新增 / 編輯職位組別密碼 / 刪除成員）</h4>
-                  <p class="text-xs text-slate-500">修改後會同步更新組織架構圖、名錄、登入驗證與積分排行榜</p>
-                </div>
-                <button type="button" onclick="restoreDefaultMembersConfirm()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs cursor-pointer">
-                  ↩ 還原預設 17 人名單
-                </button>
-              </div>
-
-              <!-- Add New Member Form -->
-              <form onsubmit="handleAddMember(event)" class="rounded-2xl bg-peanut-cream/80 border border-peanut-light p-4 space-y-3">
-                <div class="text-xs font-black text-peanut-deep">➕ 新增同學 / 成員</div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-2.5">
-                  <input type="text" id="new-member-name" required placeholder="英文名字 (如 Alex)" class="px-3 py-2 rounded-xl bg-white border border-peanut-light text-xs font-bold text-navy focus:outline-none" />
-                  <input type="text" id="new-member-account" required placeholder="帳號 (如 14250@pnts)" class="px-3 py-2 rounded-xl bg-white border border-peanut-light text-xs font-bold text-navy focus:outline-none" />
-                  <input type="text" id="new-member-password" required placeholder="密碼 (如 123456)" class="px-3 py-2 rounded-xl bg-white border border-peanut-light text-xs font-bold text-navy focus:outline-none" />
-                  <select id="new-member-role" class="px-3 py-2 rounded-xl bg-white border border-peanut-light text-xs font-bold text-navy focus:outline-none">
-                    <option value="信徒">職位：信徒</option>
-                    <option value="副教祖">職位：副教祖</option>
-                    <option value="教祖">職位：教祖</option>
-                  </select>
-                  <select id="new-member-dept" class="px-3 py-2 rounded-xl bg-white border border-peanut-light text-xs font-bold text-navy focus:outline-none">
-                    <option value="">幹部：無</option>
-                    <option value="活動組">幹部：活動組</option>
-                    <option value="資訊組">幹部：資訊組</option>
-                    <option value="供品組">幹部：供品組</option>
-                  </select>
-                  <button type="submit" class="px-4 py-2 rounded-xl bg-navy hover:bg-navy-light text-white font-black text-xs cursor-pointer">
-                    新增成員
-                  </button>
-                </div>
-              </form>
-
-              <!-- Editable Roster Table -->
-              <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr class="border-b border-slate-200 text-slate-500 font-black">
-                      <th class="py-2.5 px-2">名字</th>
-                      <th class="py-2.5 px-2">帳號</th>
-                      <th class="py-2.5 px-2">密碼</th>
-                      <th class="py-2.5 px-2">職位</th>
-                      <th class="py-2.5 px-2">幹部組別</th>
-                      <th class="py-2.5 px-2 text-right">目前分數</th>
-                      <th class="py-2.5 px-2 text-right">操作</th>
-                    </tr>
-                  </thead>
-                  <tbody id="admin-roster-tbody" class="divide-y divide-slate-100"></tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- Row 3: Christmas RSVP Management -->
-            <div class="rounded-2xl bg-white p-5 border border-amber-200 space-y-3">
-              <h4 class="font-black text-sm text-navy">🎄 聖誕活動搶先預約名單管理</h4>
-              <div id="admin-xmas-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-h-48 overflow-y-auto"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- =========================================================
-       FOOTER
-  ========================================================= -->
-  <footer class="bg-navy-dark text-slate-300 border-t border-white/10 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">🥜</span>
-            <span class="font-black text-white text-lg">國際花生組織 IPO · 花生教</span>
-          </div>
-          <p class="text-xs text-slate-400">One Peanut, One World. 相信花生，尊重花生，傳播花生。</p>
-        </div>
-
-        <div class="flex flex-wrap gap-3 text-xs font-bold justify-start md:justify-center">
-          <button type="button" onclick="navigateTo('#/home')" class="hover:text-amber-300 cursor-pointer">首頁</button>
-          <button type="button" onclick="navigateTo('#/purpose')" class="hover:text-amber-300 cursor-pointer">教旨</button>
-          <button type="button" onclick="navigateTo('#/member')" class="hover:text-amber-300 cursor-pointer">成員</button>
-          <button type="button" onclick="navigateTo('#/ipo-intro')" class="hover:text-amber-300 cursor-pointer">IPO 簡介</button>
-          <button type="button" onclick="navigateTo('#/pnt-esg')" class="hover:text-amber-300 cursor-pointer">PNT ESG</button>
-          <button type="button" onclick="navigateTo('#/studio')" class="hover:text-amber-300 cursor-pointer">花生工作室</button>
-          <a href="https://sites.google.com/kcis.com.tw/pnt-world" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:text-indigo-200">花生宇宙 ↗</a>
-          <button type="button" onclick="navigateTo('#/app')" class="hover:text-amber-300 cursor-pointer">下載 APP</button>
-        </div>
-
-        <div class="text-xs text-slate-400 md:text-right">
-          <p>© 2026 International Peanut Org. (804 花生教)</p>
-          <p class="mt-1">最高指導原則：花生可以沒有你，但你不能沒有花生。</p>
-        </div>
-      </div>
     </div>
-  </footer>
 
-  <!-- =========================================================
-       CUSTOM CONFIRMATION MODAL (NEVER USES window.confirm / alert)
-  ========================================================= -->
-  <div id="custom-confirm-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-peanut-light space-y-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-lg shrink-0">⚠️</div>
-        <h3 id="confirm-modal-title" class="text-lg font-black text-navy">確認操作</h3>
-      </div>
-      <p id="confirm-modal-desc" class="text-xs sm:text-sm text-slate-600 leading-relaxed">確定要執行此操作嗎？</p>
-      <div class="flex justify-end gap-2 pt-2">
-        <button type="button" onclick="closeConfirmModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs cursor-pointer">
-          取消
-        </button>
-        <button type="button" id="confirm-modal-ok-btn" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs shadow-md cursor-pointer">
-          確定執行
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- =========================================================
-       TOAST NOTIFICATION CONTAINER
-  ========================================================= -->
-  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-xs w-full pointer-events-none"></div>
-
-  <!-- =========================================================
-       CORE JAVASCRIPT ENGINE (GOOGLE SHEETS REAL-TIME SYNC)
-  ========================================================= -->
-  <script>
-    /* =========================================================================
-       0. GOOGLE SHEETS / APPS SCRIPT CONFIG (UNBLOCKED ON SCHOOL WI-FI)
-       將部署好的 Google Apps Script 網頁應用程式網址貼到下方引號內，即可開啟全班即時同步：
-       範例：const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycb.../exec";
-    ========================================================================= */
-    const GOOGLE_SHEET_API_URL = "";
-
-    let syncPollTimer = null;
-
-    function updateCloudSyncBadge(status) {
-      const badge = document.getElementById('cloud-sync-badge');
-      if (!badge) return;
-      if (status === 'connected') {
-        badge.textContent = '🟢 Google 試算表即時連線中';
-        badge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-900/80 border border-emerald-400/40 text-[10px] font-black text-emerald-200';
-      } else if (status === 'syncing') {
-        badge.textContent = '🔄 正在連線 Google 試算表...';
-        badge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sky-900/80 border border-sky-400/40 text-[10px] font-bold text-sky-200';
-      } else {
-        badge.textContent = '🟡 單機模式（尚未綁定試算表）';
-        badge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-900/70 border border-amber-400/30 text-[10px] font-bold text-amber-200';
-      }
-    }
-
-    async function pushToGoogleSheet(payload) {
-      if (!GOOGLE_SHEET_API_URL) return;
-      try {
-        await fetch(GOOGLE_SHEET_API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
-        });
-      } catch (err) {
-        console.warn('Google Sheet sync push error:', err);
-      }
-    }
-
-    /* =========================================================================
-       1. DEFAULT 17-MEMBER REGISTRY (ENGLISH NAMES ONLY)
-    ========================================================================= */
-    const DEFAULT_IPO_MEMBERS = [
-      { role: '教祖', name: 'Yi-Hsun', account: '14072@pnts', password: '676767', dept: '', color: '#C86D51', variant: 'classic' },
-      { role: '副教祖', name: 'Anne', account: '14021@pnts', password: '958473', dept: '供品組', color: '#A5B4FC', variant: 'classic' },
-      { role: '副教祖', name: 'Mei', account: '14030@pnts', password: '387233', dept: '', color: '#5E72A6', variant: 'classic' },
-      { role: '副教祖', name: 'Bella', account: '14083@pnts', password: '573728', dept: '', color: '#D4A5A5', variant: 'classic' },
-      { role: '副教祖', name: 'Heng', account: '14093@pnts', password: '216761', dept: '資訊組', color: '#93C5FD', variant: 'classic' },
-      { role: '副教祖', name: 'Myaku Myaku', account: 'testm@pnts', password: 'pntexpo2025', dept: '', color: '#E63946', variant: 'myaku' },
-      { role: '信徒', name: 'Jerry', account: '14133@pnts', password: '732892', dept: '', color: '#6B8E55', variant: 'classic' },
-      { role: '信徒', name: 'Nathan', account: '14171@pnts', password: '847231', dept: '', color: '#748CAB', variant: 'classic' },
-      { role: '信徒', name: 'Spencer', account: '14120@pnts', password: '435627', dept: '活動組', color: '#84A98C', variant: 'classic' },
-      { role: '信徒', name: 'Brian', account: '14036@pnts', password: '637892', dept: '', color: '#B5838D', variant: 'classic' },
-      { role: '信徒', name: 'Eunice', account: '14130@pnts', password: '958439', dept: '', color: '#F4A261', variant: 'classic' },
-      { role: '信徒', name: 'Charity', account: '14243@pnts', password: '843723', dept: '', color: '#2A9D8F', variant: 'classic' },
-      { role: '信徒', name: 'Kiwi', account: '14190@pnts', password: '463783', dept: '', color: '#8AB17D', variant: 'classic' },
-      { role: '信徒', name: 'Alissa', account: '14168@pnts', password: '738290', dept: '', color: '#E9C46A', variant: 'classic' },
-      { role: '信徒', name: 'ELAINE', account: '14177@pnts', password: '362783', dept: '', color: '#9B5DE5', variant: 'classic' },
-      { role: '信徒', name: 'Hank', account: 'hank@pnts', password: '293023', dept: '', color: '#457B9D', variant: 'sprout' },
-      { role: '信徒', name: 'Xiann', account: '14040@pnts', password: '452678', dept: '', color: '#E76F51', variant: 'classic' }
-    ];
-
-    /* =========================================================================
-       2. PEANUTO VECTOR SVG GENERATOR (WITH ALIGNED ROTATION)
-    ========================================================================= */
-    function renderPeanutoSVG(variant = 'classic', bandColor = '#6B8E55', hasGlasses = false) {
-      const glassesMarkup = hasGlasses
-        ? `<g stroke="#1E293B" stroke-width="1.8" fill="rgba(255,255,255,0.35)">
-             <circle cx="27" cy="21" r="4.2"/><circle cx="37" cy="21" r="4.2"/>
-             <line x1="31.2" y1="21" x2="32.8" y2="21"/>
-           </g>`
-        : '';
-
-      if (variant === 'sprout') {
-        return `
-          <svg viewBox="0 0 80 80" class="w-full h-full">
-            <path d="M40 16 C35 8 25 8 24 14 C23 19 33 20 40 17 Z" fill="#84A98C"/>
-            <path d="M40 16 C45 8 55 8 56 14 C57 19 47 20 40 17 Z" fill="#6B8E55"/>
-            <rect x="38.8" y="15" width="2.4" height="6" rx="1" fill="#52796F"/>
-            <circle cx="40" cy="42" r="21" fill="#E8C391" stroke="#C5935A" stroke-width="2"/>
-            <circle cx="40" cy="44" r="15.5" fill="#FDE6C4"/>
-            <circle cx="34.5" cy="43" r="2.3" fill="#2B2118"/>
-            <circle cx="45.5" cy="43" r="2.3" fill="#2B2118"/>
-            <circle cx="30" cy="47" r="2.5" fill="#F4A261" opacity="0.55"/>
-            <circle cx="50" cy="47" r="2.5" fill="#F4A261" opacity="0.55"/>
-            <path d="M37.5 47 Q40 49.5 42.5 47" fill="none" stroke="#2B2118" stroke-width="2" stroke-linecap="round"/>
-            <g transform="rotate(-18 44 58)">
-              <path d="M44 47 C50 47 53 51 52 56 C51 59 51 62 52 65 C53 70 50 74 44 74 C38 74 35 70 36 65 C37 62 37 59 36 56 C35 51 38 47 44 47 Z" fill="#DDB27C" stroke="#B68249" stroke-width="1.6"/>
-            </g>
-            ${glassesMarkup}
-          </svg>`;
-      }
-
-      if (variant === 'santa') {
-        return `
-          <svg viewBox="0 0 64 64" class="w-full h-full">
-            <g transform="rotate(-24 32 32)">
-              <path d="M32 10 C42 10 47 18 45 26 C43.5 31 43.5 36 45 41 C47 49 42 57 32 57 C22 57 17 49 19 41 C20.5 36 20.5 31 19 26 C17 18 22 10 32 10 Z" fill="#E8C391" stroke="#C5935A" stroke-width="2"/>
-              <path d="M23 19 L41 19 M21 26 L43 26 M21 41 L43 41 M23 48 L41 48 M27 12 L27 55 M37 12 L37 55" stroke="#C5935A" stroke-width="1.2" opacity="0.55"/>
-              <path d="M20 14 Q32 2 44 14 L50 20 L45 22 L41 15 L20 15 Z" fill="#DC2626"/>
-              <rect x="18" y="11" width="28" height="5.5" rx="2.7" fill="#FFFFFF"/>
-              <circle cx="49" cy="21" r="3.4" fill="#FACC15"/>
-              <circle cx="28" cy="21.5" r="2.1" fill="#1E293B"/>
-              <circle cx="36" cy="21.5" r="2.1" fill="#1E293B"/>
-              <path d="M29.5 24.5 Q32 27 34.5 24.5" fill="none" stroke="#1E293B" stroke-width="1.8" stroke-linecap="round"/>
-              <rect x="17" y="28" width="30" height="13" rx="6" fill="#DC2626"/>
-              <rect x="17" y="32.5" width="30" height="4" fill="#1E293B"/>
-              <rect x="28.5" y="31" width="7" height="7" rx="1.5" fill="none" stroke="#FACC15" stroke-width="2"/>
-            </g>
-            <rect x="39" y="42" width="16" height="13" rx="2.5" fill="#16A34A" stroke="#14532D" stroke-width="1.4"/>
-            <rect x="45.5" y="42" width="3" height="13" fill="#FACC15"/>
-            <rect x="39" y="47" width="16" height="3" fill="#FACC15"/>
-            <text x="6" y="18" font-size="11">❄️</text>
-            <text x="51" y="40" font-size="10">✨</text>
-            ${glassesMarkup}
-          </svg>`;
-      }
-
-      if (variant === 'witch') {
-        return `
-          <svg viewBox="0 0 64 64" class="w-full h-full">
-            <g transform="rotate(-24 32 32)">
-              <path d="M32 10 C42 10 47 18 45 26 C43.5 31 43.5 36 45 41 C47 49 42 57 32 57 C22 57 17 49 19 41 C20.5 36 20.5 31 19 26 C17 18 22 10 32 10 Z" fill="#E8C391" stroke="#C5935A" stroke-width="2"/>
-              <path d="M23 19 L41 19 M21 26 L43 26 M21 41 L43 41 M23 48 L41 48 M27 12 L27 55 M37 12 L37 55" stroke="#C5935A" stroke-width="1.2" opacity="0.55"/>
-              <ellipse cx="32" cy="13.5" rx="16" ry="4" fill="#1E293B"/>
-              <path d="M22 13 L32 2 L44 10 L41 13 Z" fill="#1E293B"/>
-              <rect x="23.5" y="10" width="17" height="3.2" rx="1" fill="#8B5CF6"/>
-              <rect x="30" y="9.2" width="4" height="4.8" rx="0.8" fill="none" stroke="#F59E0B" stroke-width="1.4"/>
-              <circle cx="45.5" cy="11" r="2.3" fill="#F59E0B"/>
-              <rect x="17" y="28" width="30" height="13" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
-            </g>
-            <text x="5" y="18" fill="#1E293B" font-size="9.5" font-weight="900" transform="rotate(-18 12 16)">BOO!</text>
-            ${glassesMarkup}
-          </svg>`;
-      }
-
-      if (variant === 'pumpkin') {
-        return `
-          <svg viewBox="0 0 64 64" class="w-full h-full">
-            <g transform="rotate(-20 32 32)">
-              <path d="M32 11 C42 11 47 18 45 26 C43.5 31 43.5 36 45 41 C47 49 42 56 32 56 C22 56 17 49 19 41 C20.5 36 20.5 31 19 26 C17 18 22 11 32 11 Z" fill="#F3D5A5" stroke="#C5935A" stroke-width="2"/>
-              <ellipse cx="27" cy="23" rx="2.8" ry="3.6" fill="#0F172A"/>
-              <ellipse cx="37" cy="23" rx="2.8" ry="3.6" fill="#0F172A"/>
-              <ellipse cx="32" cy="30" rx="3.4" ry="4.5" fill="#0F172A"/>
-              <path d="M21 15 Q32 7 43 15 L41 19 L36 16 L32 19 L28 16 L23 19 Z" fill="#F97316"/>
-              <rect x="30.5" y="7" width="3" height="5" rx="1" fill="#4D7C0F"/>
-              <rect x="18" y="34" width="28" height="12" rx="6" fill="#D8A46F"/>
-            </g>
-            ${glassesMarkup}
-          </svg>`;
-      }
-
-      if (variant === 'cosmic') {
-        return `
-          <svg viewBox="0 0 64 64" class="w-full h-full">
-            <defs>
-              <linearGradient id="cosmicGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#F2CFA0"/><stop offset="60%" stop-color="#E5A49B"/><stop offset="100%" stop-color="#B5838D"/>
-              </linearGradient>
-            </defs>
-            <circle cx="32" cy="32" r="27" fill="rgba(129,140,248,0.18)" stroke="#818CF8" stroke-width="1.8" stroke-dasharray="4 3"/>
-            <g transform="rotate(-24 32 32)">
-              <path d="M32 8 C42 8 47 16 45 25 C43.5 30 43.5 35 45 40 C47 49 42 57 32 57 C22 57 17 49 19 40 C20.5 35 20.5 30 19 25 C17 16 22 8 32 8 Z" fill="url(#cosmicGrad)"/>
-              <rect x="26" y="16" width="4" height="4" rx="1" fill="#A46B43" opacity="0.7"/>
-              <rect x="34" y="21" width="4" height="4" rx="1" fill="#A46B43" opacity="0.7"/>
-              <rect x="27" y="39" width="4" height="4" rx="1" fill="#A46B43" opacity="0.7"/>
-              <rect x="34" y="45" width="4" height="4" rx="1" fill="#A46B43" opacity="0.7"/>
-              <rect x="17" y="26" width="30" height="13" rx="6" fill="${bandColor}"/>
-            </g>
-            <circle cx="52" cy="14" r="2.2" fill="#FDE047"/>
-            <circle cx="12" cy="50" r="1.8" fill="#38BDF8"/>
-            ${glassesMarkup}
-          </svg>`;
-      }
-
-      if (variant === 'esg') {
-        return `
-          <svg viewBox="0 0 64 64" class="w-full h-full">
-            <g transform="rotate(-24 32 32)">
-              <path d="M32 8 C42 8 47 16 45 25 C43.5 30 43.5 35 45 40 C47 49 42 57 32 57 C22 57 17 49 19 40 C20.5 35 20.5 30 19 25 C17 16 22 8 32 8 Z" fill="#E8C391" stroke="#2D6A4F" stroke-width="2.2"/>
-              <path d="M23 17 L41 17 M21 25 L43 25 M21 40 L43 40 M23 48 L41 48 M27 10 L27 55 M37 10 L37 55" stroke="#C5935A" stroke-width="1.2" opacity="0.55"/>
-              <rect x="17" y="26" width="30" height="13" rx="6" fill="#2D6A4F"/>
-            </g>
-            <path d="M45 12 C52 10 56 15 53 20 C50 24 44 21 45 12 Z" fill="#52B788"/>
-            ${glassesMarkup}
-          </svg>`;
-      }
-
-      if (variant === 'myaku') {
-        return `
-          <svg viewBox="0 0 64 64" class="w-full h-full">
-            <circle cx="32" cy="10" r="5" fill="#E63946"/><circle cx="48" cy="16" r="5.5" fill="#1D4ED8"/>
-            <circle cx="53" cy="34" r="5" fill="#E63946"/><circle cx="46" cy="50" r="5.5" fill="#E63946"/>
-            <circle cx="28" cy="54" r="5" fill="#1D4ED8"/><circle cx="13" cy="44" r="5.5" fill="#E63946"/>
-            <circle cx="14" cy="21" r="5" fill="#1D4ED8"/>
-            <g transform="rotate(-20 32 32)">
-              <path d="M32 12 C40 12 44 19 42 26 C41 30 41 34 42 38 C44 45 40 52 32 52 C24 52 20 45 22 38 C23 34 23 30 22 26 C20 19 24 12 32 12 Z" fill="#E8C391" stroke="#C5935A" stroke-width="2"/>
-              <rect x="20" y="27" width="24" height="10" rx="5" fill="#1D4ED8"/>
-            </g>
-            ${glassesMarkup}
-          </svg>`;
-      }
-
-      // Default: classic Peanuto
-      return `
-        <svg viewBox="0 0 64 64" class="w-full h-full">
-          <g transform="rotate(-24 32 32)">
-            <path d="M32 7 C42 7 47 15 45 24 C43.5 30 43.5 35 45 41 C47 50 42 58 32 58 C22 58 17 50 19 41 C20.5 35 20.5 30 19 24 C17 15 22 7 32 7 Z" fill="#E8C391" stroke="#C5935A" stroke-width="2.2"/>
-            <path d="M23 16 L41 16 M21 24 L43 24 M21 41 L43 41 M23 49 L41 49 M27 9 L27 56 M37 9 L37 56" stroke="#C5935A" stroke-width="1.3" opacity="0.6"/>
-            <rect x="17" y="26" width="30" height="13" rx="6" fill="${bandColor}" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
-          </g>
-          ${glassesMarkup}
-        </svg>`;
-    }
-
-    /* =========================================================================
-       3. IN-MEMORY CACHE + GOOGLE SHEETS REAL-TIME SYNC STATE
-    ========================================================================= */
-    const DEFAULT_ANNOUNCEMENT = '🎄 最新公告：2026 萬聖節活動已圓滿落幕！花生教聖誕節特別企劃即將公開（Coming Soon），每日完成一項挑戰領 200P！';
-
-    let currentSessionAccount = null;
-    let cloudProfiles = {};
-    let cloudMembers = []; // Empty means use DEFAULT_IPO_MEMBERS
-    let cloudAnnouncement = DEFAULT_ANNOUNCEMENT;
-    let cloudEsgCount = 0;
-    let cloudXmasSubscribers = [];
-    let cloudXmasIdeas = [];
-    let cloudWishes = [];
-
-    const SKIN_SHOP = [
-      { id: 'classic', name: 'Classic 原味經典', price: 0, variant: 'classic', band: '#FFFFFF', desc: '最純粹的 804 經典白肚兜造型' },
-      { id: 'santa', name: 'Santa 聖誕老公公 [NEW]', price: 200, variant: 'santa', band: '#DC2626', desc: '金鈴聖誕帽＋禮物盒歲末限定款' },
-      { id: 'cosmic', name: 'Space 宇宙太空人', price: 300, variant: 'cosmic', band: '#4F46E5', desc: '裝備量子頭盔探索多重宇宙' },
-      { id: 'esg', name: 'ESG 永續綠葉徽章', price: 250, variant: 'esg', band: '#2D6A4F', desc: '守護二手考卷再生的永續大使' },
-      { id: 'myaku', name: 'VIP 尊爵脈脈聯名', price: 400, variant: 'myaku', band: '#E63946', desc: '致敬紅藍細胞環的跨次元聯名款' },
-      { id: 'pumpkin', name: '2026 萬聖南瓜紀念款', price: 200, variant: 'pumpkin', band: '#F97316', desc: '紀念 2026.10.30 圓滿落幕的萬聖典藏' }
-    ];
-
-    function getMembersList() {
-      return (Array.isArray(cloudMembers) && cloudMembers.length > 0) ? cloudMembers : DEFAULT_IPO_MEMBERS;
-    }
-
-    function getTodayStr() {
-      const d = new Date();
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    }
-
-    function getDefaultProfile(account) {
-      const member = getMembersList().find(m => m.account === account);
-      return {
-        points: 0,
-        lastChallengeDate: '',
-        lastChallengeType: '',
-        lastFortune: '',
-        lastEsgPledge: '',
-        lastXmasSub: false,
-        lastXmasIdea: '',
-        unlockedSkins: ['classic'],
-        equippedVariant: member ? (member.variant || 'classic') : 'classic',
-        equippedBand: member ? (member.color || '#6B8E55') : '#6B8E55'
-      };
-    }
-
-    function getLoggedInMember() {
-      return currentSessionAccount ? getMembersList().find(m => m.account === currentSessionAccount) || null : null;
-    }
-
-    function getMemberProfile(account) {
-      const base = getDefaultProfile(account);
-      return cloudProfiles[account] ? { ...base, ...cloudProfiles[account] } : base;
-    }
-
-    async function mutateMemberProfile(account, fn) {
-      const cur = getMemberProfile(account);
-      const updated = fn({ ...cur });
-      cloudProfiles[account] = updated;
-
-      await pushToGoogleSheet({
-        action: 'upsertProfile',
-        account,
-        profile: updated
-      });
-      return updated;
-    }
-
-    async function syncRosterToCloud(updatedMembers) {
-      cloudMembers = updatedMembers;
-      renderMemberDirectory('ALL');
-      renderLoginQuickChips();
-      renderLeaderboards();
-      renderAdminRosterTable();
-      await pushToGoogleSheet({
-        action: 'saveMembers',
-        members: updatedMembers
-      });
-    }
-
-    async function fetchCloudStateFromSheet() {
-      if (!GOOGLE_SHEET_API_URL) {
-        updateCloudSyncBadge('local');
-        return;
-      }
-      try {
-        const res = await fetch(`${GOOGLE_SHEET_API_URL}?t=${Date.now()}`);
-        if (!res.ok) throw new Error('Network response error');
-        const data = await res.json();
-
-        if (data.profiles && typeof data.profiles === 'object') {
-          cloudProfiles = data.profiles;
-        }
-        if (Array.isArray(data.members) && data.members.length > 0) {
-          cloudMembers = data.members;
-        }
-        if (typeof data.announcement === 'string' && data.announcement.trim()) {
-          cloudAnnouncement = data.announcement;
-        }
-        if (typeof data.esgCount === 'number') {
-          cloudEsgCount = data.esgCount;
-        }
-        if (Array.isArray(data.wishes)) {
-          cloudWishes = data.wishes;
-        }
-        if (Array.isArray(data.xmasSubscribers)) {
-          cloudXmasSubscribers = data.xmasSubscribers;
-        }
-        if (Array.isArray(data.xmasIdeas)) {
-          cloudXmasIdeas = data.xmasIdeas;
-        }
-
-        updateCloudSyncBadge('connected');
-        applyGlobalAnnouncement();
-        renderChristmasBillboard();
-        renderEsgCount();
-        renderWishWall();
-        renderMemberDirectory('ALL');
-        renderLoginQuickChips();
-        syncHeaderAuth();
-        renderLeaderboards();
-        if (!document.getElementById('page-login').classList.contains('hidden')) {
-          refreshMemberPage();
-        }
-      } catch (err) {
-        console.warn('Fetch from Google Sheet failed:', err);
-        updateCloudSyncBadge('local');
-      }
-    }
-
-    async function initCloudConnection() {
-      if (!GOOGLE_SHEET_API_URL) {
-        updateCloudSyncBadge('local');
-        return;
-      }
-      updateCloudSyncBadge('syncing');
-      await fetchCloudStateFromSheet();
-      if (syncPollTimer) clearInterval(syncPollTimer);
-      syncPollTimer = setInterval(fetchCloudStateFromSheet, 8000);
-    }
-
-    /* =========================================================================
-       4. MULTI-PAGE ROUTER (HASH-BASED SPA)
-    ========================================================================= */
-    const VALID_ROUTES = ['#/home', '#/purpose', '#/member', '#/ipo-intro', '#/pnt-esg', '#/studio', '#/app', '#/login'];
-
-    function navigateTo(route) {
-      if (!VALID_ROUTES.includes(route)) route = '#/home';
-      if (window.location.hash !== route) {
-        window.location.hash = route;
-      } else {
-        renderRoute(route);
-      }
-      document.getElementById('mobile-menu').classList.add('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function renderRoute(route) {
-      if (!VALID_ROUTES.includes(route)) route = '#/home';
-      document.querySelectorAll('.page-view').forEach(sec => {
-        sec.classList.add('hidden');
-        sec.classList.remove('page-enter');
-      });
-
-      const pageId = 'page-' + route.replace('#/', '');
-      const target = document.getElementById(pageId);
-      if (target) {
-        target.classList.remove('hidden');
-        void target.offsetWidth;
-        target.classList.add('page-enter');
-      }
-
-      document.querySelectorAll('.nav-link').forEach(btn => {
-        const active = btn.getAttribute('data-route') === route;
-        btn.className = active
-          ? 'nav-link px-3 py-2 rounded-xl text-sm font-black bg-peanut-caramel text-navy-dark shadow-sm transition-all cursor-pointer'
-          : 'nav-link px-3 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-white/10 transition-all cursor-pointer';
-      });
-
-      document.querySelectorAll('.mobile-nav-link').forEach(btn => {
-        const active = btn.getAttribute('data-route') === route;
-        btn.classList.toggle('bg-peanut-caramel', active);
-        btn.classList.toggle('text-navy-dark', active);
-      });
-
-      if (route === '#/login') refreshMemberPage();
-      if (route === '#/studio') renderUniverseStudio();
-      if (route === '#/member') renderMemberDirectory('ALL');
-    }
-
-    function toggleMobileMenu() {
-      document.getElementById('mobile-menu').classList.toggle('hidden');
-    }
-
-    window.addEventListener('hashchange', () => {
-      renderRoute(window.location.hash || '#/home');
-    });
-
-    /* =========================================================================
-       5. CUSTOM CONFIRMATION MODAL & TOAST SYSTEM
-    ========================================================================= */
-    let pendingConfirmCallback = null;
-
-    function openConfirmModal(title, desc, onConfirm) {
-      document.getElementById('confirm-modal-title').textContent = title;
-      document.getElementById('confirm-modal-desc').textContent = desc;
-      pendingConfirmCallback = onConfirm;
-      document.getElementById('custom-confirm-modal').classList.remove('hidden');
-    }
-
-    function closeConfirmModal() {
-      document.getElementById('custom-confirm-modal').classList.add('hidden');
-      pendingConfirmCallback = null;
-    }
-
-    document.getElementById('confirm-modal-ok-btn').addEventListener('click', () => {
-      const fn = pendingConfirmCallback;
-      closeConfirmModal();
-      if (typeof fn === 'function') fn();
-    });
-
-    function showToast(message, type = 'success') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      const colors = {
-        success: 'bg-navy text-white border-peanut-caramel',
-        warning: 'bg-amber-900 text-amber-50 border-amber-400',
-        error: 'bg-rose-900 text-white border-rose-400'
-      };
-      toast.className = `pointer-events-auto rounded-2xl border-l-4 px-4 py-3 shadow-xl text-xs sm:text-sm font-bold transition-all duration-300 ${colors[type] || colors.success}`;
-      toast.textContent = message;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateY(8px)';
-        setTimeout(() => toast.remove(), 300);
-      }, 3200);
-    }
-
-    function escapeHTML(str) {
-      return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
-    }
-
-    /* =========================================================================
-       6. HERO CAROUSEL & GLOBAL ANNOUNCEMENT
-    ========================================================================= */
-    let currentSlide = 0;
-
-    function setHeroSlide(idx) {
-      currentSlide = idx;
-      document.getElementById('hero-slide-0').classList.toggle('hidden', idx !== 0);
-      document.getElementById('hero-slide-1').classList.toggle('hidden', idx !== 1);
-      document.getElementById('dot-0').className = idx === 0 ? 'w-8 h-2.5 rounded-full bg-amber-400 transition-all cursor-pointer' : 'w-2.5 h-2.5 rounded-full bg-white/30 transition-all cursor-pointer';
-      document.getElementById('dot-1').className = idx === 1 ? 'w-8 h-2.5 rounded-full bg-indigo-400 transition-all cursor-pointer' : 'w-2.5 h-2.5 rounded-full bg-white/30 transition-all cursor-pointer';
-    }
-
-    function toggleHeroSlide() {
-      setHeroSlide(currentSlide === 0 ? 1 : 0);
-    }
-
-    function getAnnouncementText() {
-      return cloudAnnouncement || DEFAULT_ANNOUNCEMENT;
-    }
-
-    function applyGlobalAnnouncement() {
-      const txt = getAnnouncementText();
-      const bannerEl = document.getElementById('global-banner-text');
-      if (bannerEl) bannerEl.textContent = txt;
-      const adminInput = document.getElementById('admin-banner-textarea');
-      if (adminInput && document.activeElement !== adminInput) {
-        adminInput.value = txt;
-      }
-    }
-
-    /* =========================================================================
-       7. HOME INTERACTIONS: PEANUT ORACLE & CHRISTMAS BILLBOARD
-    ========================================================================= */
-    const ORACLE_MESSAGES = [
-      '「相信花生，今天遇到的難題都會像剝花生殼一樣輕鬆打開！」',
-      '「冷靜三秒，然後思考：為什麼不是兩顆？好運即將成雙降臨！」',
-      '「一顆花生可以很渺小，但今天和同學合作就會變成無敵堅果盤！」',
-      '「下課記得補充能量，吃飽了才有精神繼續傳播花生精神！」',
-      '「花生可以沒有你，但你今天的幸運指數絕對需要一顆花生！」',
-      '「遇到選擇題猶豫不決時，相信直覺，就像花生相信土壤一樣！」'
-    ];
-
-    async function drawHomeOracle() {
-      const pick = ORACLE_MESSAGES[Math.floor(Math.random() * ORACLE_MESSAGES.length)];
-      const textEl = document.getElementById('home-oracle-text');
-      textEl.textContent = pick;
-
-      const member = getLoggedInMember();
-      if (member) {
-        const today = getTodayStr();
-        const prof = getMemberProfile(member.account);
-        if (prof.lastFortune !== today) {
-          await mutateMemberProfile(member.account, p => {
-            p.points += 20;
-            p.lastFortune = today;
-            return p;
-          });
-          renderLeaderboards();
-          showToast(`✨ ${member.name} 領取今日神諭，獲得 +20P！`);
-        } else {
-          showToast('今日神諭點數已領取，可繼續免費占卜！', 'warning');
-        }
-      } else {
-        showToast('已為你揭示花生神諭！（登入會員抽簽可賺 +20P）');
-      }
-    }
-
-    function renderChristmasBillboard() {
-      const subs = cloudXmasSubscribers;
-      const me = getLoggedInMember();
-      const isAdmin = me && (me.role === '教祖' || me.role === '副教祖');
-
-      document.getElementById('xmas-sub-count').textContent = subs.length;
-      document.getElementById('xmas-sub-badges').innerHTML = subs.length === 0
-        ? '<span class="text-[11px] text-emerald-100/70">尚無預約紀錄，歡迎搶先登記！</span>'
-        : subs.map(s => `
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-[11px] font-bold text-white">
-            🎄 ${escapeHTML(s.name)}
-          </span>
-        `).join('');
-
-      const adminBox = document.getElementById('admin-xmas-list');
-      if (adminBox) {
-        adminBox.innerHTML = subs.length === 0
-          ? '<p class="text-xs text-slate-400">目前尚無預約資料。</p>'
-          : subs.map(s => `
-            <div class="flex items-center justify-between gap-2 rounded-xl bg-peanut-cream px-3 py-2 text-xs">
-              <div>
-                <span class="font-black text-navy">🎄 ${escapeHTML(s.name)}</span>
-                <span class="ml-2 px-2 py-0.5 rounded-md bg-peanut-sand text-peanut-deep font-bold">${escapeHTML(s.role || '信徒')}</span>
-              </div>
-              <button type="button" onclick="removeXmasSubscriber('${escapeHTML(s.account)}')" class="px-2.5 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold cursor-pointer">移除</button>
-            </div>
-          `).join('');
-      }
-
-      const ideas = cloudXmasIdeas;
-      const ideaBox = document.getElementById('xmas-idea-list');
-      if (ideaBox) {
-        ideaBox.innerHTML = ideas.length === 0
-          ? '<p class="text-[11px] text-slate-300/70 py-1">目前尚無聖誕許願留言，歡迎搶先許願！</p>'
-          : ideas.map(item => {
-            const canDelete = isAdmin || (me && ((item.account && item.account === me.account) || item.author === me.name));
-            return `
-              <div class="rounded-xl bg-black/25 px-3 py-2 border border-white/10 flex items-center justify-between gap-2">
-                <div class="min-w-0">
-                  <span class="font-black text-amber-300">${escapeHTML(item.author)}：</span>
-                  <span class="break-words">${escapeHTML(item.text)}</span>
-                </div>
-                ${canDelete ? `<button type="button" onclick="confirmDeleteXmasIdea('${escapeHTML(item.id)}')" class="shrink-0 px-2 py-0.5 rounded-lg bg-rose-500/30 hover:bg-rose-500 text-rose-100 hover:text-white text-[10px] font-bold cursor-pointer">刪除</button>` : ''}
-              </div>
-            `;
-          }).join('');
-      }
-    }
-
-    async function subscribeChristmasNotice() {
-      const member = getLoggedInMember();
-      if (!member) {
-        showToast('請先登入 @pnts 會員帳號再搶先預約！', 'warning');
-        navigateTo('#/login');
-        return;
-      }
-
-      const exists = cloudXmasSubscribers.some(s => s.account === member.account);
-      if (exists) {
-        showToast('你已經完成聖誕活動預約通知囉！', 'warning');
-        return;
-      }
-
-      const entry = {
-        account: member.account,
-        name: member.name,
-        role: member.role,
-        createdAt: Date.now()
-      };
-      cloudXmasSubscribers = [entry, ...cloudXmasSubscribers];
-      await pushToGoogleSheet({ action: 'addXmasSub', entry });
-
-      const prof = getMemberProfile(member.account);
-      if (!prof.lastXmasSub) {
-        await mutateMemberProfile(member.account, p => {
-          p.points += 30;
-          p.lastXmasSub = true;
-          return p;
-        });
-        showToast(`🎄 ${member.name} 預約成功！已獲得 +30P！`);
-      } else {
-        showToast(`🎄 ${member.name} 已重新加入預約名單！`);
-      }
-
-      document.getElementById('xmas-sub-status').textContent = '✓ 已成功預約';
-      renderChristmasBillboard();
-      renderLeaderboards();
-    }
-
-    async function removeXmasSubscriber(account) {
-      cloudXmasSubscribers = cloudXmasSubscribers.filter(s => s.account !== account);
-      await pushToGoogleSheet({ action: 'removeXmasSub', account });
-      renderChristmasBillboard();
-      showToast('已從聖誕預約名單移除', 'warning');
-    }
-
-    async function submitChristmasIdea() {
-      const member = getLoggedInMember();
-      if (!member) {
-        showToast('請先登入會員再送出聖誕玩法許願！', 'warning');
-        navigateTo('#/login');
-        return;
-      }
-      const input = document.getElementById('xmas-idea-input');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const entry = {
-        id: 'idea_' + Date.now(),
-        account: member.account,
-        author: member.name,
-        text,
-        createdAt: Date.now()
-      };
-      cloudXmasIdeas = [entry, ...cloudXmasIdeas];
-      await pushToGoogleSheet({ action: 'addXmasIdea', entry });
-      input.value = '';
-
-      const today = getTodayStr();
-      const prof = getMemberProfile(member.account);
-      if (prof.lastXmasIdea !== today) {
-        await mutateMemberProfile(member.account, p => {
-          p.points += 20;
-          p.lastXmasIdea = today;
-          return p;
-        });
-        renderLeaderboards();
-        showToast('💭 聖誕許願已送出，獲得 +20P！');
-      } else {
-        showToast('💭 聖誕許願已送出！');
-      }
-      renderChristmasBillboard();
-    }
-
-    function confirmDeleteXmasIdea(id) {
-      openConfirmModal(
-        '刪除聖誕許願留言',
-        '確定要刪除這則聖誕玩法許願嗎？刪除後全站將同步移除。',
-        () => deleteChristmasIdea(id)
-      );
-    }
-
-    async function deleteChristmasIdea(id) {
-      cloudXmasIdeas = cloudXmasIdeas.filter(item => String(item.id) !== String(id));
-      renderChristmasBillboard();
-      await pushToGoogleSheet({ action: 'deleteXmasIdea', id });
-      showToast('已刪除該則聖誕許願留言', 'warning');
-    }
-
-    /* =========================================================================
-       8. PNT ESG PLEDGE
-    ========================================================================= */
-    function renderEsgCount() {
-      const el = document.getElementById('esg-pledge-count');
-      if (el) el.textContent = cloudEsgCount;
-    }
-
-    async function pledgeEsgAction() {
-      cloudEsgCount += 1;
-      renderEsgCount();
-      await pushToGoogleSheet({ action: 'incEsg' });
-
-      const member = getLoggedInMember();
-      if (member) {
-        const today = getTodayStr();
-        const prof = getMemberProfile(member.account);
-        if (prof.lastEsgPledge !== today) {
-          await mutateMemberProfile(member.account, p => {
-            p.points += 30;
-            p.lastEsgPledge = today;
-            return p;
-          });
-          renderLeaderboards();
-          showToast('🌿 感謝響應考卷紙袋再生！獲得 +30P！');
-          return;
-        }
-      }
-      showToast('🌿 感謝支持 #PNTESG 考卷紙袋再生行動！');
-    }
-
-    /* =========================================================================
-       9. MEMBER DIRECTORY & DYNAMIC ORG TREE (#/member)
-    ========================================================================= */
-    function renderOrgTreeFromMembers() {
-      const members = getMembersList();
-      const leaders = members.filter(m => m.role === '教祖');
-      const vices = members.filter(m => m.role === '副教祖');
-      const cadres = members.filter(m => m.dept && m.dept.trim() !== '');
-      const believers = members.filter(m => m.role === '信徒');
-
-      const leaderBox = document.getElementById('org-tree-leaders');
-      if (leaderBox) {
-        leaderBox.innerHTML = leaders.length === 0
-          ? '<div class="px-8 py-4 rounded-2xl bg-peanut-caramel text-navy-dark font-black text-lg shadow-lg">教祖（待指派）</div>'
-          : leaders.map(m => `
-            <div class="px-8 py-4 rounded-2xl bg-peanut-caramel text-navy-dark font-black text-lg shadow-lg">
-              教祖 ${escapeHTML(m.name)}
-            </div>
-          `).join('');
-      }
-
-      const viceBox = document.getElementById('org-tree-vices');
-      if (viceBox) {
-        viceBox.innerHTML = vices.length === 0
-          ? '<li class="text-center text-xs opacity-75">目前無副教祖</li>'
-          : vices.map(m => `
-            <li class="flex items-center gap-2.5 bg-white/35 rounded-xl px-3.5 py-2">
-              <span class="w-3.5 h-3.5 rounded-full shrink-0" style="background:${escapeHTML(m.color || '#A5B4FC')}"></span>
-              <span>${escapeHTML(m.name)}</span>
-            </li>
-          `).join('');
-      }
-
-      const cadreBox = document.getElementById('org-tree-cadres');
-      if (cadreBox) {
-        const deptIcons = { '活動組': '🧩', '資訊組': '🌐', '供品組': '🎁' };
-        cadreBox.innerHTML = cadres.length === 0
-          ? '<p class="text-xs opacity-75">目前無指派幹部</p>'
-          : cadres.map(m => `
-            <div class="bg-white/35 rounded-xl p-3">
-              <div class="text-xs font-black text-navy">${deptIcons[m.dept] || '🏅'} ${escapeHTML(m.dept)}</div>
-              <div class="font-extrabold text-sm mt-0.5">${escapeHTML(m.name)}</div>
-            </div>
-          `).join('');
-      }
-
-      const believerBox = document.getElementById('org-tree-believers');
-      if (believerBox) {
-        believerBox.innerHTML = believers.length === 0
-          ? '<li class="col-span-2 text-center text-xs opacity-75">目前無信徒</li>'
-          : believers.map(m => `
-            <li class="bg-white/30 rounded-xl px-3 py-1.5">• ${escapeHTML(m.name)}</li>
-          `).join('');
-      }
-    }
-
-    function renderMemberDirectory(filter = 'ALL') {
-      renderOrgTreeFromMembers();
-      const members = getMembersList();
-      const totalEl = document.getElementById('member-total-count');
-      if (totalEl) totalEl.textContent = members.length;
-
-      const grid = document.getElementById('member-cards-grid');
-      if (!grid) return;
-      const list = members.filter(m => {
-        if (filter === 'ALL') return true;
-        if (filter === '幹部') return Boolean(m.dept);
-        return m.role === filter;
-      });
-
-      grid.innerHTML = list.map(m => `
-        <div class="rounded-2xl bg-white p-4 shadow-sm border border-peanut-light/70 flex items-center gap-3.5 hover:shadow-md transition-all">
-          <div class="w-14 h-14 rounded-2xl bg-peanut-cream p-1 shrink-0 border border-peanut-light">
-            ${renderPeanutoSVG(m.variant || 'classic', m.color || '#6B8E55', false)}
-          </div>
-          <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="px-2 py-0.5 rounded-md text-[10px] font-black ${getRoleBadgeClass(m.role)}">${escapeHTML(m.role)}</span>
-              ${m.dept ? `<span class="px-2 py-0.5 rounded-md text-[10px] font-black bg-emerald-100 text-emerald-800">${escapeHTML(m.dept)}</span>` : ''}
-            </div>
-            <h4 class="font-black text-navy text-base mt-1 truncate">${escapeHTML(m.name)}</h4>
-            <p class="text-[11px] font-mono text-slate-400">${escapeHTML(m.account)}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function filterMembers(filter) {
-      document.querySelectorAll('.member-filter-btn').forEach(btn => {
-        const isMatch = btn.textContent.includes(filter === 'ALL' ? '全部' : filter);
-        btn.className = isMatch
-          ? 'member-filter-btn px-3.5 py-1.5 rounded-xl bg-navy text-white text-xs font-bold cursor-pointer'
-          : 'member-filter-btn px-3.5 py-1.5 rounded-xl bg-white text-navy border border-peanut-light text-xs font-bold cursor-pointer';
-      });
-      renderMemberDirectory(filter);
-    }
-
-    function getRoleBadgeClass(role) {
-      if (role === '教祖') return 'bg-amber-400 text-navy-dark';
-      if (role === '副教祖') return 'bg-indigo-100 text-indigo-800';
-      return 'bg-peanut-sand text-peanut-deep';
-    }
-
-    /* =========================================================================
-       10. PEANUT STUDIO (#/studio)
-    ========================================================================= */
-    let studioVariant = 'santa';
-    let studioColor = '#DC2626';
-
-    const STUDIO_VARIANTS = [
-      { id: 'classic', label: '經典肚兜' },
-      { id: 'santa', label: '聖誕老公公' },
-      { id: 'sprout', label: '嫩芽抱花生' },
-      { id: 'cosmic', label: '宇宙太空人' },
-      { id: 'esg', label: 'ESG 綠葉' },
-      { id: 'myaku', label: 'VIP 脈脈聯名' }
-    ];
-
-    const STUDIO_COLORS = ['#6B8E55', '#DC2626', '#4F46E5', '#F59E0B', '#EC4899', '#0EA5E9', '#1E293B', '#FFFFFF'];
-
-    function renderUniverseStudio() {
-      document.getElementById('universe-preview-mascot').innerHTML = renderPeanutoSVG(studioVariant, studioColor, false);
-      const found = STUDIO_VARIANTS.find(v => v.id === studioVariant);
-      document.getElementById('universe-preview-label').textContent = `Peanuto · ${found ? found.label : '訂製款'}`;
-
-      document.getElementById('universe-variant-btns').innerHTML = STUDIO_VARIANTS.map(v => `
-        <button type="button" onclick="selectStudioVariant('${v.id}')" class="px-3 py-2.5 rounded-xl text-xs font-black border transition-all cursor-pointer ${studioVariant === v.id ? 'bg-navy text-white border-navy shadow-sm' : 'bg-peanut-cream text-navy border-peanut-light hover:border-peanut-caramel'}">
-          ${v.label}
-        </button>
-      `).join('');
-
-      document.getElementById('universe-color-btns').innerHTML = STUDIO_COLORS.map(c => `
-        <button type="button" onclick="selectStudioColor('${c}')" style="background:${c}" class="w-9 h-9 rounded-full border-2 shadow-sm transition-transform cursor-pointer ${studioColor === c ? 'scale-110 border-navy ring-2 ring-peanut-caramel' : 'border-slate-300'}" aria-label="選擇顏色 ${c}"></button>
-      `).join('');
-    }
-
-    function selectStudioVariant(v) {
-      studioVariant = v;
-      renderUniverseStudio();
-    }
-
-    function selectStudioColor(c) {
-      studioColor = c;
-      renderUniverseStudio();
-    }
-
-    async function saveStudioLookToProfile() {
-      const member = getLoggedInMember();
-      if (!member) {
-        showToast('請先登入會員再套用造型！', 'warning');
-        navigateTo('#/login');
-        return;
-      }
-      const prof = getMemberProfile(member.account);
-      if (!prof.unlockedSkins.includes(studioVariant) && studioVariant !== 'sprout') {
-        showToast('你尚未在兌換所解鎖此造型，請先前往會員專區兌換！', 'warning');
-        navigateTo('#/login');
-        return;
-      }
-      await mutateMemberProfile(member.account, p => {
-        p.equippedVariant = studioVariant;
-        p.equippedBand = studioColor;
-        return p;
-      });
-      showToast('✨ 已更新你的專屬信徒證頭像！');
-    }
-
-    /* =========================================================================
-       11. AUTHENTICATION, DAILY 3-IN-1 CHALLENGE, LEADERBOARD & WISHES
-    ========================================================================= */
-    function renderLoginQuickChips() {
-      const chipsBox = document.getElementById('login-quick-chips');
-      if (!chipsBox) return;
-      chipsBox.innerHTML = getMembersList().map(m => `
-        <button type="button" onclick="quickFillAccount('${escapeHTML(m.account)}')" class="px-2.5 py-1 rounded-lg bg-peanut-cream hover:bg-peanut-sand border border-peanut-light text-[11px] font-bold text-navy cursor-pointer">
-          ${escapeHTML(m.name)}
-        </button>
-      `).join('');
-    }
-
-    function quickFillAccount(acc) {
-      document.getElementById('login-account').value = acc;
-      document.getElementById('login-password').value = '';
-      document.getElementById('login-password').focus();
-      document.getElementById('login-error-msg').classList.add('hidden');
-    }
-
-    function handleMemberLogin(e) {
-      e.preventDefault();
-      let rawAcc = document.getElementById('login-account').value.trim().toLowerCase();
-      const rawPw = document.getElementById('login-password').value.trim();
-      const errBox = document.getElementById('login-error-msg');
-
-      if (rawAcc && !rawAcc.includes('@')) {
-        rawAcc = rawAcc + '@pnts';
-      }
-
-      const matched = getMembersList().find(m => m.account.toLowerCase() === rawAcc && m.password === rawPw);
-      if (!matched) {
-        errBox.textContent = '❌ 帳號或密碼錯誤，請確認 @pnts 帳號與通行密碼後再試一次。';
-        errBox.classList.remove('hidden');
-        return;
-      }
-
-      errBox.classList.add('hidden');
-      currentSessionAccount = matched.account;
-      syncHeaderAuth();
-      refreshMemberPage();
-      renderChristmasBillboard();
-      showToast(`🥜 歡迎回來，${matched.role} ${matched.name}！`);
-    }
-
-    function handleMemberLogout() {
-      closeChallengeArena();
-      currentSessionAccount = null;
-      syncHeaderAuth();
-      refreshMemberPage();
-      renderChristmasBillboard();
-      showToast('已安全登出花生教會員系統');
-    }
-
-    function syncHeaderAuth() {
-      const btn = document.getElementById('header-auth-btn');
-      const member = getLoggedInMember();
-      if (member) {
-        const prof = getMemberProfile(member.account);
-        btn.innerHTML = `<span>🥜 ${escapeHTML(member.name)} (${prof.points}P)</span>`;
-      } else {
-        btn.innerHTML = `<span>🔐 會員登入</span>`;
-      }
-    }
-
-    function refreshMemberPage() {
-      const member = getLoggedInMember();
-      const outView = document.getElementById('member-logged-out-view');
-      const inView = document.getElementById('member-logged-in-view');
-
-      if (!member) {
-        outView.classList.remove('hidden');
-        inView.classList.add('hidden');
-        return;
-      }
-
-      outView.classList.add('hidden');
-      inView.classList.remove('hidden');
-
-      const prof = getMemberProfile(member.account);
-      document.getElementById('card-role-badge').textContent = member.role;
-      document.getElementById('card-member-name').textContent = member.name;
-      document.getElementById('card-member-account').textContent = member.account;
-      document.getElementById('card-member-dept').textContent = member.dept ? `🏅 幹部職責：${member.dept}` : '';
-      document.getElementById('card-points-value').textContent = prof.points;
-      document.getElementById('card-avatar-svg').innerHTML = renderPeanutoSVG(prof.equippedVariant || 'classic', prof.equippedBand || member.color, false);
-
-      // Daily 3-in-1 challenge status
-      const today = getTodayStr();
-      const completedToday = prof.lastChallengeDate === today;
-      const badge = document.getElementById('daily-challenge-status-badge');
-      const challengeNames = { memory: '花生翻牌', whack: '打花生', sequence: '數字順序' };
-
-      if (completedToday) {
-        badge.textContent = `✓ 今日已完成：${challengeNames[prof.lastChallengeType] || '每日挑戰'} (+200P)`;
-        badge.className = 'px-3 py-1.5 rounded-xl bg-slate-200 text-slate-700 text-xs font-black';
-      } else {
-        badge.textContent = '今日尚未完成挑戰（三選一）';
-        badge.className = 'px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-black';
-      }
-
-      ['memory', 'whack', 'sequence'].forEach(type => {
-        const btn = document.getElementById(`btn-chal-${type}`);
-        if (!btn) return;
-        btn.disabled = completedToday;
-        btn.classList.toggle('opacity-50', completedToday);
-        btn.classList.toggle('cursor-not-allowed', completedToday);
-        btn.classList.toggle('cursor-pointer', !completedToday);
-      });
-
-      renderLeaderboards();
-      renderSkinShop(prof);
-      renderWishWall();
-      syncHeaderAuth();
-
-      // Admin Panel check
-      const isAdmin = member.role === '教祖' || member.role === '副教祖';
-      const adminPanel = document.getElementById('admin-control-panel');
-      if (isAdmin) {
-        adminPanel.classList.remove('hidden');
-        applyGlobalAnnouncement();
-        renderAdminScoreSelect();
-        renderAdminRosterTable();
-        renderChristmasBillboard();
-      } else {
-        adminPanel.classList.add('hidden');
-      }
-    }
-
-    function renderLeaderboards() {
-      const me = getLoggedInMember();
-      const today = getTodayStr();
-      const ranked = getMembersList().map(m => {
-        const p = getMemberProfile(m.account);
-        return {
-          ...m,
-          points: p.points,
-          doneToday: p.lastChallengeDate === today
-        };
-      }).sort((a, b) => b.points - a.points);
-
-      if (me) {
-        const myIdx = ranked.findIndex(r => r.account === me.account);
-        const rankEl = document.getElementById('card-rank-value');
-        if (rankEl) rankEl.textContent = myIdx >= 0 ? (myIdx + 1) : '-';
-      }
-
-      const box = document.getElementById('member-leaderboard-list');
-      if (!box) return;
-      box.innerHTML = ranked.map((r, idx) => {
-        const medal = idx === 0 && r.points > 0 ? '🥇' : idx === 1 && r.points > 0 ? '🥈' : idx === 2 && r.points > 0 ? '🥉' : `#${idx + 1}`;
-        const isMe = me && me.account === r.account;
-        return `
-          <div class="rounded-2xl px-4 py-3 flex items-center justify-between border ${isMe ? 'bg-amber-50 border-peanut-caramel' : 'bg-peanut-cream/70 border-peanut-light/60'}">
-            <div class="flex items-center gap-3 min-w-0">
-              <span class="w-8 text-center font-black text-sm text-navy shrink-0">${medal}</span>
-              <div class="min-w-0">
-                <div class="flex items-center gap-1.5">
-                  <span class="font-black text-sm text-navy truncate">${escapeHTML(r.name)}</span>
-                  <span class="px-1.5 py-0.5 rounded text-[10px] font-black ${getRoleBadgeClass(r.role)}">${escapeHTML(r.role)}</span>
-                </div>
-                <div class="text-[11px] text-slate-400">${r.doneToday ? '✅ 今日已完成挑戰' : '⏳ 今日尚未挑戰'}</div>
-              </div>
-            </div>
-            <div class="font-black text-base ${r.points < 0 ? 'text-rose-600' : 'text-peanut-deep'} shrink-0">${r.points} P</div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    /* =========================================================================
-       12. INTERACTIVE DAILY 3-IN-1 CHALLENGE MINI-GAMES
-    ========================================================================= */
-    let activeChallengeTimer = null;
-
-    function closeChallengeArena() {
-      if (activeChallengeTimer) {
-        clearInterval(activeChallengeTimer);
-        activeChallengeTimer = null;
-      }
-      const arena = document.getElementById('challenge-arena');
-      if (arena) arena.classList.add('hidden');
-    }
-
-    async function completeDailyChallengeWin(type, label) {
-      closeChallengeArena();
-      const member = getLoggedInMember();
-      if (!member) return;
-      const today = getTodayStr();
-      const prof = getMemberProfile(member.account);
-      if (prof.lastChallengeDate === today) return;
-
-      await mutateMemberProfile(member.account, p => {
-        p.points += 200;
-        p.lastChallengeDate = today;
-        p.lastChallengeType = type;
-        return p;
-      });
-      refreshMemberPage();
-      showToast(`🎉 挑戰成功！「${label}」通關，獲得 +200P！`);
-    }
-
-    function startDailyChallenge(type) {
-      const member = getLoggedInMember();
-      if (!member) return;
-      const today = getTodayStr();
-      const prof = getMemberProfile(member.account);
-      if (prof.lastChallengeDate === today) {
-        showToast('你今天已經完成過一項挑戰囉，明天再來！', 'warning');
-        return;
-      }
-
-      closeChallengeArena();
-      const arena = document.getElementById('challenge-arena');
-      const titleEl = document.getElementById('arena-title');
-      const subEl = document.getElementById('arena-subtitle');
-      const timerEl = document.getElementById('arena-timer');
-      const boardEl = document.getElementById('arena-board');
-      arena.classList.remove('hidden');
-
-      if (type === 'memory') {
-        titleEl.textContent = '✨ 花生翻牌挑戰';
-        subEl.textContent = '45 秒內配對全部 6 組圖案（共 12 張牌）';
-        let timeLeft = 45;
-        timerEl.textContent = timeLeft;
-
-        const icons = ['🥜', '🎄', '🌿', '🌌', '👑', '🎁'];
-        const deck = [...icons, ...icons].sort(() => Math.random() - 0.5);
-        let flipped = [];
-        let matchedCount = 0;
-        let lockBoard = false;
-
-        boardEl.innerHTML = `<div class="grid grid-cols-4 gap-2.5 w-full max-w-sm" id="memory-grid"></div>`;
-        const grid = document.getElementById('memory-grid');
-
-        deck.forEach((icon, idx) => {
-          const card = document.createElement('button');
-          card.type = 'button';
-          card.className = 'h-16 rounded-2xl bg-navy text-white font-black text-2xl flex items-center justify-center shadow-sm cursor-pointer transition-all';
-          card.textContent = '?';
-          card.onclick = () => {
-            if (lockBoard || card.dataset.matched === '1' || flipped.includes(idx)) return;
-            card.textContent = icon;
-            card.classList.remove('bg-navy', 'text-white');
-            card.classList.add('bg-white', 'border-2', 'border-peanut-caramel');
-            flipped.push(idx);
-
-            if (flipped.length === 2) {
-              lockBoard = true;
-              const [i1, i2] = flipped;
-              const c1 = grid.children[i1];
-              const c2 = grid.children[i2];
-              if (deck[i1] === deck[i2]) {
-                c1.dataset.matched = '1';
-                c2.dataset.matched = '1';
-                c1.classList.add('bg-emerald-100', 'border-emerald-500');
-                c2.classList.add('bg-emerald-100', 'border-emerald-500');
-                matchedCount += 1;
-                flipped = [];
-                lockBoard = false;
-                if (matchedCount === 6) {
-                  completeDailyChallengeWin('memory', '花生翻牌');
-                }
-              } else {
-                setTimeout(() => {
-                  c1.textContent = '?';
-                  c2.textContent = '?';
-                  c1.className = 'h-16 rounded-2xl bg-navy text-white font-black text-2xl flex items-center justify-center shadow-sm cursor-pointer transition-all';
-                  c2.className = 'h-16 rounded-2xl bg-navy text-white font-black text-2xl flex items-center justify-center shadow-sm cursor-pointer transition-all';
-                  flipped = [];
-                  lockBoard = false;
-                }, 550);
-              }
-            }
-          };
-          grid.appendChild(card);
-        });
-
-        activeChallengeTimer = setInterval(() => {
-          timeLeft -= 1;
-          timerEl.textContent = timeLeft;
-          if (timeLeft <= 0) {
-            closeChallengeArena();
-            showToast('⏰ 時間到！可重新挑戰或改選其他項目', 'warning');
-          }
-        }, 1000);
-      }
-
-      else if (type === 'whack') {
-        titleEl.textContent = '⚡ 打花生挑戰';
-        subEl.textContent = '20 秒內點中 12 顆冒出來的花生（已點中：0 / 12）';
-        let timeLeft = 20;
-        let hits = 0;
-        let activeHole = -1;
-        timerEl.textContent = timeLeft;
-
-        boardEl.innerHTML = `<div class="grid grid-cols-3 gap-3 w-full max-w-xs" id="whack-grid"></div>`;
-        const grid = document.getElementById('whack-grid');
-
-        for (let i = 0; i < 9; i++) {
-          const hole = document.createElement('button');
-          hole.type = 'button';
-          hole.className = 'h-16 rounded-2xl bg-peanut-sand border-2 border-peanut-light text-2xl flex items-center justify-center font-black cursor-pointer transition-transform active:scale-95';
-          hole.textContent = '🕳️';
-          hole.onclick = () => {
-            if (activeHole === i) {
-              hits += 1;
-              activeHole = -1;
-              hole.textContent = '💥';
-              subEl.textContent = `20 秒內點中 12 顆冒出來的花生（已點中：${hits} / 12）`;
-              if (hits >= 12) {
-                completeDailyChallengeWin('whack', '打花生');
-              }
-            }
-          };
-          grid.appendChild(hole);
-        }
-
-        const spawnPeanut = () => {
-          Array.from(grid.children).forEach(el => {
-            el.textContent = '🕳️';
-            el.classList.remove('bg-amber-300', 'border-amber-600');
-          });
-          activeHole = Math.floor(Math.random() * 9);
-          const target = grid.children[activeHole];
-          if (target) {
-            target.textContent = '🥜';
-            target.classList.add('bg-amber-300', 'border-amber-600');
-          }
+    <!-- JavaScript 邏輯 -->
+    <script>
+        const defaultRoutes = [
+            { region: "Northeast Asia", code: "CTS", city: "Sapporo", flight: "AH 110", days: "Daily", aircraft: "A359", time: "8:00" },
+            { region: "Northeast Asia", code: "AKJ", city: "Asahikawa", flight: "AH 112", days: "1,3,5,7", aircraft: "32Q", time: "7:30" },
+            { region: "Northeast Asia", code: "HKD", city: "Hakkodate", flight: "AH 114", days: "1,3,5,6,7", aircraft: "32Q", time: "9:30" },
+            { region: "Northeast Asia", code: "SDJ", city: "Sendai", flight: "AH 116", days: "Daily", aircraft: "A339", time: "9:00" },
+            { region: "Northeast Asia", code: "HND (TSA)", city: "Tokyo Haneda", flight: "AH 150", days: "DailyX2", aircraft: "A339", time: "7:00/17:00" },
+            { region: "Northeast Asia", code: "NRT", city: "Tokyo Narita", flight: "AH 120", days: "DailyX2", aircraft: "A359/K", time: "8:00/18:00" },
+            { region: "Northeast Asia", code: "KIX", city: "Osaka Kansai", flight: "AH 130", days: "DailyX2", aircraft: "A359/A339", time: "8:30/11:00" },
+            { region: "Northeast Asia", code: "ICN", city: "Seoul(Incheon)", flight: "AH 146", days: "DailyX2", aircraft: "A359/32Q", time: "9:30/17:00" },
+            { region: "China Region", code: "PVG", city: "Shanghai", flight: "AH 1101", days: "1,4", aircraft: "A359", time: "10:30" },
+            { region: "China Region", code: "HKG", city: "Hong Kong", flight: "AH 601", days: "DailyX2", aircraft: "A3(3,5)9/32Q", time: "15:30/19:00" },
+            { region: "South East Asia", code: "SIN", city: "Singapore", flight: "AH 201", days: "DailyX2", aircraft: "A35K/32Q", time: "9:30/15:00" },
+            { region: "South East Asia", code: "BKK", city: "Bangkok", flight: "AH 205", days: "Daily", aircraft: "A359", time: "10:40" },
+            { region: "Middle East / India", code: "DXB", city: "Dubai", flight: "AH 252", days: "Daily", aircraft: "A359", time: "22:30" },
+            { region: "Europe", code: "CDG", city: "Paris", flight: "AH 302", days: "Daily", aircraft: "A339", time: "21:00" },
+            { region: "Europe", code: "LHR", city: "London", flight: "AH 300", days: "Daily", aircraft: "A339", time: "22:30" },
+            { region: "Oceania", code: "SYD", city: "Sydney", flight: "AH 401", days: "Daily", aircraft: "A359", time: "15:30" },
+            { region: "America", code: "LAX", city: "Los Angeles", flight: "AH01", days: "Daily", aircraft: "A359", time: "00:15" },
+            { region: "America", code: "JFK", city: "New York", flight: "AH10", days: "Daily", aircraft: "A359", time: "19:30" },
+            { region: "Africa", code: "EGG", city: "New Eggland", flight: "AH 701", days: "1,3,5", aircraft: "321NY", time: "19:25" }
+        ];
+
+        let routes = JSON.parse(localStorage.getItem('avocado_routes')) || defaultRoutes;
+        let bookings = JSON.parse(localStorage.getItem('avocado_bookings')) || [
+            { id: 'ORD-101', passenger: '陳大明', flight: 'AH 120', city: 'Tokyo Narita', date: new Date().toISOString().split('T')[0], time: '8:00' }
+        ];
+        let isAdminLoggedIn = false;
+        let calendar = null;
+
+        window.onload = function() {
+            renderRoutesTable();
+            populateBookingOptions();
+            renderOrdersTable();
+            renderAdminRoutesTable();
         };
 
-        spawnPeanut();
-        const hopTimer = setInterval(() => {
-          if (!document.getElementById('whack-grid')) {
-            clearInterval(hopTimer);
-            return;
-          }
-          spawnPeanut();
-        }, 720);
+        function switchTab(tab) {
+            if (tab === 'admin' && !isAdminLoggedIn) {
+                openAdminModal();
+                return;
+            }
 
-        activeChallengeTimer = setInterval(() => {
-          timeLeft -= 1;
-          timerEl.textContent = timeLeft;
-          if (timeLeft <= 0) {
-            clearInterval(hopTimer);
-            closeChallengeArena();
-            showToast('⏰ 時間到！可重新挑戰或改選其他項目', 'warning');
-          }
-        }, 1000);
-      }
+            document.getElementById('section-booking').classList.toggle('hidden', tab !== 'booking');
+            document.getElementById('section-admin').classList.toggle('hidden', tab !== 'admin');
 
-      else if (type === 'sequence') {
-        titleEl.textContent = '🚩 數字順序挑戰';
-        subEl.textContent = '15 秒內依序點完 1 到 12（下一個數字：1）';
-        let timeLeft = 15;
-        let nextNum = 1;
-        timerEl.textContent = timeLeft;
+            if (tab === 'admin' && !calendar) {
+                setTimeout(initCalendar, 100);
+            }
+        }
 
-        const nums = Array.from({ length: 12 }, (_, i) => i + 1).sort(() => Math.random() - 0.5);
-        boardEl.innerHTML = `<div class="grid grid-cols-4 gap-2.5 w-full max-w-sm" id="seq-grid"></div>`;
-        const grid = document.getElementById('seq-grid');
+        function renderRoutesTable() {
+            const tbody = document.getElementById('routes-table-body');
+            tbody.innerHTML = routes.map(r => `
+                <tr class="hover:bg-sage-50/50 transition">
+                    <td class="p-3.5"><span class="bg-sage-100/70 text-sage-800 px-2.5 py-1 rounded-md text-xs font-medium">${r.region}</span></td>
+                    <td class="p-3.5 font-medium text-sage-700">${r.code}</td>
+                    <td class="p-3.5 text-slate-700">${r.city}</td>
+                    <td class="p-3.5 font-mono text-xs text-slate-500">${r.flight}</td>
+                    <td class="p-3.5 text-slate-600">${r.days}</td>
+                    <td class="p-3.5 text-slate-400 text-xs">${r.aircraft}</td>
+                    <td class="p-3.5 text-slate-600">${r.time}</td>
+                </tr>
+            `).join('');
+        }
 
-        nums.forEach(n => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'h-14 rounded-2xl bg-white border-2 border-peanut-caramel text-navy font-black text-lg shadow-sm hover:bg-amber-100 cursor-pointer transition-all';
-          btn.textContent = n;
-          btn.onclick = () => {
-            if (n === nextNum) {
-              btn.disabled = true;
-              btn.className = 'h-14 rounded-2xl bg-emerald-500 text-white font-black text-lg shadow-inner';
-              nextNum += 1;
-              if (nextNum > 12) {
-                completeDailyChallengeWin('sequence', '數字順序');
-              } else {
-                subEl.textContent = `15 秒內依序點完 1 到 12（下一個數字：${nextNum}）`;
-              }
+        function populateBookingOptions() {
+            const region = document.getElementById('book-region').value;
+            const select = document.getElementById('book-route');
+            const filtered = region === 'ALL' ? routes : routes.filter(r => r.region === region);
+            
+            select.innerHTML = filtered.map(r => `
+                <option value="${r.flight}|${r.city}|${r.time}">
+                    ${r.flight} - ${r.city} (${r.code}) [起飛: ${r.time}]
+                </option>
+            `).join('');
+        }
+
+        function filterRoutesByRegion() {
+            populateBookingOptions();
+        }
+
+        function handleBooking(e) {
+            e.preventDefault();
+            const routeVal = document.getElementById('book-route').value;
+            const date = document.getElementById('book-date').value;
+            const passenger = document.getElementById('book-passenger').value;
+
+            if (!routeVal || !date || !passenger) return;
+
+            const [flight, city, time] = routeVal.split('|');
+            const newBooking = {
+                id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
+                passenger,
+                flight,
+                city,
+                date,
+                time
+            };
+
+            bookings.push(newBooking);
+            localStorage.setItem('avocado_bookings', JSON.stringify(bookings));
+            alert(`🎉 預訂成功！\n\n訂單編號：${newBooking.id}\n乘客姓名：${passenger}\n預訂航班：${flight} 往 ${city}\n出發日期：${date}`);
+
+            document.getElementById('booking-form').reset();
+            populateBookingOptions();
+            
+            renderOrdersTable();
+            if (calendar) calendar.refetchEvents();
+        }
+
+        function openAdminModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('admin-user').value;
+            const p = document.getElementById('admin-pass').value;
+
+            if (u === 'admin' && p === 'avocado123') {
+                isAdminLoggedIn = true;
+                closeAdminModal();
+                document.getElementById('nav-admin-btn').innerText = "進入後台控制頁";
+                document.getElementById('nav-admin-btn').onclick = () => switchTab('admin');
+                switchTab('admin');
             } else {
-              btn.classList.add('bg-rose-200');
-              setTimeout(() => btn.classList.remove('bg-rose-200'), 220);
+                alert('帳號或密碼錯誤！');
             }
-          };
-          grid.appendChild(btn);
-        });
-
-        activeChallengeTimer = setInterval(() => {
-          timeLeft -= 1;
-          timerEl.textContent = timeLeft;
-          if (timeLeft <= 0) {
-            closeChallengeArena();
-            showToast('⏰ 時間到！可重新挑戰或改選其他項目', 'warning');
-          }
-        }, 1000);
-      }
-    }
-
-    function renderSkinShop(prof) {
-      const box = document.getElementById('member-skin-shop');
-      box.innerHTML = SKIN_SHOP.map(skin => {
-        const unlocked = prof.unlockedSkins.includes(skin.id);
-        const equipped = prof.equippedVariant === skin.variant;
-        return `
-          <div class="rounded-2xl bg-peanut-cream p-3.5 border ${equipped ? 'border-navy ring-2 ring-peanut-caramel' : 'border-peanut-light'} flex items-center gap-3">
-            <div class="w-14 h-14 rounded-xl bg-white p-1 shrink-0">${renderPeanutoSVG(skin.variant, skin.band, false)}</div>
-            <div class="min-w-0 flex-1">
-              <div class="font-black text-xs text-navy truncate">${skin.name}</div>
-              <p class="text-[11px] text-slate-500 line-clamp-1">${skin.desc}</p>
-              <div class="mt-2">
-                ${equipped
-                  ? `<span class="inline-block px-2.5 py-1 rounded-lg bg-navy text-white text-[10px] font-black">✓ 穿戴中</span>`
-                  : unlocked
-                    ? `<button type="button" onclick="equipShopSkin('${skin.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-[10px] font-black cursor-pointer">套用造型</button>`
-                    : `<button type="button" onclick="redeemShopSkin('${skin.id}')" class="px-2.5 py-1 rounded-lg bg-peanut-caramel text-navy-dark text-[10px] font-black cursor-pointer">兌換 (${skin.price}P)</button>`
-                }
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    async function redeemShopSkin(skinId) {
-      const member = getLoggedInMember();
-      if (!member) return;
-      const skin = SKIN_SHOP.find(s => s.id === skinId);
-      if (!skin) return;
-      const prof = getMemberProfile(member.account);
-      if (prof.points < skin.price) {
-        showToast(`點數不足（需要 ${skin.price}P），快去完成每日挑戰吧！`, 'warning');
-        return;
-      }
-      await mutateMemberProfile(member.account, p => {
-        p.points -= skin.price;
-        if (!p.unlockedSkins.includes(skin.id)) p.unlockedSkins.push(skin.id);
-        p.equippedVariant = skin.variant;
-        p.equippedBand = skin.band;
-        return p;
-      });
-      refreshMemberPage();
-      showToast(`🎉 成功兌換並穿戴「${skin.name}」！`);
-    }
-
-    async function equipShopSkin(skinId) {
-      const member = getLoggedInMember();
-      if (!member) return;
-      const skin = SKIN_SHOP.find(s => s.id === skinId);
-      if (!skin) return;
-      await mutateMemberProfile(member.account, p => {
-        p.equippedVariant = skin.variant;
-        p.equippedBand = skin.band;
-        return p;
-      });
-      refreshMemberPage();
-      showToast(`✨ 已換上「${skin.name}」！`);
-    }
-
-    // Wish Wall (Google Sheet synced, zero pre-filled fake wishes, supports Delete)
-    function renderWishWall() {
-      const wishes = cloudWishes;
-      const box = document.getElementById('wish-wall-container');
-      if (!box) return;
-      const me = getLoggedInMember();
-      const isAdmin = me && (me.role === '教祖' || me.role === '副教祖');
-
-      box.innerHTML = wishes.length === 0
-        ? '<p class="text-xs text-slate-400 py-3 text-center">目前尚無任何祈願留言，成為第一位留下真實心聲的信徒吧！</p>'
-        : wishes.map(w => {
-          const canDelete = isAdmin || (me && ((w.account && w.account === me.account) || w.name === me.name));
-          return `
-            <div class="rounded-2xl bg-peanut-cream border border-peanut-light/60 p-4 flex items-start justify-between gap-3">
-              <div class="space-y-1 min-w-0 flex-1">
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="px-2 py-0.5 rounded-md text-[10px] font-black ${getRoleBadgeClass(w.role)}">${escapeHTML(w.role)}</span>
-                  <span class="text-xs font-black text-navy">${escapeHTML(w.name)}</span>
-                </div>
-                <p class="text-xs sm:text-sm text-slate-700 break-words">${escapeHTML(w.text)}</p>
-              </div>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <button type="button" onclick="likeWish('${escapeHTML(w.id)}')" class="px-3 py-1.5 rounded-xl bg-white border border-peanut-light hover:border-peanut-caramel text-xs font-black text-peanut-deep cursor-pointer">
-                  🥜 ${w.likes || 0}
-                </button>
-                ${canDelete ? `<button type="button" onclick="confirmDeleteWish('${escapeHTML(w.id)}')" class="px-2.5 py-1.5 rounded-xl bg-rose-100 hover:bg-rose-200 text-rose-700 text-xs font-black cursor-pointer" title="刪除留言">🗑️</button>` : ''}
-              </div>
-            </div>
-          `;
-        }).join('');
-    }
-
-    async function postNewWish() {
-      const member = getLoggedInMember();
-      if (!member) return;
-      const input = document.getElementById('wish-input');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const entry = {
-        id: 'wish_' + Date.now(),
-        account: member.account,
-        role: member.role,
-        name: member.name,
-        text,
-        likes: 1,
-        createdAt: Date.now()
-      };
-      cloudWishes = [entry, ...cloudWishes];
-      renderWishWall();
-      input.value = '';
-      await pushToGoogleSheet({ action: 'addWish', entry });
-      showToast('🙏 祈願已發布至 804 花生祈願牆！');
-    }
-
-    async function likeWish(id) {
-      cloudWishes = cloudWishes.map(w => {
-        if (String(w.id) === String(id)) return { ...w, likes: (w.likes || 0) + 1 };
-        return w;
-      });
-      renderWishWall();
-      await pushToGoogleSheet({ action: 'likeWish', id });
-    }
-
-    function confirmDeleteWish(id) {
-      openConfirmModal(
-        '刪除祈願牆留言',
-        '確定要刪除這則花生祈願牆留言嗎？刪除後將同步從雲端移除。',
-        () => deleteWish(id)
-      );
-    }
-
-    async function deleteWish(id) {
-      cloudWishes = cloudWishes.filter(w => String(w.id) !== String(id));
-      renderWishWall();
-      await pushToGoogleSheet({ action: 'deleteWish', id });
-      showToast('🗑️ 已刪除該則祈願牆留言', 'warning');
-    }
-
-    /* =========================================================================
-       13. ADMIN PANEL ACTIONS (CUSTOM +/- POINTS & ROSTER MANAGEMENT)
-    ========================================================================= */
-    async function saveAdminAnnouncement() {
-      const val = document.getElementById('admin-banner-textarea').value.trim();
-      if (!val) return;
-      cloudAnnouncement = val;
-      applyGlobalAnnouncement();
-      await pushToGoogleSheet({ action: 'setAnnouncement', announcement: val });
-      showToast('📢 已同步更新全站即時公告！');
-    }
-
-    async function resetAdminAnnouncement() {
-      cloudAnnouncement = DEFAULT_ANNOUNCEMENT;
-      applyGlobalAnnouncement();
-      await pushToGoogleSheet({ action: 'setAnnouncement', announcement: DEFAULT_ANNOUNCEMENT });
-      showToast('已恢復預設公告文字');
-    }
-
-    function renderAdminScoreSelect() {
-      const sel = document.getElementById('admin-score-member-select');
-      if (!sel) return;
-      const prevVal = sel.value;
-      sel.innerHTML = getMembersList().map(m => {
-        const p = getMemberProfile(m.account);
-        return `<option value="${escapeHTML(m.account)}">${escapeHTML(m.name)} (${escapeHTML(m.role)}) — 目前 ${p.points}P</option>`;
-      }).join('');
-      if (prevVal && getMembersList().some(m => m.account === prevVal)) {
-        sel.value = prevVal;
-      }
-    }
-
-    function setAdminScoreDelta(val) {
-      const input = document.getElementById('admin-score-delta-input');
-      if (input) input.value = val;
-    }
-
-    async function applyCustomScoreAdjustment() {
-      const sel = document.getElementById('admin-score-member-select');
-      const input = document.getElementById('admin-score-delta-input');
-      if (!sel || !input) return;
-
-      const targetAcc = sel.value;
-      const delta = parseInt(input.value, 10);
-      if (!targetAcc || isNaN(delta) || delta === 0) {
-        showToast('請輸入有效的非零整數（例如 50 或 -30）！', 'warning');
-        return;
-      }
-
-      const targetMember = getMembersList().find(m => m.account === targetAcc);
-      await mutateMemberProfile(targetAcc, p => {
-        p.points = (Number(p.points) || 0) + delta;
-        return p;
-      });
-
-      refreshMemberPage();
-      const signStr = delta > 0 ? `+${delta}` : `${delta}`;
-      showToast(`⚖️ 已為 ${targetMember ? targetMember.name : targetAcc} 調整 ${signStr}P！`);
-    }
-
-    function renderAdminRosterTable() {
-      const tbody = document.getElementById('admin-roster-tbody');
-      if (!tbody) return;
-      const members = getMembersList();
-
-      tbody.innerHTML = members.map((m, idx) => {
-        const prof = getMemberProfile(m.account);
-        return `
-          <tr class="hover:bg-peanut-cream/50">
-            <td class="py-2.5 px-2">
-              <input type="text" id="edit-name-${idx}" value="${escapeHTML(m.name)}" class="w-28 px-2.5 py-1.5 rounded-lg bg-peanut-cream border border-peanut-light font-bold text-navy" />
-            </td>
-            <td class="py-2.5 px-2 font-mono text-slate-600">${escapeHTML(m.account)}</td>
-            <td class="py-2.5 px-2">
-              <input type="text" id="edit-pw-${idx}" value="${escapeHTML(m.password)}" class="w-24 px-2.5 py-1.5 rounded-lg bg-peanut-cream border border-peanut-light font-mono text-navy" />
-            </td>
-            <td class="py-2.5 px-2">
-              <select id="edit-role-${idx}" class="px-2 py-1.5 rounded-lg bg-peanut-cream border border-peanut-light font-bold text-navy">
-                <option value="教祖" ${m.role === '教祖' ? 'selected' : ''}>教祖</option>
-                <option value="副教祖" ${m.role === '副教祖' ? 'selected' : ''}>副教祖</option>
-                <option value="信徒" ${m.role === '信徒' ? 'selected' : ''}>信徒</option>
-              </select>
-            </td>
-            <td class="py-2.5 px-2">
-              <select id="edit-dept-${idx}" class="px-2 py-1.5 rounded-lg bg-peanut-cream border border-peanut-light font-bold text-navy">
-                <option value="" ${!m.dept ? 'selected' : ''}>無</option>
-                <option value="活動組" ${m.dept === '活動組' ? 'selected' : ''}>活動組</option>
-                <option value="資訊組" ${m.dept === '資訊組' ? 'selected' : ''}>資訊組</option>
-                <option value="供品組" ${m.dept === '供品組' ? 'selected' : ''}>供品組</option>
-              </select>
-            </td>
-            <td class="py-2.5 px-2 text-right font-black ${prof.points < 0 ? 'text-rose-600' : 'text-peanut-deep'}">
-              ${prof.points} P
-            </td>
-            <td class="py-2.5 px-2 text-right whitespace-nowrap space-x-1">
-              <button type="button" onclick="saveEditedMember(${idx})" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black cursor-pointer">
-                儲存
-              </button>
-              <button type="button" onclick="confirmDeleteMember(${idx})" class="px-2.5 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 font-black cursor-pointer">
-                刪除
-              </button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    async function handleAddMember(e) {
-      e.preventDefault();
-      const name = document.getElementById('new-member-name').value.trim();
-      let account = document.getElementById('new-member-account').value.trim().toLowerCase();
-      const password = document.getElementById('new-member-password').value.trim();
-      const role = document.getElementById('new-member-role').value;
-      const dept = document.getElementById('new-member-dept').value;
-
-      if (!name || !account || !password) return;
-      if (!account.includes('@')) account += '@pnts';
-
-      const currentList = [...getMembersList()];
-      if (currentList.some(m => m.account.toLowerCase() === account)) {
-        showToast('此帳號已存在於名單中！', 'warning');
-        return;
-      }
-
-      const palette = ['#6B8E55', '#748CAB', '#F4A261', '#2A9D8F', '#9B5DE5', '#E76F51', '#457B9D'];
-      const color = palette[currentList.length % palette.length];
-
-      currentList.push({
-        role,
-        name,
-        account,
-        password,
-        dept,
-        color,
-        variant: 'classic'
-      });
-
-      document.getElementById('new-member-name').value = '';
-      document.getElementById('new-member-account').value = '';
-      document.getElementById('new-member-password').value = '';
-
-      await syncRosterToCloud(currentList);
-      renderAdminScoreSelect();
-      showToast(`✅ 已新增成員 ${name} (${account})！`);
-    }
-
-    async function saveEditedMember(idx) {
-      const currentList = getMembersList().map(m => ({ ...m }));
-      const target = currentList[idx];
-      if (!target) return;
-
-      const newName = document.getElementById(`edit-name-${idx}`).value.trim();
-      const newPw = document.getElementById(`edit-pw-${idx}`).value.trim();
-      const newRole = document.getElementById(`edit-role-${idx}`).value;
-      const newDept = document.getElementById(`edit-dept-${idx}`).value;
-
-      if (!newName || !newPw) {
-        showToast('名字與密碼不可為空白！', 'warning');
-        return;
-      }
-
-      target.name = newName;
-      target.password = newPw;
-      target.role = newRole;
-      target.dept = newDept;
-
-      await syncRosterToCloud(currentList);
-      renderAdminScoreSelect();
-      refreshMemberPage();
-      showToast(`💾 已更新 ${newName} 的成員資料！`);
-    }
-
-    function confirmDeleteMember(idx) {
-      const currentList = getMembersList();
-      const target = currentList[idx];
-      if (!target) return;
-      if (target.account === currentSessionAccount) {
-        showToast('無法刪除目前正在登入操作後台的自己！', 'warning');
-        return;
-      }
-      openConfirmModal(
-        '刪除成員確認',
-        `確定要將「${target.name} (${target.account})」從同學名單中移除嗎？`,
-        () => deleteMemberAt(idx)
-      );
-    }
-
-    async function deleteMemberAt(idx) {
-      const currentList = getMembersList().filter((_, i) => i !== idx);
-      await syncRosterToCloud(currentList);
-      renderAdminScoreSelect();
-      refreshMemberPage();
-      showToast('🗑️ 已從名單中移除該成員', 'warning');
-    }
-
-    function restoreDefaultMembersConfirm() {
-      openConfirmModal(
-        '還原預設 17 人名單',
-        '確定要將同學名單還原為最初的 17 位官方成員設定嗎？',
-        async () => {
-          const restored = DEFAULT_IPO_MEMBERS.map(m => ({ ...m }));
-          await syncRosterToCloud(restored);
-          renderAdminScoreSelect();
-          refreshMemberPage();
-          showToast('↩ 已還原預設 17 人名單！');
         }
-      );
-    }
 
-    function resetAllScoresConfirm() {
-      openConfirmModal(
-        '全體點數歸零確認',
-        '確定要將全體成員點數與今日挑戰紀錄全部歸零嗎？',
-        () => resetAllScoresToZero()
-      );
-    }
+        function adminLogout() {
+            isAdminLoggedIn = false;
+            document.getElementById('nav-admin-btn').innerHTML = `<i class="fa-solid fa-user-gear mr-1.5"></i> 管理員登入`;
+            document.getElementById('nav-admin-btn').onclick = openAdminModal;
+            switchTab('booking');
+        }
 
-    async function resetAllScoresToZero() {
-      const resetMap = {};
-      getMembersList().forEach(m => {
-        const clean = getDefaultProfile(m.account);
-        cloudProfiles[m.account] = clean;
-        resetMap[m.account] = clean;
-      });
-      cloudEsgCount = 0;
+        function switchAdminTab(tab) {
+            document.getElementById('admin-panel-calendar').classList.toggle('hidden', tab !== 'calendar');
+            document.getElementById('admin-panel-orders').classList.toggle('hidden', tab !== 'orders');
+            document.getElementById('admin-panel-routes').classList.toggle('hidden', tab !== 'routes');
 
-      await pushToGoogleSheet({
-        action: 'resetAll',
-        profiles: resetMap
-      });
+            if (tab === 'calendar' && calendar) {
+                calendar.render();
+            }
+        }
 
-      refreshMemberPage();
-      renderEsgCount();
-      showToast('🔄 已將全體成員點數與計數歸零！', 'warning');
-    }
+        function initCalendar() {
+            const calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'zh-tw',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek'
+                },
+                events: function(fetchInfo, successCallback, failureCallback) {
+                    const events = bookings.map(b => ({
+                        id: b.id,
+                        title: `✈️ ${b.passenger} (${b.flight})`,
+                        start: `${b.date}T${b.time.split('/')[0]}:00`,
+                        backgroundColor: '#648564',
+                        borderColor: '#4d6b4d'
+                    }));
+                    successCallback(events);
+                },
+                eventClick: function(info) {
+                    alert('📌 預訂詳情:\n' + info.event.title);
+                }
+            });
+            calendar.render();
+        }
 
-    /* =========================================================================
-       14. INITIALIZATION ON WINDOW LOAD
-    ========================================================================= */
-    window.onload = function () {
-      document.getElementById('hero-santa-mascot').innerHTML = renderPeanutoSVG('santa', '#DC2626', false);
-      document.getElementById('hero-cosmic-mascot').innerHTML = renderPeanutoSVG('cosmic', '#6366F1', false);
-      document.getElementById('home-oracle-peanut').innerHTML = renderPeanutoSVG('sprout', '#6B8E55', false);
-      document.getElementById('xmas-card-mascot').innerHTML = renderPeanutoSVG('santa', '#DC2626', false);
-      document.getElementById('purpose-hero-mascot').innerHTML = renderPeanutoSVG('classic', '#D8A46F', false);
-      document.getElementById('login-mascot-box').innerHTML = renderPeanutoSVG('sprout', '#6B8E55', false);
+        function renderOrdersTable() {
+            const tbody = document.getElementById('orders-table-body');
+            tbody.innerHTML = bookings.map(b => `
+                <tr class="hover:bg-sage-50/50 transition">
+                    <td class="p-3.5 font-mono text-xs font-bold text-slate-400">${b.id}</td>
+                    <td class="p-3.5 font-medium text-slate-700">${b.passenger}</td>
+                    <td class="p-3.5 font-mono text-sage-700">${b.flight}</td>
+                    <td class="p-3.5 text-slate-600">${b.city}</td>
+                    <td class="p-3.5 text-slate-600">${b.date}</td>
+                    <td class="p-3.5 text-slate-500">${b.time}</td>
+                    <td class="p-3.5">
+                        <button onclick="deleteBooking('${b.id}')" class="text-rose-400 hover:text-rose-600 text-xs">刪除</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
 
-      const galleryItems = [
-        { variant: 'classic', band: '#FFFFFF', label: 'Classic 白肚兜' },
-        { variant: 'sprout', band: '#6B8E55', label: 'Peanuto 嫩芽' },
-        { variant: 'santa', band: '#DC2626', label: 'Santa 聖誕限定' },
-        { variant: 'pumpkin', band: '#F97316', label: '2026 萬聖紀念' }
-      ];
-      document.getElementById('home-mascot-gallery').innerHTML = galleryItems.map(item => `
-        <div class="rounded-2xl bg-peanut-cream p-3 text-center border border-peanut-light/70">
-          <div class="w-16 h-16 mx-auto">${renderPeanutoSVG(item.variant, item.band, false)}</div>
-          <div class="text-xs font-black text-navy mt-1.5">${item.label}</div>
-        </div>
-      `).join('');
+        function deleteBooking(id) {
+            if (confirm('確定要刪除這筆預訂紀錄嗎？')) {
+                bookings = bookings.filter(b => b.id !== id);
+                localStorage.setItem('avocado_bookings', JSON.stringify(bookings));
+                renderOrdersTable();
+                if (calendar) calendar.refetchEvents();
+            }
+        }
 
-      renderLoginQuickChips();
-      applyGlobalAnnouncement();
-      renderMemberDirectory('ALL');
-      renderChristmasBillboard();
-      renderEsgCount();
-      renderWishWall();
-      renderUniverseStudio();
-      syncHeaderAuth();
+        function renderAdminRoutesTable() {
+            const tbody = document.getElementById('admin-routes-table-body');
+            tbody.innerHTML = routes.map((r, index) => `
+                <tr class="hover:bg-sage-50/50 transition">
+                    <td class="p-3.5 text-slate-600">${r.region}</td>
+                    <td class="p-3.5 font-medium text-sage-700">${r.code}</td>
+                    <td class="p-3.5 text-slate-700">${r.city}</td>
+                    <td class="p-3.5 font-mono text-xs text-slate-500">${r.flight}</td>
+                    <td class="p-3.5 text-slate-600">${r.time}</td>
+                    <td class="p-3.5">
+                        <button onclick="deleteRoute(${index})" class="text-rose-400 hover:text-rose-600 text-xs">移除</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
 
-      const initialHash = VALID_ROUTES.includes(window.location.hash) ? window.location.hash : '#/home';
-      renderRoute(initialHash);
-
-      // Connect to Google Sheet backend if configured
-      initCloudConnection();
-    };
-  </script>
+        function deleteRoute(index) {
+            if (confirm('確定要移除此航線嗎？')) {
+                routes.splice(index, 1);
+                localStorage.setItem('avocado_routes', JSON.stringify(routes));
+                renderRoutesTable();
+                renderAdminRoutesTable();
+                populateBookingOptions();
+            }
+        }
+    </script>
 </body>
 </html>
