@@ -1168,10 +1168,22 @@
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5">
           <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg shrink-0">☁️</div>
-          <h3 class="text-lg font-black text-navy">Google 試算表雲端連線檢查</h3>
+          <h3 class="text-lg font-black text-navy">Google 試算表雲端連線設定</h3>
         </div>
         <button type="button" onclick="closeCloudHelpModal()" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold cursor-pointer">✕</button>
       </div>
+
+      <div class="space-y-2">
+        <label for="cloud-url-quick-input" class="block text-xs font-black text-navy">Apps Script 網頁應用程式網址（結尾為 /exec）</label>
+        <div class="flex gap-2">
+          <input type="url" id="cloud-url-quick-input" placeholder="https://script.google.com/macros/s/.../exec" class="flex-1 px-3 py-2 rounded-xl bg-peanut-cream border border-peanut-light text-xs font-mono text-navy focus:outline-none" />
+          <button type="button" onclick="saveAndTestCloudUrl()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs shrink-0 cursor-pointer">
+            連線測試
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-500">正式部署至 GitHub Pages 時，請同步將此網址貼入 <code class="bg-slate-100 px-1 rounded">index.html</code> 的 <code class="bg-slate-100 px-1 rounded">GOOGLE_SHEET_API_URL</code> 變數。</p>
+      </div>
+
       <div id="cloud-help-status-box" class="rounded-2xl bg-peanut-cream border border-peanut-light p-3.5 text-xs text-slate-700 space-y-2 leading-relaxed">
         <p class="font-black text-navy">若顯示「⚠️ 雲端權限待確認」，請依序檢查以下 3 項：</p>
         <ol class="list-decimal list-inside space-y-1.5">
@@ -1181,55 +1193,773 @@
         </ol>
       </div>
       <div class="flex justify-end gap-2 pt-1">
+        <button type="button" onclick="openCloudUrlInNewTab()" class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs cursor-pointer">
+          🌐 在新分頁檢查網址
+        </button>
         <button type="button" onclick="retryCloudSync()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs shadow-sm cursor-pointer">
-          🔄 立即重新測試連線
+          🔄 重新測試連線
         </button>
         <button type="button" onclick="closeCloudHelpModal()" class="px-4 py-2.5 rounded-xl bg-navy text-white font-black text-xs cursor-pointer">
-          我知道了
+          關閉
         </button>
       </div>
     </div>
   </div>
-    function updateCloudSyncBadge(status) {
-      const badge = document.getElementById('cloud-sync-badge');
+
+  <!-- =========================================================
+       TOAST NOTIFICATION CONTAINER
+  ========================================================= -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-xs sm:max-w-sm pointer-events-none"></div>
+
+  <!-- =========================================================
+       APPLICATION JAVASCRIPT LOGIC
+  ========================================================= -->
+  <script>
+    /* =========================================================================
+       1. GOOGLE SHEETS APPS SCRIPT ENDPOINT CONFIGURATION
+       請在下方雙引號內貼上你的 Google Apps Script 網頁應用程式網址 (/exec)
+    ========================================================================= */
+    const GOOGLE_SHEET_API_URL = "";
+
+    /* =========================================================================
+       2. DEFAULT ROSTER & SKIN DEFINITIONS (17 OFFICIAL MEMBERS)
+    ========================================================================= */
+    const DEFAULT_ANNOUNCEMENT = "🎄 最新公告：2026 萬聖節活動已圓滿落幕！花生教聖誕節特別企劃即將公開（Coming Soon），每日完成一項挑戰領 200P！";
+
+    const DEFAULT_IPO_MEMBERS = [
+      { role: "教祖", name: "Yi-Hsun", account: "14072@pnts", password: "676767", dept: "", color: "#D8A46F", variant: "classic" },
+      { role: "副教祖", name: "Anne", account: "14021@pnts", password: "958473", dept: "供品組", color: "#A5B4FC", variant: "classic" },
+      { role: "副教祖", name: "Mei", account: "14030@pnts", password: "387233", dept: "", color: "#5C73A8", variant: "classic" },
+      { role: "副教祖", name: "Bella", account: "14083@pnts", password: "573728", dept: "", color: "#C4B5FD", variant: "classic" },
+      { role: "副教祖", name: "Heng", account: "14093@pnts", password: "216761", dept: "資訊組", color: "#D4A39A", variant: "classic" },
+      { role: "副教祖", name: "Myaku Myaku", account: "testm@pnts", password: "pntexpo2025", dept: "", color: "#EF4444", variant: "myaku" },
+      { role: "信徒", name: "Jerry", account: "14133@pnts", password: "732892", dept: "", color: "#6B8E55", variant: "sprout" },
+      { role: "信徒", name: "Nathan", account: "14171@pnts", password: "847231", dept: "", color: "#748CAB", variant: "classic" },
+      { role: "信徒", name: "Spencer", account: "14120@pnts", password: "435627", dept: "活動組", color: "#F4A261", variant: "classic" },
+      { role: "信徒", name: "Brian", account: "14036@pnts", password: "637892", dept: "", color: "#2A9D8F", variant: "classic" },
+      { role: "信徒", name: "Eunice", account: "14130@pnts", password: "958439", dept: "", color: "#E9C46A", variant: "classic" },
+      { role: "信徒", name: "Charity", account: "14243@pnts", password: "843723", dept: "", color: "#9B5DE5", variant: "classic" },
+      { role: "信徒", name: "Kiwi", account: "14190@pnts", password: "463783", dept: "", color: "#84A98C", variant: "sprout" },
+      { role: "信徒", name: "Alissa", account: "14168@pnts", password: "738290", dept: "", color: "#F28482", variant: "classic" },
+      { role: "信徒", name: "ELAINE", account: "14177@pnts", password: "362783", dept: "", color: "#4CC9F0", variant: "classic" },
+      { role: "信徒", name: "Hank", account: "hank@pnts", password: "293023", dept: "", color: "#457B9D", variant: "classic" },
+      { role: "信徒", name: "Xiann", account: "14040@pnts", password: "452678", dept: "", color: "#E76F51", variant: "classic" }
+    ];
+
+    const SKIN_SHOP = [
+      { id: "classic", name: "經典白肚兜 Peanuto", desc: "最純粹的 804 起源款", price: 0, variant: "classic", band: "#FFFFFF" },
+      { id: "santa", name: "聖誕老公公 Santa Peanuto", desc: "2026 歲末聖誕限定紅帽造型", price: 200, variant: "santa", band: "#DC2626" },
+      { id: "esg", name: "PNT ESG 永續綠葉款", desc: "守護地球與二手考卷再生的象徵", price: 200, variant: "esg", band: "#2D6A4F" },
+      { id: "cosmic", name: "多重宇宙太空人款", desc: "戴上玻璃頭罩探索花生星系", price: 400, variant: "cosmic", band: "#6366F1" },
+      { id: "pumpkin", name: "萬聖紀念南瓜小幽靈", desc: "2026 萬聖節活動典藏造型", price: 400, variant: "pumpkin", band: "#F97316" },
+      { id: "myaku", name: "VIP 脈脈聯名限定款", desc: "Expo 2025 神秘跨界配色", price: 600, variant: "myaku", band: "#EF4444" }
+    ];
+
+    const PEANUT_ORACLES = [
+      "「如果是花生，它會先冷靜三秒，然後決定再吃一顆！」",
+      "「一顆花生很渺小，但加上你的笑容，就是無敵堅果盤。」",
+      "「遇到不會寫的題目？深呼吸，相信花生會指引你。」",
+      "「今日宜：分享快樂、節約考卷、保持花生般的幽默感。」",
+      "「花生可以沒有你，但你今天一定要好好照顧自己！」",
+      "「為什麼不是兩顆？因為好事總是成雙成對向你走來！」"
+    ];
+
+    /* =========================================================================
+       3. SAFE STORAGE & APPLICATION STATE
+    ========================================================================= */
+    const memoryStorageFallback = {};
+    function safeGetStorage(key) {
+      try {
+        return window.localStorage.getItem(key);
+      } catch (e) {
+        return Object.prototype.hasOwnProperty.call(memoryStorageFallback, key) ? memoryStorageFallback[key] : null;
+      }
+    }
+    function safeSetStorage(key, val) {
+      try {
+        window.localStorage.setItem(key, val);
+      } catch (e) {
+        memoryStorageFallback[key] = val;
+      }
+    }
+
+    let currentSessionAccount = safeGetStorage("ipo_session_acc") || null;
+    let cloudMembers = null;
+    let cloudProfiles = {};
+    let cloudAnnouncement = DEFAULT_ANNOUNCEMENT;
+    let cloudEsgCount = 0;
+    let cloudWishes = [];
+    let cloudXmasSubscribers = [];
+    let cloudXmasIdeas = [];
+    let cloudPollTimer = null;
+
+    function getActiveSheetUrl() {
+      const customOverride = (safeGetStorage("ipo_custom_sheet_url") || "").trim();
+      return (GOOGLE_SHEET_API_URL || customOverride).trim();
+    }
+
+    function getTodayStr() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    }
+
+    function escapeHTML(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function getMembersList() {
+      return Array.isArray(cloudMembers) && cloudMembers.length > 0 ? cloudMembers : DEFAULT_IPO_MEMBERS;
+    }
+
+    function getLoggedInMember() {
+      if (!currentSessionAccount) return null;
+      return getMembersList().find(m => m.account.toLowerCase() === currentSessionAccount.toLowerCase()) || null;
+    }
+
+    function getDefaultProfile(account) {
+      const m = getMembersList().find(item => item.account === account);
+      return {
+        points: 0,
+        lastChallengeDate: "",
+        lastChallengeType: "",
+        lastOracleDate: "",
+        lastEsgPledge: "",
+        lastXmasSub: false,
+        lastXmasIdea: "",
+        unlockedSkins: ["classic", "sprout"],
+        equippedVariant: m ? (m.variant || "classic") : "classic",
+        equippedBand: m ? (m.color || "#6B8E55") : "#6B8E55"
+      };
+    }
+
+    function getMemberProfile(account) {
+      const base = getDefaultProfile(account);
+      const existing = cloudProfiles[account];
+      if (!existing) return base;
+      return {
+        ...base,
+        ...existing,
+        unlockedSkins: Array.isArray(existing.unlockedSkins) ? existing.unlockedSkins : base.unlockedSkins
+      };
+    }
+
+    function persistLocalSnapshot() {
+      safeSetStorage("ipo_local_snapshot_v3", JSON.stringify({
+        members: cloudMembers,
+        profiles: cloudProfiles,
+        announcement: cloudAnnouncement,
+        esgCount: cloudEsgCount,
+        wishes: cloudWishes,
+        xmasSubscribers: cloudXmasSubscribers,
+        xmasIdeas: cloudXmasIdeas
+      }));
+    }
+
+    function loadLocalSnapshot() {
+      try {
+        const raw = safeGetStorage("ipo_local_snapshot_v3");
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.members) && parsed.members.length > 0) cloudMembers = parsed.members;
+        if (parsed.profiles && typeof parsed.profiles === "object") cloudProfiles = parsed.profiles;
+        if (typeof parsed.announcement === "string" && parsed.announcement) cloudAnnouncement = parsed.announcement;
+        if (typeof parsed.esgCount === "number") cloudEsgCount = parsed.esgCount;
+        if (Array.isArray(parsed.wishes)) cloudWishes = parsed.wishes;
+        if (Array.isArray(parsed.xmasSubscribers)) cloudXmasSubscribers = parsed.xmasSubscribers;
+        if (Array.isArray(parsed.xmasIdeas)) cloudXmasIdeas = parsed.xmasIdeas;
+      } catch (e) {}
+    }
+
+    async function mutateMemberProfile(account, updaterFn) {
+      const current = getMemberProfile(account);
+      const updated = updaterFn({ ...current, unlockedSkins: [...current.unlockedSkins] });
+      cloudProfiles[account] = updated;
+      persistLocalSnapshot();
+      await pushToGoogleSheet({ action: "upsertProfile", account, profile: updated });
+      return updated;
+    }
+
+    async function syncRosterToCloud(newRoster) {
+      cloudMembers = newRoster;
+      persistLocalSnapshot();
+      renderMemberDirectory("ALL");
+      renderLoginQuickChips();
+      renderAdminRosterTable();
+      await pushToGoogleSheet({ action: "saveMembers", members: newRoster });
+    }
+
+    /* =========================================================================
+       4. GOOGLE APPS SCRIPT CLOUD SYNC ENGINE
+    ========================================================================= */
+    function updateCloudSyncBadge(state) {
+      const badge = document.getElementById("cloud-sync-badge");
       if (!badge) return;
-      if (status === 'connected') {
-        badge.textContent = '🟢 Google 試算表即時連線中';
-        badge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-900/80 border border-emerald-400/40 text-[10px] font-black text-emerald-200 cursor-pointer transition-colors';
-      } else if (status === 'syncing') {
-        badge.textContent = '🔄 正在連線 Google 試算表...';
-        badge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sky-900/80 border border-sky-400/40 text-[10px] font-bold text-sky-200 cursor-pointer transition-colors';
-      } else if (status === 'auth_error') {
-        badge.textContent = '⚠️ 雲端權限待確認（點此排查）';
-        badge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-900/85 border border-rose-400/50 text-[10px] font-black text-rose-200 cursor-pointer transition-colors';
+      if (state === "connected") {
+        badge.textContent = "🟢 Google 試算表即時連線中";
+        badge.className = "inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500/30 text-[10px] font-bold text-emerald-200 cursor-pointer transition-colors";
+      } else if (state === "syncing") {
+        badge.textContent = "🔄 雲端連線測試中...";
+        badge.className = "inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sky-500/20 hover:bg-sky-500/30 text-[10px] font-bold text-sky-200 cursor-pointer transition-colors";
+      } else if (state === "auth_error") {
+        badge.textContent = "⚠️ 雲端權限待確認";
+        badge.className = "inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-500/25 hover:bg-rose-500/35 text-[10px] font-bold text-rose-200 cursor-pointer transition-colors";
       } else {
-        badge.textContent = '🟡 單機模式（尚未綁定試算表）';
-        badge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-900/70 border border-amber-400/30 text-[10px] font-bold text-amber-200 cursor-pointer transition-colors';
+        badge.textContent = "🟡 單機模式（尚未綁定試算表）";
+        badge.className = "inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-[10px] font-bold text-amber-200 cursor-pointer transition-colors";
       }
     }
 
     function openCloudHelpModal() {
-      const modal = document.getElementById('cloud-help-modal');
-      if (modal) modal.classList.remove('hidden');
+      const modal = document.getElementById("cloud-help-modal");
+      const input = document.getElementById("cloud-url-quick-input");
+      if (input) input.value = getActiveSheetUrl();
+      if (modal) modal.classList.remove("hidden");
     }
 
     function closeCloudHelpModal() {
-      const modal = document.getElementById('cloud-help-modal');
-      if (modal) modal.classList.add('hidden');
+      const modal = document.getElementById("cloud-help-modal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    async function saveAndTestCloudUrl() {
+      const input = document.getElementById("cloud-url-quick-input");
+      const url = input ? input.value.trim() : "";
+      if (!url) {
+        safeSetStorage("ipo_custom_sheet_url", "");
+        updateCloudSyncBadge("local");
+        showToast("已清除自訂網址，切換回單機模式", "warning");
+        return;
+      }
+      if (!url.startsWith("https://script.google.com/")) {
+        showToast("請輸入正確的 https://script.google.com/.../exec 網址", "warning");
+        return;
+      }
+      safeSetStorage("ipo_custom_sheet_url", url);
+      updateCloudSyncBadge("syncing");
+      showToast("🔄 正在測試 Google 試算表連線...");
+      await fetchCloudStateFromSheet();
+      startCloudPolling();
     }
 
     async function retryCloudSync() {
-      closeCloudHelpModal();
-      if (!GOOGLE_SHEET_API_URL) {
-        showToast('尚未在 index.html 填入 GOOGLE_SHEET_API_URL 網址', 'warning');
+      const input = document.getElementById("cloud-url-quick-input");
+      if (input && input.value.trim() !== getActiveSheetUrl()) {
+        await saveAndTestCloudUrl();
         return;
       }
-      updateCloudSyncBadge('syncing');
+      if (!getActiveSheetUrl()) {
+        showToast("請先輸入 Apps Script /exec 網址", "warning");
+        return;
+      }
+      updateCloudSyncBadge("syncing");
       await fetchCloudStateFromSheet();
     }
 
+    function openCloudUrlInNewTab() {
+      const input = document.getElementById("cloud-url-quick-input");
+      const url = (input ? input.value.trim() : "") || getActiveSheetUrl();
+      if (!url) {
+        showToast("請先在上方輸入 Apps Script /exec 網址", "warning");
+        return;
+      }
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    function applyCloudPayload(data) {
+      if (data.profiles && typeof data.profiles === "object") {
+        cloudProfiles = data.profiles;
+      }
+      if (Array.isArray(data.members) && data.members.length > 0) {
+        cloudMembers = data.members;
+      }
+      if (typeof data.announcement === "string" && data.announcement.trim() !== "") {
+        cloudAnnouncement = data.announcement;
+      }
+      if (typeof data.esgCount === "number") {
+        cloudEsgCount = data.esgCount;
+      }
+      if (Array.isArray(data.wishes)) {
+        cloudWishes = data.wishes;
+      }
+      if (Array.isArray(data.xmasSubscribers)) {
+        cloudXmasSubscribers = data.xmasSubscribers;
+      }
+      if (Array.isArray(data.xmasIdeas)) {
+        cloudXmasIdeas = data.xmasIdeas;
+      }
+
+      persistLocalSnapshot();
+      updateCloudSyncBadge("connected");
+      applyGlobalAnnouncement();
+      renderMemberDirectory("ALL");
+      renderChristmasBillboard();
+      renderEsgCount();
+      renderWishWall();
+      if (getLoggedInMember()) {
+        refreshMemberPage();
+      }
+    }
+
+    function fetchViaJsonp(url) {
+      return new Promise((resolve, reject) => {
+        const cbName = "ipoJsonpCb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+        const script = document.createElement("script");
+        const timeoutId = setTimeout(() => {
+          cleanup();
+          reject(new Error("JSONP timeout"));
+        }, 8000);
+
+        function cleanup() {
+          clearTimeout(timeoutId);
+          delete window[cbName];
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        window[cbName] = function (data) {
+          cleanup();
+          resolve(data);
+        };
+
+        script.onerror = function () {
+          cleanup();
+          reject(new Error("JSONP script error"));
+        };
+
+        const sep = url.includes("?") ? "&" : "?";
+        script.src = `${url}${sep}callback=${cbName}&t=${Date.now()}`;
+        document.body.appendChild(script);
+      });
+    }
+
+    async function fetchCloudStateFromSheet() {
+      const url = getActiveSheetUrl();
+      if (!url) {
+        updateCloudSyncBadge("local");
+        return;
+      }
+      try {
+        const sep = url.includes("?") ? "&" : "?";
+        const res = await fetch(`${url}${sep}t=${Date.now()}`, {
+          method: "GET",
+          redirect: "follow"
+        });
+        const text = await res.text();
+        let data = null;
+        try {
+          data = JSON.parse(text);
+        } catch (parseErr) {
+          // If Google returns HTML login screen instead of JSON, try JSONP fallback before flagging auth_error
+          const jsonpData = await fetchViaJsonp(url);
+          if (jsonpData && jsonpData.ok !== false) {
+            applyCloudPayload(jsonpData);
+            return;
+          }
+          updateCloudSyncBadge("auth_error");
+          return;
+        }
+
+        if (!data || data.ok === false) {
+          updateCloudSyncBadge("auth_error");
+          return;
+        }
+
+        applyCloudPayload(data);
+      } catch (err) {
+        try {
+          const jsonpData = await fetchViaJsonp(url);
+          if (jsonpData && jsonpData.ok !== false) {
+            applyCloudPayload(jsonpData);
+            return;
+          }
+        } catch (jsonpErr) {
+          console.warn("Fetch and JSONP from Google Sheet failed:", err, jsonpErr);
+        }
+        updateCloudSyncBadge("auth_error");
+      }
+    }
+
+    async function pushToGoogleSheet(payload) {
+      persistLocalSnapshot();
+      const url = getActiveSheetUrl();
+      if (!url) return;
+      try {
+        await fetch(url, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        setTimeout(() => { fetchCloudStateFromSheet(); }, 1800);
+      } catch (err) {
+        console.warn("Push to Google Sheet failed:", err);
+      }
+    }
+
+    function startCloudPolling() {
+      if (cloudPollTimer) clearInterval(cloudPollTimer);
+      const url = getActiveSheetUrl();
+      if (!url) return;
+      cloudPollTimer = setInterval(() => {
+        fetchCloudStateFromSheet();
+      }, 10000);
+    }
+
+    function initCloudConnection() {
+      loadLocalSnapshot();
+      const url = getActiveSheetUrl();
+      if (!url) {
+        updateCloudSyncBadge("local");
+        return;
+      }
+      updateCloudSyncBadge("syncing");
+      fetchCloudStateFromSheet();
+      startCloudPolling();
+    }
+
+    /* =========================================================================
+       5. VECTOR MASCOT RENDERER (PEANUTO SVG)
+    ========================================================================= */
+    function renderPeanutoSVG(variant = "classic", bandColor = "#6B8E55", showGlasses = false) {
+      const glassesMarkup = showGlasses
+        ? `<g stroke="#1E293B" stroke-width="2" fill="rgba(255,255,255,0.45)">
+             <circle cx="26" cy="24" r="4.5"/><circle cx="38" cy="24" r="4.5"/>
+             <line x1="30.5" y1="24" x2="33.5" y2="24"/>
+           </g>`
+        : "";
+
+      if (variant === "santa") {
+        return `
+          <svg viewBox="0 0 64 64" class="w-full h-full drop-shadow-md">
+            <circle cx="13" cy="18" r="2.2" fill="#BAE6FD" opacity="0.85"/>
+            <circle cx="52" cy="14" r="1.8" fill="#BAE6FD" opacity="0.8"/>
+            <g transform="rotate(-24 32 34)">
+              <path d="M32 10 C42 10 47 18 45 26 C43.5 32 43.5 38 45 44 C47 52 42 59 32 59 C22 59 17 52 19 44 C20.5 38 20.5 32 19 26 C17 18 22 10 32 10 Z" fill="#E8C391" stroke="#C5935A" stroke-width="2.2"/>
+              <path d="M23 19 L41 19 M21 27 L43 27 M21 43 L43 43 M23 50 L41 50 M27 12 L27 57 M37 12 L37 57" stroke="#C5935A" stroke-width="1.2" opacity="0.55"/>
+              <rect x="17" y="28" width="30" height="14" rx="6" fill="#DC2626"/>
+              <rect x="17" y="33" width="30" height="4" fill="#1E293B"/>
+              <rect x="28" y="31.5" width="8" height="7" rx="1.5" fill="none" stroke="#FACC15" stroke-width="2"/>
+              <circle cx="27" cy="22" r="2" fill="#1E293B"/>
+              <circle cx="37" cy="22" r="2" fill="#1E293B"/>
+              <path d="M29 24.5 Q32 27.5 35 24.5" fill="none" stroke="#1E293B" stroke-width="1.8" stroke-linecap="round"/>
+              ${glassesMarkup}
+              <path d="M21 15 Q32 2 45 13 L48 18 L19 18 Z" fill="#DC2626"/>
+              <rect x="18" y="14.5" width="30" height="4.5" rx="2.2" fill="#FFFFFF"/>
+              <circle cx="48" cy="17" r="3" fill="#FACC15"/>
+            </g>
+            <g transform="translate(42, 41)">
+              <rect x="0" y="2" width="14" height="12" rx="2.5" fill="#16A34A" stroke="#14532D" stroke-width="1.5"/>
+              <rect x="5.5" y="2" width="3" height="12" fill="#FACC15"/>
+              <rect x="0" y="6.5" width="14" height="3" fill="#FACC15"/>
+            </g>
+          </svg>
+        `;
+      }
+
+      if (variant === "cosmic") {
+        return `
+          <svg viewBox="0 0 64 64" class="w-full h-full drop-shadow-md">
+            <circle cx="11" cy="14" r="2" fill="#FDE047"/>
+            <circle cx="53" cy="20" r="1.5" fill="#C7D2FE"/>
+            <circle cx="14" cy="50" r="1.6" fill="#A5B4FC"/>
+            <g transform="rotate(-20 32 32)">
+              <path d="M32 8 C42 8 47 16 45 24 C43.5 30 43.5 36 45 42 C47 50 42 58 32 58 C22 58 17 50 19 42 C20.5 36 20.5 30 19 24 C17 16 22 8 32 8 Z" fill="#E8C391" stroke="#C5935A" stroke-width="2.2"/>
+              <path d="M23 18 L41 18 M21 26 L43 26 M21 42 L43 42 M27 10 L27 56 M37 10 L37 56" stroke="#C5935A" stroke-width="1.2" opacity="0.5"/>
+              <rect x="17" y="27" width="30" height="14" rx="6" fill="${escapeHTML(bandColor)}"/>
+              <circle cx="32" cy="20" r="13" fill="rgba(199,210,254,0.28)" stroke="#818CF8" stroke-width="2"/>
+              <circle cx="27" cy="20" r="2" fill="#1E293B"/>
+              <circle cx="37" cy="20" r="2" fill="#1E293B"/>
+              <path d="M29 23 Q32 26 35 23" fill="none" stroke="#1E293B" stroke-width="1.8" stroke-linecap="round"/>
+              ${glassesMarkup}
+            </g>
+          </svg>
+        `;
+      }
+
+      if (variant === "pumpkin") {
+        return `
+          <svg viewBox="0 0 64 64" class="w-full h-full drop-shadow-md">
+            <g transform="rotate(-24 32 34)">
+              <path d="M32 10 C42 10 47 18 45 26 C43.5 32 43.5 38 45 44 C47 52 42 59 32 59 C22 59 17 52 19 44 C20.5 38 20.5 32 19 26 C17 18 22 10 32 10 Z" fill="#E8C391" stroke="#C5935A" stroke-width="2.2"/>
+              <path d="M23 19 L41 19 M21 27 L43 27 M21 43 L43 43 M27 12 L27 57 M37 12 L37 57" stroke="#C5935A" stroke-width="1.2" opacity="0.55"/>
+              <rect x="17" y="28" width="30" height="14" rx="6" fill="${escapeHTML(bandColor)}"/>
+              <ellipse cx="27" cy="21" rx="2.4" ry="3" fill="#0F172A"/>
+              <ellipse cx="37" cy="21" rx="2.4" ry="3" fill="#0F172A"/>
+              <ellipse cx="32" cy="25.5" rx="3.2" ry="2.2" fill="#0F172A"/>
+              <path d="M20 15 Q32 6 44 15 L41 18 L36 15 L32 18 L28 15 L23 18 Z" fill="#EA580C"/>
+              <path d="M32 9 Q33 5 36 5" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round"/>
+            </g>
+          </svg>
+        `;
+      }
+
+      if (variant === "esg") {
+        return `
+          <svg viewBox="0 0 64 64" class="w-full h-full drop-shadow-md">
+            <g transform="rotate(-22 32 34)">
+              <path d="M32 10 C42 10 47 18 45 26 C43.5 32 43.5 38 45 44 C47 52 42 59 32 59 C22 59 17 52 19 44 C20.5 38 20.5 32 19 26 C17 18 22 10 32 10 Z" fill="#E8C391" stroke="#C5935A" stroke-width="2.2"/>
+              <path d="M23 19 L41 19 M21 27 L43 27 M21 43 L43 43 M27 12 L27 57 M37 12 L37 57" stroke="#C5935A" stroke-width="1.2" opacity="0.55"/>
+              <rect x="17" y="28" width="30" height="14" rx="6" fill="#2D6A4F"/>
+              <circle cx="27" cy="21" r="2" fill="#1E293B"/>
+              <circle cx="37" cy="21" r="2" fill="#1E293B"/>
+              <path d="M29 24 Q32 27 35 24" fill="none" stroke="#1E293B" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M32 10 C27 4 21 5 22 10 C26 11 30 11 32 10 Z" fill="#52B788"/>
+              <path d="M32 10 C37 4 43 5 42 10 C38 11 34 11 32 10 Z" fill="#40916C"/>
+            </g>
+          </svg>
+        `;
+      }
+
+      if (variant === "myaku") {
+        return `
+          <svg viewBox="0 0 64 64" class="w-full h-full drop-shadow-md">
+            <g transform="rotate(-22 32 32)">
+              <path d="M32 8 C42 8 47 16 45 24 C43.5 30 43.5 36 45 42 C47 50 42 58 32 58 C22 58 17 50 19 42 C20.5 36 20.5 30 19 24 C17 16 22 8 32 8 Z" fill="#93C5FD" stroke="#2563EB" stroke-width="2.2"/>
+              <circle cx="25" cy="12" r="4" fill="#EF4444"/>
+              <circle cx="39" cy="12" r="4" fill="#EF4444"/>
+              <circle cx="25" cy="12" r="1.5" fill="#FFFFFF"/>
+              <circle cx="39" cy="12" r="1.5" fill="#FFFFFF"/>
+              <rect x="17" y="27" width="30" height="14" rx="6" fill="#EF4444"/>
+              <circle cx="27" cy="21" r="2" fill="#1E293B"/>
+              <circle cx="37" cy="21" r="2" fill="#1E293B"/>
+              <path d="M29 23.5 Q32 26.5 35 23.5" fill="none" stroke="#1E293B" stroke-width="1.8" stroke-linecap="round"/>
+            </g>
+          </svg>
+        `;
+      }
+
+      if (variant === "sprout") {
+        return `
+          <svg viewBox="0 0 64 64" class="w-full h-full drop-shadow-md">
+            <g transform="rotate(-22 32 34)">
+              <path d="M32 11 C42 11 47 19 45 27 C43.5 33 43.5 39 45 45 C47 53 42 59 32 59 C22 59 17 53 19 45 C20.5 39 20.5 33 19 27 C17 19 22 11 32 11 Z" fill="#E8C391" stroke="#C5935A" stroke-width="2.2"/>
+              <path d="M23 20 L41 20 M21 28 L43 28 M21 44 L43 44 M27 13 L27 57 M37 13 L37 57" stroke="#C5935A" stroke-width="1.2" opacity="0.55"/>
+              <rect x="17" y="29" width="30" height="14" rx="6" fill="${escapeHTML(bandColor)}"/>
+              <circle cx="27" cy="22" r="2" fill="#1E293B"/>
+              <circle cx="37" cy="22" r="2" fill="#1E293B"/>
+              <path d="M29 24.5 Q32 27.5 35 24.5" fill="none" stroke="#1E293B" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M32 11 L32 6" stroke="#4D7C0F" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M32 7 C26 2 21 4 23 8 C26 10 30 9 32 7 Z" fill="#65A30D"/>
+              <path d="M32 7 C38 2 43 4 41 8 C38 10 34 9 32 7 Z" fill="#84CC16"/>
+            </g>
+          </svg>
+        `;
+      }
+
+      // Default: classic
+      return `
+        <svg viewBox="0 0 64 64" class="w-full h-full drop-shadow-md">
+          <g transform="rotate(-24 32 32)">
+            <path d="M32 6 C42 6 47 14 45 23 C43.5 29 43.5 35 45 41 C47 50 42 58 32 58 C22 58 17 50 19 41 C20.5 35 20.5 29 19 23 C17 14 22 6 32 6 Z" fill="#E8C391" stroke="#C5935A" stroke-width="2.3"/>
+            <path d="M23 16 L41 16 M21 24 L43 24 M21 40 L43 40 M23 48 L41 48 M27 9 L27 55 M37 9 L37 55" stroke="#C5935A" stroke-width="1.3" opacity="0.6"/>
+            <rect x="17" y="25" width="30" height="14" rx="6" fill="${escapeHTML(bandColor)}" stroke="#C5935A" stroke-width="1"/>
+            <circle cx="27" cy="19" r="2" fill="#1E293B"/>
+            <circle cx="37" cy="19" r="2" fill="#1E293B"/>
+            <path d="M29 21.5 Q32 24.5 35 21.5" fill="none" stroke="#1E293B" stroke-width="1.8" stroke-linecap="round"/>
+            ${glassesMarkup}
+          </g>
+        </svg>
+      `;
+    }
+
+    /* =========================================================================
+       6. ROUTING & UI SHELL (HASH NAVIGATION, TOASTS, CONFIRM MODAL)
+    ========================================================================= */
+    const VALID_ROUTES = ["#/home", "#/purpose", "#/member", "#/ipo-intro", "#/pnt-esg", "#/studio", "#/app", "#/login"];
+
+    function navigateTo(hash) {
+      const target = VALID_ROUTES.includes(hash) ? hash : "#/home";
+      if (window.location.hash !== target) {
+        window.location.hash = target;
+      } else {
+        renderRoute(target);
+      }
+      const mobileMenu = document.getElementById("mobile-menu");
+      if (mobileMenu) mobileMenu.classList.add("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderRoute(hash) {
+      const target = VALID_ROUTES.includes(hash) ? hash : "#/home";
+      const pageKey = target.replace("#/", "");
+
+      document.querySelectorAll(".page-view").forEach(sec => {
+        sec.classList.add("hidden");
+        sec.classList.remove("page-enter");
+      });
+
+      const activeSec = document.getElementById(`page-${pageKey}`);
+      if (activeSec) {
+        activeSec.classList.remove("hidden");
+        activeSec.classList.add("page-enter");
+      }
+
+      document.querySelectorAll(".nav-link").forEach(btn => {
+        const isMatch = btn.dataset.route === target;
+        btn.className = isMatch
+          ? "nav-link px-3 py-2 rounded-xl text-sm font-black bg-peanut-caramel text-navy-dark shadow-sm transition-all cursor-pointer"
+          : "nav-link px-3 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-white/10 transition-all cursor-pointer";
+      });
+
+      document.querySelectorAll(".mobile-nav-link").forEach(btn => {
+        const isMatch = btn.dataset.route === target;
+        btn.className = isMatch
+          ? "mobile-nav-link w-full text-left px-4 py-3 rounded-xl text-sm font-black bg-peanut-caramel text-navy-dark block cursor-pointer"
+          : "mobile-nav-link w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-slate-200 hover:bg-white/10 block cursor-pointer";
+      });
+
+      if (target === "#/login") refreshMemberPage();
+      if (target === "#/member") renderMemberDirectory("ALL");
+      if (target === "#/studio") renderUniverseStudio();
+    }
+
+    window.addEventListener("hashchange", () => {
+      renderRoute(window.location.hash);
+    });
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById("mobile-menu");
+      if (menu) menu.classList.toggle("hidden");
+    }
+
+    function showToast(message, type = "success") {
+      const container = document.getElementById("toast-container");
+      if (!container) return;
+      const el = document.createElement("div");
+      const bgClass = type === "warning"
+        ? "bg-amber-900 border-amber-500 text-amber-100"
+        : "bg-navy-dark border-peanut-caramel text-white";
+      el.className = `pointer-events-auto rounded-2xl border-l-4 ${bgClass} px-4 py-3 shadow-2xl text-xs sm:text-sm font-bold transition-all`;
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(8px)";
+        setTimeout(() => el.remove(), 250);
+      }, 3200);
+    }
+
+    let pendingConfirmCallback = null;
+    function openConfirmModal(title, desc, onConfirm) {
+      document.getElementById("confirm-modal-title").textContent = title;
+      document.getElementById("confirm-modal-desc").textContent = desc;
+      pendingConfirmCallback = onConfirm;
+      document.getElementById("custom-confirm-modal").classList.remove("hidden");
+    }
+
+    function closeConfirmModal() {
+      pendingConfirmCallback = null;
+      document.getElementById("custom-confirm-modal").classList.add("hidden");
+    }
+
+    document.getElementById("confirm-modal-ok-btn").onclick = async () => {
+      const fn = pendingConfirmCallback;
+      closeConfirmModal();
+      if (typeof fn === "function") await fn();
+    };
+
+    /* =========================================================================
+       7. HOME CAROUSEL, ORACLE & CHRISTMAS BILLBOARD
+    ========================================================================= */
+    let currentHeroSlide = 0;
+
+    function setHeroSlide(idx) {
+      currentHeroSlide = idx;
+      const s0 = document.getElementById("hero-slide-0");
+      const s1 = document.getElementById("hero-slide-1");
+      const d0 = document.getElementById("dot-0");
+      const d1 = document.getElementById("dot-1");
+      if (!s0 || !s1) return;
+
+      if (idx === 0) {
+        s0.classList.remove("hidden");
+        s1.classList.add("hidden");
+        d0.className = "w-8 h-2.5 rounded-full bg-amber-400 transition-all cursor-pointer";
+        d1.className = "w-2.5 h-2.5 rounded-full bg-white/30 transition-all cursor-pointer";
+      } else {
+        s0.classList.add("hidden");
+        s1.classList.remove("hidden");
+        d0.className = "w-2.5 h-2.5 rounded-full bg-white/30 transition-all cursor-pointer";
+        d1.className = "w-8 h-2.5 rounded-full bg-amber-400 transition-all cursor-pointer";
+      }
+    }
+
+    function toggleHeroSlide() {
+      setHeroSlide(currentHeroSlide === 0 ? 1 : 0);
+    }
+
+    function applyGlobalAnnouncement() {
+      const bannerEl = document.getElementById("global-banner-text");
+      if (bannerEl) bannerEl.textContent = cloudAnnouncement || DEFAULT_ANNOUNCEMENT;
+      const adminArea = document.getElementById("admin-banner-textarea");
+      if (adminArea && document.activeElement !== adminArea) {
+        adminArea.value = cloudAnnouncement || DEFAULT_ANNOUNCEMENT;
+      }
+    }
+
+    async function drawHomeOracle() {
+      const pick = PEANUT_ORACLES[Math.floor(Math.random() * PEANUT_ORACLES.length)];
+      const textEl = document.getElementById("home-oracle-text");
+      if (textEl) textEl.textContent = pick;
+
+      const member = getLoggedInMember();
+      if (member) {
+        const today = getTodayStr();
+        const prof = getMemberProfile(member.account);
+        if (prof.lastOracleDate !== today) {
+          await mutateMemberProfile(member.account, p => {
+            p.points += 20;
+            p.lastOracleDate = today;
+            return p;
+          });
+          syncHeaderAuth();
+          showToast("🥜 聆聽今日花生神諭，獲得 +20P！");
+          return;
+        }
+      }
+      showToast("✨ 花生神諭已降臨！");
+    }
+
+    function renderChristmasBillboard() {
+      const subs = cloudXmasSubscribers;
+      const countEl = document.getElementById("xmas-sub-count");
+      if (countEl) countEl.textContent = subs.length;
+
+      const me = getLoggedInMember();
+      const isAdmin = me && (me.role === "教祖" || me.role === "副教祖");
+
+      const statusEl = document.getElementById("xmas-sub-status");
+      if (statusEl) {
+        statusEl.textContent = me && subs.some(s => s.account === me.account) ? "✓ 你已預約通知" : "";
+      }
+
+      const badgesEl = document.getElementById("xmas-sub-badges");
+      if (badgesEl) {
+        badgesEl.innerHTML = subs.map(s => `
+          <span class="px-2.5 py-0.5 rounded-full bg-white/15 text-amber-200 text-[11px] font-bold">
+            🎄 ${escapeHTML(s.name)}
+          </span>
+        `).join("");
+      }
+
+      const adminXmas = document.getElementById("admin-xmas-list");
+      if (adminXmas) {
+        adminXmas.innerHTML = subs.length === 0
+          ? '<p class="text-xs text-slate-400 col-span-full">目前尚無成員預約聖誕活動通知。</p>'
+          : subs.map(s => `
+            <div class="rounded-xl bg-peanut-cream px-3 py-2 border border-peanut-light flex items-center justify-between text-xs">
+              <span class="font-bold text-navy">${escapeHTML(s.name)} (${escapeHTML(s.role)})</span>
+              <button type="button" onclick="removeXmasSubscriber('${escapeHTML(s.account)}')" class="text-rose-600 hover:underline font-bold cursor-pointer">移除</button>
+            </div>
+          `).join("");
+      }
+
       const ideas = cloudXmasIdeas;
-      const ideaBox = document.getElementById('xmas-idea-list');
+      const ideaBox = document.getElementById("xmas-idea-list");
       if (ideaBox) {
         ideaBox.innerHTML = ideas.length === 0
           ? '<p class="text-[11px] text-slate-300/70 py-1">目前尚無聖誕許願留言，歡迎搶先許願！</p>'
@@ -1241,24 +1971,24 @@
                   <span class="font-black text-amber-300">${escapeHTML(item.author)}：</span>
                   <span class="break-words">${escapeHTML(item.text)}</span>
                 </div>
-                ${canDelete ? `<button type="button" onclick="confirmDeleteXmasIdea('${escapeHTML(item.id)}')" class="shrink-0 px-2 py-0.5 rounded-lg bg-rose-500/30 hover:bg-rose-500 text-rose-100 hover:text-white text-[10px] font-bold cursor-pointer">刪除</button>` : ''}
-      } catch (err) {
-        console.warn('Fetch from Google Sheet failed:', err);
-        updateCloudSyncBadge(GOOGLE_SHEET_API_URL ? 'auth_error' : 'local');
+                ${canDelete ? `<button type="button" onclick="confirmDeleteXmasIdea('${escapeHTML(item.id)}')" class="shrink-0 px-2 py-0.5 rounded-lg bg-rose-500/30 hover:bg-rose-500 text-rose-100 hover:text-white text-[10px] font-bold cursor-pointer">刪除</button>` : ""}
+              </div>
+            `;
+          }).join("");
       }
     }
 
     async function subscribeChristmasNotice() {
       const member = getLoggedInMember();
       if (!member) {
-        showToast('請先登入 @pnts 會員帳號再搶先預約！', 'warning');
-        navigateTo('#/login');
+        showToast("請先登入 @pnts 會員帳號再搶先預約！", "warning");
+        navigateTo("#/login");
         return;
       }
 
       const exists = cloudXmasSubscribers.some(s => s.account === member.account);
       if (exists) {
-        showToast('你已經完成聖誕活動預約通知囉！', 'warning');
+        showToast("你已經完成聖誕活動預約通知囉！", "warning");
         return;
       }
 
@@ -1269,7 +1999,7 @@
         createdAt: Date.now()
       };
       cloudXmasSubscribers = [entry, ...cloudXmasSubscribers];
-      await pushToGoogleSheet({ action: 'addXmasSub', entry });
+      await pushToGoogleSheet({ action: "addXmasSub", entry });
 
       const prof = getMemberProfile(member.account);
       if (!prof.lastXmasSub) {
@@ -1283,39 +2013,40 @@
         showToast(`🎄 ${member.name} 已重新加入預約名單！`);
       }
 
-      document.getElementById('xmas-sub-status').textContent = '✓ 已成功預約';
+      document.getElementById("xmas-sub-status").textContent = "✓ 已成功預約";
       renderChristmasBillboard();
       renderLeaderboards();
+      syncHeaderAuth();
     }
 
     async function removeXmasSubscriber(account) {
       cloudXmasSubscribers = cloudXmasSubscribers.filter(s => s.account !== account);
-      await pushToGoogleSheet({ action: 'removeXmasSub', account });
+      await pushToGoogleSheet({ action: "removeXmasSub", account });
       renderChristmasBillboard();
-      showToast('已從聖誕預約名單移除', 'warning');
+      showToast("已從聖誕預約名單移除", "warning");
     }
 
     async function submitChristmasIdea() {
       const member = getLoggedInMember();
       if (!member) {
-        showToast('請先登入會員再送出聖誕玩法許願！', 'warning');
-        navigateTo('#/login');
+        showToast("請先登入會員再送出聖誕玩法許願！", "warning");
+        navigateTo("#/login");
         return;
       }
-      const input = document.getElementById('xmas-idea-input');
+      const input = document.getElementById("xmas-idea-input");
       const text = input.value.trim();
       if (!text) return;
 
       const entry = {
-        id: 'idea_' + Date.now(),
+        id: "idea_" + Date.now(),
         account: member.account,
         author: member.name,
         text,
         createdAt: Date.now()
       };
       cloudXmasIdeas = [entry, ...cloudXmasIdeas];
-      await pushToGoogleSheet({ action: 'addXmasIdea', entry });
-      input.value = '';
+      await pushToGoogleSheet({ action: "addXmasIdea", entry });
+      input.value = "";
 
       const today = getTodayStr();
       const prof = getMemberProfile(member.account);
@@ -1326,17 +2057,18 @@
           return p;
         });
         renderLeaderboards();
-        showToast('💭 聖誕許願已送出，獲得 +20P！');
+        syncHeaderAuth();
+        showToast("💭 聖誕許願已送出，獲得 +20P！");
       } else {
-        showToast('💭 聖誕許願已送出！');
+        showToast("💭 聖誕許願已送出！");
       }
       renderChristmasBillboard();
     }
 
     function confirmDeleteXmasIdea(id) {
       openConfirmModal(
-        '刪除聖誕許願留言',
-        '確定要刪除這則聖誕玩法許願嗎？刪除後全站將同步移除。',
+        "刪除聖誕許願留言",
+        "確定要刪除這則聖誕玩法許願嗎？刪除後全站將同步移除。",
         () => deleteChristmasIdea(id)
       );
     }
@@ -1344,22 +2076,22 @@
     async function deleteChristmasIdea(id) {
       cloudXmasIdeas = cloudXmasIdeas.filter(item => String(item.id) !== String(id));
       renderChristmasBillboard();
-      await pushToGoogleSheet({ action: 'deleteXmasIdea', id });
-      showToast('已刪除該則聖誕許願留言', 'warning');
+      await pushToGoogleSheet({ action: "deleteXmasIdea", id });
+      showToast("已刪除該則聖誕許願留言", "warning");
     }
 
     /* =========================================================================
        8. PNT ESG PLEDGE
     ========================================================================= */
     function renderEsgCount() {
-      const el = document.getElementById('esg-pledge-count');
+      const el = document.getElementById("esg-pledge-count");
       if (el) el.textContent = cloudEsgCount;
     }
 
     async function pledgeEsgAction() {
       cloudEsgCount += 1;
       renderEsgCount();
-      await pushToGoogleSheet({ action: 'incEsg' });
+      await pushToGoogleSheet({ action: "incEsg" });
 
       const member = getLoggedInMember();
       if (member) {
@@ -1372,11 +2104,12 @@
             return p;
           });
           renderLeaderboards();
-          showToast('🌿 感謝響應考卷紙袋再生！獲得 +30P！');
+          syncHeaderAuth();
+          showToast("🌿 感謝響應考卷紙袋再生！獲得 +30P！");
           return;
         }
       }
-      showToast('🌿 感謝支持 #PNTESG 考卷紙袋再生行動！');
+      showToast("🌿 感謝支持 #PNTESG 考卷紙袋再生行動！");
     }
 
     /* =========================================================================
@@ -1384,12 +2117,12 @@
     ========================================================================= */
     function renderOrgTreeFromMembers() {
       const members = getMembersList();
-      const leaders = members.filter(m => m.role === '教祖');
-      const vices = members.filter(m => m.role === '副教祖');
-      const cadres = members.filter(m => m.dept && m.dept.trim() !== '');
-      const believers = members.filter(m => m.role === '信徒');
+      const leaders = members.filter(m => m.role === "教祖");
+      const vices = members.filter(m => m.role === "副教祖");
+      const cadres = members.filter(m => m.dept && m.dept.trim() !== "");
+      const believers = members.filter(m => m.role === "信徒");
 
-      const leaderBox = document.getElementById('org-tree-leaders');
+      const leaderBox = document.getElementById("org-tree-leaders");
       if (leaderBox) {
         leaderBox.innerHTML = leaders.length === 0
           ? '<div class="px-8 py-4 rounded-2xl bg-peanut-caramel text-navy-dark font-black text-lg shadow-lg">教祖（待指派）</div>'
@@ -1397,122 +2130,122 @@
             <div class="px-8 py-4 rounded-2xl bg-peanut-caramel text-navy-dark font-black text-lg shadow-lg">
               教祖 ${escapeHTML(m.name)}
             </div>
-          `).join('');
+          `).join("");
       }
 
-      const viceBox = document.getElementById('org-tree-vices');
+      const viceBox = document.getElementById("org-tree-vices");
       if (viceBox) {
         viceBox.innerHTML = vices.length === 0
           ? '<li class="text-center text-xs opacity-75">目前無副教祖</li>'
           : vices.map(m => `
             <li class="flex items-center gap-2.5 bg-white/35 rounded-xl px-3.5 py-2">
-              <span class="w-3.5 h-3.5 rounded-full shrink-0" style="background:${escapeHTML(m.color || '#A5B4FC')}"></span>
+              <span class="w-3.5 h-3.5 rounded-full shrink-0" style="background:${escapeHTML(m.color || "#A5B4FC")}"></span>
               <span>${escapeHTML(m.name)}</span>
             </li>
-          `).join('');
+          `).join("");
       }
 
-      const cadreBox = document.getElementById('org-tree-cadres');
+      const cadreBox = document.getElementById("org-tree-cadres");
       if (cadreBox) {
-        const deptIcons = { '活動組': '🧩', '資訊組': '🌐', '供品組': '🎁' };
+        const deptIcons = { "活動組": "🧩", "資訊組": "🌐", "供品組": "🎁" };
         cadreBox.innerHTML = cadres.length === 0
           ? '<p class="text-xs opacity-75">目前無指派幹部</p>'
           : cadres.map(m => `
             <div class="bg-white/35 rounded-xl p-3">
-              <div class="text-xs font-black text-navy">${deptIcons[m.dept] || '🏅'} ${escapeHTML(m.dept)}</div>
+              <div class="text-xs font-black text-navy">${deptIcons[m.dept] || "🏅"} ${escapeHTML(m.dept)}</div>
               <div class="font-extrabold text-sm mt-0.5">${escapeHTML(m.name)}</div>
             </div>
-          `).join('');
+          `).join("");
       }
 
-      const believerBox = document.getElementById('org-tree-believers');
+      const believerBox = document.getElementById("org-tree-believers");
       if (believerBox) {
         believerBox.innerHTML = believers.length === 0
           ? '<li class="col-span-2 text-center text-xs opacity-75">目前無信徒</li>'
           : believers.map(m => `
             <li class="bg-white/30 rounded-xl px-3 py-1.5">• ${escapeHTML(m.name)}</li>
-          `).join('');
+          `).join("");
       }
     }
 
-    function renderMemberDirectory(filter = 'ALL') {
+    function renderMemberDirectory(filter = "ALL") {
       renderOrgTreeFromMembers();
       const members = getMembersList();
-      const totalEl = document.getElementById('member-total-count');
+      const totalEl = document.getElementById("member-total-count");
       if (totalEl) totalEl.textContent = members.length;
 
-      const grid = document.getElementById('member-cards-grid');
+      const grid = document.getElementById("member-cards-grid");
       if (!grid) return;
       const list = members.filter(m => {
-        if (filter === 'ALL') return true;
-        if (filter === '幹部') return Boolean(m.dept);
+        if (filter === "ALL") return true;
+        if (filter === "幹部") return Boolean(m.dept);
         return m.role === filter;
       });
 
       grid.innerHTML = list.map(m => `
         <div class="rounded-2xl bg-white p-4 shadow-sm border border-peanut-light/70 flex items-center gap-3.5 hover:shadow-md transition-all">
           <div class="w-14 h-14 rounded-2xl bg-peanut-cream p-1 shrink-0 border border-peanut-light">
-            ${renderPeanutoSVG(m.variant || 'classic', m.color || '#6B8E55', false)}
+            ${renderPeanutoSVG(m.variant || "classic", m.color || "#6B8E55", false)}
           </div>
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-1.5 flex-wrap">
               <span class="px-2 py-0.5 rounded-md text-[10px] font-black ${getRoleBadgeClass(m.role)}">${escapeHTML(m.role)}</span>
-              ${m.dept ? `<span class="px-2 py-0.5 rounded-md text-[10px] font-black bg-emerald-100 text-emerald-800">${escapeHTML(m.dept)}</span>` : ''}
+              ${m.dept ? `<span class="px-2 py-0.5 rounded-md text-[10px] font-black bg-emerald-100 text-emerald-800">${escapeHTML(m.dept)}</span>` : ""}
             </div>
             <h4 class="font-black text-navy text-base mt-1 truncate">${escapeHTML(m.name)}</h4>
             <p class="text-[11px] font-mono text-slate-400">${escapeHTML(m.account)}</p>
           </div>
         </div>
-      `).join('');
+      `).join("");
     }
 
     function filterMembers(filter) {
-      document.querySelectorAll('.member-filter-btn').forEach(btn => {
-        const isMatch = btn.textContent.includes(filter === 'ALL' ? '全部' : filter);
+      document.querySelectorAll(".member-filter-btn").forEach(btn => {
+        const isMatch = btn.textContent.includes(filter === "ALL" ? "全部" : filter);
         btn.className = isMatch
-          ? 'member-filter-btn px-3.5 py-1.5 rounded-xl bg-navy text-white text-xs font-bold cursor-pointer'
-          : 'member-filter-btn px-3.5 py-1.5 rounded-xl bg-white text-navy border border-peanut-light text-xs font-bold cursor-pointer';
+          ? "member-filter-btn px-3.5 py-1.5 rounded-xl bg-navy text-white text-xs font-bold cursor-pointer"
+          : "member-filter-btn px-3.5 py-1.5 rounded-xl bg-white text-navy border border-peanut-light text-xs font-bold cursor-pointer";
       });
       renderMemberDirectory(filter);
     }
 
     function getRoleBadgeClass(role) {
-      if (role === '教祖') return 'bg-amber-400 text-navy-dark';
-      if (role === '副教祖') return 'bg-indigo-100 text-indigo-800';
-      return 'bg-peanut-sand text-peanut-deep';
+      if (role === "教祖") return "bg-amber-400 text-navy-dark";
+      if (role === "副教祖") return "bg-indigo-100 text-indigo-800";
+      return "bg-peanut-sand text-peanut-deep";
     }
 
     /* =========================================================================
        10. PEANUT STUDIO (#/studio)
     ========================================================================= */
-    let studioVariant = 'santa';
-    let studioColor = '#DC2626';
+    let studioVariant = "santa";
+    let studioColor = "#DC2626";
 
     const STUDIO_VARIANTS = [
-      { id: 'classic', label: '經典肚兜' },
-      { id: 'santa', label: '聖誕老公公' },
-      { id: 'sprout', label: '嫩芽抱花生' },
-      { id: 'cosmic', label: '宇宙太空人' },
-      { id: 'esg', label: 'ESG 綠葉' },
-      { id: 'myaku', label: 'VIP 脈脈聯名' }
+      { id: "classic", label: "經典肚兜" },
+      { id: "santa", label: "聖誕老公公" },
+      { id: "sprout", label: "嫩芽抱花生" },
+      { id: "cosmic", label: "宇宙太空人" },
+      { id: "esg", label: "ESG 綠葉" },
+      { id: "myaku", label: "VIP 脈脈聯名" }
     ];
 
-    const STUDIO_COLORS = ['#6B8E55', '#DC2626', '#4F46E5', '#F59E0B', '#EC4899', '#0EA5E9', '#1E293B', '#FFFFFF'];
+    const STUDIO_COLORS = ["#6B8E55", "#DC2626", "#4F46E5", "#F59E0B", "#EC4899", "#0EA5E9", "#1E293B", "#FFFFFF"];
 
     function renderUniverseStudio() {
-      document.getElementById('universe-preview-mascot').innerHTML = renderPeanutoSVG(studioVariant, studioColor, false);
+      document.getElementById("universe-preview-mascot").innerHTML = renderPeanutoSVG(studioVariant, studioColor, false);
       const found = STUDIO_VARIANTS.find(v => v.id === studioVariant);
-      document.getElementById('universe-preview-label').textContent = `Peanuto · ${found ? found.label : '訂製款'}`;
+      document.getElementById("universe-preview-label").textContent = `Peanuto · ${found ? found.label : "訂製款"}`;
 
-      document.getElementById('universe-variant-btns').innerHTML = STUDIO_VARIANTS.map(v => `
-        <button type="button" onclick="selectStudioVariant('${v.id}')" class="px-3 py-2.5 rounded-xl text-xs font-black border transition-all cursor-pointer ${studioVariant === v.id ? 'bg-navy text-white border-navy shadow-sm' : 'bg-peanut-cream text-navy border-peanut-light hover:border-peanut-caramel'}">
+      document.getElementById("universe-variant-btns").innerHTML = STUDIO_VARIANTS.map(v => `
+        <button type="button" onclick="selectStudioVariant('${v.id}')" class="px-3 py-2.5 rounded-xl text-xs font-black border transition-all cursor-pointer ${studioVariant === v.id ? "bg-navy text-white border-navy shadow-sm" : "bg-peanut-cream text-navy border-peanut-light hover:border-peanut-caramel"}">
           ${v.label}
         </button>
-      `).join('');
+      `).join("");
 
-      document.getElementById('universe-color-btns').innerHTML = STUDIO_COLORS.map(c => `
-        <button type="button" onclick="selectStudioColor('${c}')" style="background:${c}" class="w-9 h-9 rounded-full border-2 shadow-sm transition-transform cursor-pointer ${studioColor === c ? 'scale-110 border-navy ring-2 ring-peanut-caramel' : 'border-slate-300'}" aria-label="選擇顏色 ${c}"></button>
-      `).join('');
+      document.getElementById("universe-color-btns").innerHTML = STUDIO_COLORS.map(c => `
+        <button type="button" onclick="selectStudioColor('${c}')" style="background:${c}" class="w-9 h-9 rounded-full border-2 shadow-sm transition-transform cursor-pointer ${studioColor === c ? "scale-110 border-navy ring-2 ring-peanut-caramel" : "border-slate-300"}" aria-label="選擇顏色 ${c}"></button>
+      `).join("");
     }
 
     function selectStudioVariant(v) {
@@ -1528,14 +2261,14 @@
     async function saveStudioLookToProfile() {
       const member = getLoggedInMember();
       if (!member) {
-        showToast('請先登入會員再套用造型！', 'warning');
-        navigateTo('#/login');
+        showToast("請先登入會員再套用造型！", "warning");
+        navigateTo("#/login");
         return;
       }
       const prof = getMemberProfile(member.account);
-      if (!prof.unlockedSkins.includes(studioVariant) && studioVariant !== 'sprout') {
-        showToast('你尚未在兌換所解鎖此造型，請先前往會員專區兌換！', 'warning');
-        navigateTo('#/login');
+      if (!prof.unlockedSkins.includes(studioVariant) && studioVariant !== "sprout") {
+        showToast("你尚未在兌換所解鎖此造型，請先前往會員專區兌換！", "warning");
+        navigateTo("#/login");
         return;
       }
       await mutateMemberProfile(member.account, p => {
@@ -1543,48 +2276,49 @@
         p.equippedBand = studioColor;
         return p;
       });
-      showToast('✨ 已更新你的專屬信徒證頭像！');
+      showToast("✨ 已更新你的專屬信徒證頭像！");
     }
 
     /* =========================================================================
        11. AUTHENTICATION, DAILY 3-IN-1 CHALLENGE, LEADERBOARD & WISHES
     ========================================================================= */
     function renderLoginQuickChips() {
-      const chipsBox = document.getElementById('login-quick-chips');
+      const chipsBox = document.getElementById("login-quick-chips");
       if (!chipsBox) return;
       chipsBox.innerHTML = getMembersList().map(m => `
         <button type="button" onclick="quickFillAccount('${escapeHTML(m.account)}')" class="px-2.5 py-1 rounded-lg bg-peanut-cream hover:bg-peanut-sand border border-peanut-light text-[11px] font-bold text-navy cursor-pointer">
           ${escapeHTML(m.name)}
         </button>
-      `).join('');
+      `).join("");
     }
 
     function quickFillAccount(acc) {
-      document.getElementById('login-account').value = acc;
-      document.getElementById('login-password').value = '';
-      document.getElementById('login-password').focus();
-      document.getElementById('login-error-msg').classList.add('hidden');
+      document.getElementById("login-account").value = acc;
+      document.getElementById("login-password").value = "";
+      document.getElementById("login-password").focus();
+      document.getElementById("login-error-msg").classList.add("hidden");
     }
 
     function handleMemberLogin(e) {
       e.preventDefault();
-      let rawAcc = document.getElementById('login-account').value.trim().toLowerCase();
-      const rawPw = document.getElementById('login-password').value.trim();
-      const errBox = document.getElementById('login-error-msg');
+      let rawAcc = document.getElementById("login-account").value.trim().toLowerCase();
+      const rawPw = document.getElementById("login-password").value.trim();
+      const errBox = document.getElementById("login-error-msg");
 
-      if (rawAcc && !rawAcc.includes('@')) {
-        rawAcc = rawAcc + '@pnts';
+      if (rawAcc && !rawAcc.includes("@")) {
+        rawAcc = rawAcc + "@pnts";
       }
 
-      const matched = getMembersList().find(m => m.account.toLowerCase() === rawAcc && m.password === rawPw);
+      const matched = getMembersList().find(m => m.account.toLowerCase() === rawAcc && String(m.password).trim() === rawPw);
       if (!matched) {
-        errBox.textContent = '❌ 帳號或密碼錯誤，請確認 @pnts 帳號與通行密碼後再試一次。';
-        errBox.classList.remove('hidden');
+        errBox.textContent = "❌ 帳號或密碼錯誤，請確認 @pnts 帳號與通行密碼後再試一次。";
+        errBox.classList.remove("hidden");
         return;
       }
 
-      errBox.classList.add('hidden');
+      errBox.classList.add("hidden");
       currentSessionAccount = matched.account;
+      safeSetStorage("ipo_session_acc", matched.account);
       syncHeaderAuth();
       refreshMemberPage();
       renderChristmasBillboard();
@@ -1594,14 +2328,16 @@
     function handleMemberLogout() {
       closeChallengeArena();
       currentSessionAccount = null;
+      safeSetStorage("ipo_session_acc", "");
       syncHeaderAuth();
       refreshMemberPage();
       renderChristmasBillboard();
-      showToast('已安全登出花生教會員系統');
+      showToast("已安全登出花生教會員系統");
     }
 
     function syncHeaderAuth() {
-      const btn = document.getElementById('header-auth-btn');
+      const btn = document.getElementById("header-auth-btn");
+      if (!btn) return;
       const member = getLoggedInMember();
       if (member) {
         const prof = getMemberProfile(member.account);
@@ -1613,47 +2349,47 @@
 
     function refreshMemberPage() {
       const member = getLoggedInMember();
-      const outView = document.getElementById('member-logged-out-view');
-      const inView = document.getElementById('member-logged-in-view');
+      const outView = document.getElementById("member-logged-out-view");
+      const inView = document.getElementById("member-logged-in-view");
+      if (!outView || !inView) return;
 
       if (!member) {
-        outView.classList.remove('hidden');
-        inView.classList.add('hidden');
+        outView.classList.remove("hidden");
+        inView.classList.add("hidden");
         return;
       }
 
-      outView.classList.add('hidden');
-      inView.classList.remove('hidden');
+      outView.classList.add("hidden");
+      inView.classList.remove("hidden");
 
       const prof = getMemberProfile(member.account);
-      document.getElementById('card-role-badge').textContent = member.role;
-      document.getElementById('card-member-name').textContent = member.name;
-      document.getElementById('card-member-account').textContent = member.account;
-      document.getElementById('card-member-dept').textContent = member.dept ? `🏅 幹部職責：${member.dept}` : '';
-      document.getElementById('card-points-value').textContent = prof.points;
-      document.getElementById('card-avatar-svg').innerHTML = renderPeanutoSVG(prof.equippedVariant || 'classic', prof.equippedBand || member.color, false);
+      document.getElementById("card-role-badge").textContent = member.role;
+      document.getElementById("card-member-name").textContent = member.name;
+      document.getElementById("card-member-account").textContent = member.account;
+      document.getElementById("card-member-dept").textContent = member.dept ? `🏅 幹部職責：${member.dept}` : "";
+      document.getElementById("card-points-value").textContent = prof.points;
+      document.getElementById("card-avatar-svg").innerHTML = renderPeanutoSVG(prof.equippedVariant || "classic", prof.equippedBand || member.color, false);
 
-      // Daily 3-in-1 challenge status
       const today = getTodayStr();
       const completedToday = prof.lastChallengeDate === today;
-      const badge = document.getElementById('daily-challenge-status-badge');
-      const challengeNames = { memory: '花生翻牌', whack: '打花生', sequence: '數字順序' };
+      const badge = document.getElementById("daily-challenge-status-badge");
+      const challengeNames = { memory: "花生翻牌", whack: "打花生", sequence: "數字順序" };
 
       if (completedToday) {
-        badge.textContent = `✓ 今日已完成：${challengeNames[prof.lastChallengeType] || '每日挑戰'} (+200P)`;
-        badge.className = 'px-3 py-1.5 rounded-xl bg-slate-200 text-slate-700 text-xs font-black';
+        badge.textContent = `✓ 今日已完成：${challengeNames[prof.lastChallengeType] || "每日挑戰"} (+200P)`;
+        badge.className = "px-3 py-1.5 rounded-xl bg-slate-200 text-slate-700 text-xs font-black";
       } else {
-        badge.textContent = '今日尚未完成挑戰（三選一）';
-        badge.className = 'px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-black';
+        badge.textContent = "今日尚未完成挑戰（三選一）";
+        badge.className = "px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-black";
       }
 
-      ['memory', 'whack', 'sequence'].forEach(type => {
+      ["memory", "whack", "sequence"].forEach(type => {
         const btn = document.getElementById(`btn-chal-${type}`);
         if (!btn) return;
         btn.disabled = completedToday;
-        btn.classList.toggle('opacity-50', completedToday);
-        btn.classList.toggle('cursor-not-allowed', completedToday);
-        btn.classList.toggle('cursor-pointer', !completedToday);
+        btn.classList.toggle("opacity-50", completedToday);
+        btn.classList.toggle("cursor-not-allowed", completedToday);
+        btn.classList.toggle("cursor-pointer", !completedToday);
       });
 
       renderLeaderboards();
@@ -1661,17 +2397,16 @@
       renderWishWall();
       syncHeaderAuth();
 
-      // Admin Panel check
-      const isAdmin = member.role === '教祖' || member.role === '副教祖';
-      const adminPanel = document.getElementById('admin-control-panel');
+      const isAdmin = member.role === "教祖" || member.role === "副教祖";
+      const adminPanel = document.getElementById("admin-control-panel");
       if (isAdmin) {
-        adminPanel.classList.remove('hidden');
+        adminPanel.classList.remove("hidden");
         applyGlobalAnnouncement();
         renderAdminScoreSelect();
         renderAdminRosterTable();
         renderChristmasBillboard();
       } else {
-        adminPanel.classList.add('hidden');
+        adminPanel.classList.add("hidden");
       }
     }
 
@@ -1689,17 +2424,17 @@
 
       if (me) {
         const myIdx = ranked.findIndex(r => r.account === me.account);
-        const rankEl = document.getElementById('card-rank-value');
-        if (rankEl) rankEl.textContent = myIdx >= 0 ? (myIdx + 1) : '-';
+        const rankEl = document.getElementById("card-rank-value");
+        if (rankEl) rankEl.textContent = myIdx >= 0 ? (myIdx + 1) : "-";
       }
 
-      const box = document.getElementById('member-leaderboard-list');
+      const box = document.getElementById("member-leaderboard-list");
       if (!box) return;
       box.innerHTML = ranked.map((r, idx) => {
-        const medal = idx === 0 && r.points > 0 ? '🥇' : idx === 1 && r.points > 0 ? '🥈' : idx === 2 && r.points > 0 ? '🥉' : `#${idx + 1}`;
+        const medal = idx === 0 && r.points > 0 ? "🥇" : idx === 1 && r.points > 0 ? "🥈" : idx === 2 && r.points > 0 ? "🥉" : `#${idx + 1}`;
         const isMe = me && me.account === r.account;
         return `
-          <div class="rounded-2xl px-4 py-3 flex items-center justify-between border ${isMe ? 'bg-amber-50 border-peanut-caramel' : 'bg-peanut-cream/70 border-peanut-light/60'}">
+          <div class="rounded-2xl px-4 py-3 flex items-center justify-between border ${isMe ? "bg-amber-50 border-peanut-caramel" : "bg-peanut-cream/70 border-peanut-light/60"}">
             <div class="flex items-center gap-3 min-w-0">
               <span class="w-8 text-center font-black text-sm text-navy shrink-0">${medal}</span>
               <div class="min-w-0">
@@ -1707,13 +2442,13 @@
                   <span class="font-black text-sm text-navy truncate">${escapeHTML(r.name)}</span>
                   <span class="px-1.5 py-0.5 rounded text-[10px] font-black ${getRoleBadgeClass(r.role)}">${escapeHTML(r.role)}</span>
                 </div>
-                <div class="text-[11px] text-slate-400">${r.doneToday ? '✅ 今日已完成挑戰' : '⏳ 今日尚未挑戰'}</div>
+                <div class="text-[11px] text-slate-400">${r.doneToday ? "✅ 今日已完成挑戰" : "⏳ 今日尚未挑戰"}</div>
               </div>
             </div>
-            <div class="font-black text-base ${r.points < 0 ? 'text-rose-600' : 'text-peanut-deep'} shrink-0">${r.points} P</div>
+            <div class="font-black text-base ${r.points < 0 ? "text-rose-600" : "text-peanut-deep"} shrink-0">${r.points} P</div>
           </div>
         `;
-      }).join('');
+      }).join("");
     }
 
     /* =========================================================================
@@ -1726,8 +2461,8 @@
         clearInterval(activeChallengeTimer);
         activeChallengeTimer = null;
       }
-      const arena = document.getElementById('challenge-arena');
-      if (arena) arena.classList.add('hidden');
+      const arena = document.getElementById("challenge-arena");
+      if (arena) arena.classList.add("hidden");
     }
 
     async function completeDailyChallengeWin(type, label) {
@@ -1754,43 +2489,43 @@
       const today = getTodayStr();
       const prof = getMemberProfile(member.account);
       if (prof.lastChallengeDate === today) {
-        showToast('你今天已經完成過一項挑戰囉，明天再來！', 'warning');
+        showToast("你今天已經完成過一項挑戰囉，明天再來！", "warning");
         return;
       }
 
       closeChallengeArena();
-      const arena = document.getElementById('challenge-arena');
-      const titleEl = document.getElementById('arena-title');
-      const subEl = document.getElementById('arena-subtitle');
-      const timerEl = document.getElementById('arena-timer');
-      const boardEl = document.getElementById('arena-board');
-      arena.classList.remove('hidden');
+      const arena = document.getElementById("challenge-arena");
+      const titleEl = document.getElementById("arena-title");
+      const subEl = document.getElementById("arena-subtitle");
+      const timerEl = document.getElementById("arena-timer");
+      const boardEl = document.getElementById("arena-board");
+      arena.classList.remove("hidden");
 
-      if (type === 'memory') {
-        titleEl.textContent = '✨ 花生翻牌挑戰';
-        subEl.textContent = '45 秒內配對全部 6 組圖案（共 12 張牌）';
+      if (type === "memory") {
+        titleEl.textContent = "✨ 花生翻牌挑戰";
+        subEl.textContent = "45 秒內配對全部 6 組圖案（共 12 張牌）";
         let timeLeft = 45;
         timerEl.textContent = timeLeft;
 
-        const icons = ['🥜', '🎄', '🌿', '🌌', '👑', '🎁'];
+        const icons = ["🥜", "🎄", "🌿", "🌌", "👑", "🎁"];
         const deck = [...icons, ...icons].sort(() => Math.random() - 0.5);
         let flipped = [];
         let matchedCount = 0;
         let lockBoard = false;
 
         boardEl.innerHTML = `<div class="grid grid-cols-4 gap-2.5 w-full max-w-sm" id="memory-grid"></div>`;
-        const grid = document.getElementById('memory-grid');
+        const grid = document.getElementById("memory-grid");
 
         deck.forEach((icon, idx) => {
-          const card = document.createElement('button');
-          card.type = 'button';
-          card.className = 'h-16 rounded-2xl bg-navy text-white font-black text-2xl flex items-center justify-center shadow-sm cursor-pointer transition-all';
-          card.textContent = '?';
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = "h-16 rounded-2xl bg-navy text-white font-black text-2xl flex items-center justify-center shadow-sm cursor-pointer transition-all";
+          card.textContent = "?";
           card.onclick = () => {
-            if (lockBoard || card.dataset.matched === '1' || flipped.includes(idx)) return;
+            if (lockBoard || card.dataset.matched === "1" || flipped.includes(idx)) return;
             card.textContent = icon;
-            card.classList.remove('bg-navy', 'text-white');
-            card.classList.add('bg-white', 'border-2', 'border-peanut-caramel');
+            card.classList.remove("bg-navy", "text-white");
+            card.classList.add("bg-white", "border-2", "border-peanut-caramel");
             flipped.push(idx);
 
             if (flipped.length === 2) {
@@ -1799,22 +2534,22 @@
               const c1 = grid.children[i1];
               const c2 = grid.children[i2];
               if (deck[i1] === deck[i2]) {
-                c1.dataset.matched = '1';
-                c2.dataset.matched = '1';
-                c1.classList.add('bg-emerald-100', 'border-emerald-500');
-                c2.classList.add('bg-emerald-100', 'border-emerald-500');
+                c1.dataset.matched = "1";
+                c2.dataset.matched = "1";
+                c1.classList.add("bg-emerald-100", "border-emerald-500");
+                c2.classList.add("bg-emerald-100", "border-emerald-500");
                 matchedCount += 1;
                 flipped = [];
                 lockBoard = false;
                 if (matchedCount === 6) {
-                  completeDailyChallengeWin('memory', '花生翻牌');
+                  completeDailyChallengeWin("memory", "花生翻牌");
                 }
               } else {
                 setTimeout(() => {
-                  c1.textContent = '?';
-                  c2.textContent = '?';
-                  c1.className = 'h-16 rounded-2xl bg-navy text-white font-black text-2xl flex items-center justify-center shadow-sm cursor-pointer transition-all';
-                  c2.className = 'h-16 rounded-2xl bg-navy text-white font-black text-2xl flex items-center justify-center shadow-sm cursor-pointer transition-all';
+                  c1.textContent = "?";
+                  c2.textContent = "?";
+                  c1.className = "h-16 rounded-2xl bg-navy text-white font-black text-2xl flex items-center justify-center shadow-sm cursor-pointer transition-all";
+                  c2.className = "h-16 rounded-2xl bg-navy text-white font-black text-2xl flex items-center justify-center shadow-sm cursor-pointer transition-all";
                   flipped = [];
                   lockBoard = false;
                 }, 550);
@@ -1829,35 +2564,35 @@
           timerEl.textContent = timeLeft;
           if (timeLeft <= 0) {
             closeChallengeArena();
-            showToast('⏰ 時間到！可重新挑戰或改選其他項目', 'warning');
+            showToast("⏰ 時間到！可重新挑戰或改選其他項目", "warning");
           }
         }, 1000);
       }
 
-      else if (type === 'whack') {
-        titleEl.textContent = '⚡ 打花生挑戰';
-        subEl.textContent = '20 秒內點中 12 顆冒出來的花生（已點中：0 / 12）';
+      else if (type === "whack") {
+        titleEl.textContent = "⚡ 打花生挑戰";
+        subEl.textContent = "20 秒內點中 12 顆冒出來的花生（已點中：0 / 12）";
         let timeLeft = 20;
         let hits = 0;
         let activeHole = -1;
         timerEl.textContent = timeLeft;
 
         boardEl.innerHTML = `<div class="grid grid-cols-3 gap-3 w-full max-w-xs" id="whack-grid"></div>`;
-        const grid = document.getElementById('whack-grid');
+        const grid = document.getElementById("whack-grid");
 
         for (let i = 0; i < 9; i++) {
-          const hole = document.createElement('button');
-          hole.type = 'button';
-          hole.className = 'h-16 rounded-2xl bg-peanut-sand border-2 border-peanut-light text-2xl flex items-center justify-center font-black cursor-pointer transition-transform active:scale-95';
-          hole.textContent = '🕳️';
+          const hole = document.createElement("button");
+          hole.type = "button";
+          hole.className = "h-16 rounded-2xl bg-peanut-sand border-2 border-peanut-light text-2xl flex items-center justify-center font-black cursor-pointer transition-transform active:scale-95";
+          hole.textContent = "🕳️";
           hole.onclick = () => {
             if (activeHole === i) {
               hits += 1;
               activeHole = -1;
-              hole.textContent = '💥';
+              hole.textContent = "💥";
               subEl.textContent = `20 秒內點中 12 顆冒出來的花生（已點中：${hits} / 12）`;
               if (hits >= 12) {
-                completeDailyChallengeWin('whack', '打花生');
+                completeDailyChallengeWin("whack", "打花生");
               }
             }
           };
@@ -1866,20 +2601,20 @@
 
         const spawnPeanut = () => {
           Array.from(grid.children).forEach(el => {
-            el.textContent = '🕳️';
-            el.classList.remove('bg-amber-300', 'border-amber-600');
+            el.textContent = "🕳️";
+            el.classList.remove("bg-amber-300", "border-amber-600");
           });
           activeHole = Math.floor(Math.random() * 9);
           const target = grid.children[activeHole];
           if (target) {
-            target.textContent = '🥜';
-            target.classList.add('bg-amber-300', 'border-amber-600');
+            target.textContent = "🥜";
+            target.classList.add("bg-amber-300", "border-amber-600");
           }
         };
 
         spawnPeanut();
         const hopTimer = setInterval(() => {
-          if (!document.getElementById('whack-grid')) {
+          if (!document.getElementById("whack-grid")) {
             clearInterval(hopTimer);
             return;
           }
@@ -1892,40 +2627,40 @@
           if (timeLeft <= 0) {
             clearInterval(hopTimer);
             closeChallengeArena();
-            showToast('⏰ 時間到！可重新挑戰或改選其他項目', 'warning');
+            showToast("⏰ 時間到！可重新挑戰或改選其他項目", "warning");
           }
         }, 1000);
       }
 
-      else if (type === 'sequence') {
-        titleEl.textContent = '🚩 數字順序挑戰';
-        subEl.textContent = '15 秒內依序點完 1 到 12（下一個數字：1）';
+      else if (type === "sequence") {
+        titleEl.textContent = "🚩 數字順序挑戰";
+        subEl.textContent = "15 秒內依序點完 1 到 12（下一個數字：1）";
         let timeLeft = 15;
         let nextNum = 1;
         timerEl.textContent = timeLeft;
 
         const nums = Array.from({ length: 12 }, (_, i) => i + 1).sort(() => Math.random() - 0.5);
         boardEl.innerHTML = `<div class="grid grid-cols-4 gap-2.5 w-full max-w-sm" id="seq-grid"></div>`;
-        const grid = document.getElementById('seq-grid');
+        const grid = document.getElementById("seq-grid");
 
         nums.forEach(n => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'h-14 rounded-2xl bg-white border-2 border-peanut-caramel text-navy font-black text-lg shadow-sm hover:bg-amber-100 cursor-pointer transition-all';
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "h-14 rounded-2xl bg-white border-2 border-peanut-caramel text-navy font-black text-lg shadow-sm hover:bg-amber-100 cursor-pointer transition-all";
           btn.textContent = n;
           btn.onclick = () => {
             if (n === nextNum) {
               btn.disabled = true;
-              btn.className = 'h-14 rounded-2xl bg-emerald-500 text-white font-black text-lg shadow-inner';
+              btn.className = "h-14 rounded-2xl bg-emerald-500 text-white font-black text-lg shadow-inner";
               nextNum += 1;
               if (nextNum > 12) {
-                completeDailyChallengeWin('sequence', '數字順序');
+                completeDailyChallengeWin("sequence", "數字順序");
               } else {
                 subEl.textContent = `15 秒內依序點完 1 到 12（下一個數字：${nextNum}）`;
               }
             } else {
-              btn.classList.add('bg-rose-200');
-              setTimeout(() => btn.classList.remove('bg-rose-200'), 220);
+              btn.classList.add("bg-rose-200");
+              setTimeout(() => btn.classList.remove("bg-rose-200"), 220);
             }
           };
           grid.appendChild(btn);
@@ -1936,19 +2671,19 @@
           timerEl.textContent = timeLeft;
           if (timeLeft <= 0) {
             closeChallengeArena();
-            showToast('⏰ 時間到！可重新挑戰或改選其他項目', 'warning');
+            showToast("⏰ 時間到！可重新挑戰或改選其他項目", "warning");
           }
         }, 1000);
       }
     }
 
     function renderSkinShop(prof) {
-      const box = document.getElementById('member-skin-shop');
+      const box = document.getElementById("member-skin-shop");
       box.innerHTML = SKIN_SHOP.map(skin => {
         const unlocked = prof.unlockedSkins.includes(skin.id);
         const equipped = prof.equippedVariant === skin.variant;
         return `
-          <div class="rounded-2xl bg-peanut-cream p-3.5 border ${equipped ? 'border-navy ring-2 ring-peanut-caramel' : 'border-peanut-light'} flex items-center gap-3">
+          <div class="rounded-2xl bg-peanut-cream p-3.5 border ${equipped ? "border-navy ring-2 ring-peanut-caramel" : "border-peanut-light"} flex items-center gap-3">
             <div class="w-14 h-14 rounded-xl bg-white p-1 shrink-0">${renderPeanutoSVG(skin.variant, skin.band, false)}</div>
             <div class="min-w-0 flex-1">
               <div class="font-black text-xs text-navy truncate">${skin.name}</div>
@@ -1964,7 +2699,7 @@
             </div>
           </div>
         `;
-      }).join('');
+      }).join("");
     }
 
     async function redeemShopSkin(skinId) {
@@ -1974,7 +2709,7 @@
       if (!skin) return;
       const prof = getMemberProfile(member.account);
       if (prof.points < skin.price) {
-        showToast(`點數不足（需要 ${skin.price}P），快去完成每日挑戰吧！`, 'warning');
+        showToast(`點數不足（需要 ${skin.price}P），快去完成每日挑戰吧！`, "warning");
         return;
       }
       await mutateMemberProfile(member.account, p => {
@@ -2002,13 +2737,12 @@
       showToast(`✨ 已換上「${skin.name}」！`);
     }
 
-    // Wish Wall (Google Sheet synced, zero pre-filled fake wishes, supports Delete)
     function renderWishWall() {
       const wishes = cloudWishes;
-      const box = document.getElementById('wish-wall-container');
+      const box = document.getElementById("wish-wall-container");
       if (!box) return;
       const me = getLoggedInMember();
-      const isAdmin = me && (me.role === '教祖' || me.role === '副教祖');
+      const isAdmin = me && (me.role === "教祖" || me.role === "副教祖");
 
       box.innerHTML = wishes.length === 0
         ? '<p class="text-xs text-slate-400 py-3 text-center">目前尚無任何祈願留言，成為第一位留下真實心聲的信徒吧！</p>'
@@ -2027,22 +2761,22 @@
                 <button type="button" onclick="likeWish('${escapeHTML(w.id)}')" class="px-3 py-1.5 rounded-xl bg-white border border-peanut-light hover:border-peanut-caramel text-xs font-black text-peanut-deep cursor-pointer">
                   🥜 ${w.likes || 0}
                 </button>
-                ${canDelete ? `<button type="button" onclick="confirmDeleteWish('${escapeHTML(w.id)}')" class="px-2.5 py-1.5 rounded-xl bg-rose-100 hover:bg-rose-200 text-rose-700 text-xs font-black cursor-pointer" title="刪除留言">🗑️</button>` : ''}
+                ${canDelete ? `<button type="button" onclick="confirmDeleteWish('${escapeHTML(w.id)}')" class="px-2.5 py-1.5 rounded-xl bg-rose-100 hover:bg-rose-200 text-rose-700 text-xs font-black cursor-pointer" title="刪除留言">🗑️</button>` : ""}
               </div>
             </div>
           `;
-        }).join('');
+        }).join("");
     }
 
     async function postNewWish() {
       const member = getLoggedInMember();
       if (!member) return;
-      const input = document.getElementById('wish-input');
+      const input = document.getElementById("wish-input");
       const text = input.value.trim();
       if (!text) return;
 
       const entry = {
-        id: 'wish_' + Date.now(),
+        id: "wish_" + Date.now(),
         account: member.account,
         role: member.role,
         name: member.name,
@@ -2052,9 +2786,9 @@
       };
       cloudWishes = [entry, ...cloudWishes];
       renderWishWall();
-      input.value = '';
-      await pushToGoogleSheet({ action: 'addWish', entry });
-      showToast('🙏 祈願已發布至 804 花生祈願牆！');
+      input.value = "";
+      await pushToGoogleSheet({ action: "addWish", entry });
+      showToast("🙏 祈願已發布至 804 花生祈願牆！");
     }
 
     async function likeWish(id) {
@@ -2063,13 +2797,13 @@
         return w;
       });
       renderWishWall();
-      await pushToGoogleSheet({ action: 'likeWish', id });
+      await pushToGoogleSheet({ action: "likeWish", id });
     }
 
     function confirmDeleteWish(id) {
       openConfirmModal(
-        '刪除祈願牆留言',
-        '確定要刪除這則花生祈願牆留言嗎？刪除後將同步從雲端移除。',
+        "刪除祈願牆留言",
+        "確定要刪除這則花生祈願牆留言嗎？刪除後將同步從雲端移除。",
         () => deleteWish(id)
       );
     }
@@ -2077,56 +2811,56 @@
     async function deleteWish(id) {
       cloudWishes = cloudWishes.filter(w => String(w.id) !== String(id));
       renderWishWall();
-      await pushToGoogleSheet({ action: 'deleteWish', id });
-      showToast('🗑️ 已刪除該則祈願牆留言', 'warning');
+      await pushToGoogleSheet({ action: "deleteWish", id });
+      showToast("🗑️ 已刪除該則祈願牆留言", "warning");
     }
 
     /* =========================================================================
        13. ADMIN PANEL ACTIONS (CUSTOM +/- POINTS & ROSTER MANAGEMENT)
     ========================================================================= */
     async function saveAdminAnnouncement() {
-      const val = document.getElementById('admin-banner-textarea').value.trim();
+      const val = document.getElementById("admin-banner-textarea").value.trim();
       if (!val) return;
       cloudAnnouncement = val;
       applyGlobalAnnouncement();
-      await pushToGoogleSheet({ action: 'setAnnouncement', announcement: val });
-      showToast('📢 已同步更新全站即時公告！');
+      await pushToGoogleSheet({ action: "setAnnouncement", announcement: val });
+      showToast("📢 已同步更新全站即時公告！");
     }
 
     async function resetAdminAnnouncement() {
       cloudAnnouncement = DEFAULT_ANNOUNCEMENT;
       applyGlobalAnnouncement();
-      await pushToGoogleSheet({ action: 'setAnnouncement', announcement: DEFAULT_ANNOUNCEMENT });
-      showToast('已恢復預設公告文字');
+      await pushToGoogleSheet({ action: "setAnnouncement", announcement: DEFAULT_ANNOUNCEMENT });
+      showToast("已恢復預設公告文字");
     }
 
     function renderAdminScoreSelect() {
-      const sel = document.getElementById('admin-score-member-select');
+      const sel = document.getElementById("admin-score-member-select");
       if (!sel) return;
       const prevVal = sel.value;
       sel.innerHTML = getMembersList().map(m => {
         const p = getMemberProfile(m.account);
         return `<option value="${escapeHTML(m.account)}">${escapeHTML(m.name)} (${escapeHTML(m.role)}) — 目前 ${p.points}P</option>`;
-      }).join('');
+      }).join("");
       if (prevVal && getMembersList().some(m => m.account === prevVal)) {
         sel.value = prevVal;
       }
     }
 
     function setAdminScoreDelta(val) {
-      const input = document.getElementById('admin-score-delta-input');
+      const input = document.getElementById("admin-score-delta-input");
       if (input) input.value = val;
     }
 
     async function applyCustomScoreAdjustment() {
-      const sel = document.getElementById('admin-score-member-select');
-      const input = document.getElementById('admin-score-delta-input');
+      const sel = document.getElementById("admin-score-member-select");
+      const input = document.getElementById("admin-score-delta-input");
       if (!sel || !input) return;
 
       const targetAcc = sel.value;
       const delta = parseInt(input.value, 10);
       if (!targetAcc || isNaN(delta) || delta === 0) {
-        showToast('請輸入有效的非零整數（例如 50 或 -30）！', 'warning');
+        showToast("請輸入有效的非零整數（例如 50 或 -30）！", "warning");
         return;
       }
 
@@ -2142,7 +2876,7 @@
     }
 
     function renderAdminRosterTable() {
-      const tbody = document.getElementById('admin-roster-tbody');
+      const tbody = document.getElementById("admin-roster-tbody");
       if (!tbody) return;
       const members = getMembersList();
 
@@ -2159,20 +2893,20 @@
             </td>
             <td class="py-2.5 px-2">
               <select id="edit-role-${idx}" class="px-2 py-1.5 rounded-lg bg-peanut-cream border border-peanut-light font-bold text-navy">
-                <option value="教祖" ${m.role === '教祖' ? 'selected' : ''}>教祖</option>
-                <option value="副教祖" ${m.role === '副教祖' ? 'selected' : ''}>副教祖</option>
-                <option value="信徒" ${m.role === '信徒' ? 'selected' : ''}>信徒</option>
+                <option value="教祖" ${m.role === "教祖" ? "selected" : ""}>教祖</option>
+                <option value="副教祖" ${m.role === "副教祖" ? "selected" : ""}>副教祖</option>
+                <option value="信徒" ${m.role === "信徒" ? "selected" : ""}>信徒</option>
               </select>
             </td>
             <td class="py-2.5 px-2">
               <select id="edit-dept-${idx}" class="px-2 py-1.5 rounded-lg bg-peanut-cream border border-peanut-light font-bold text-navy">
-                <option value="" ${!m.dept ? 'selected' : ''}>無</option>
-                <option value="活動組" ${m.dept === '活動組' ? 'selected' : ''}>活動組</option>
-                <option value="資訊組" ${m.dept === '資訊組' ? 'selected' : ''}>資訊組</option>
-                <option value="供品組" ${m.dept === '供品組' ? 'selected' : ''}>供品組</option>
+                <option value="" ${!m.dept ? "selected" : ""}>無</option>
+                <option value="活動組" ${m.dept === "活動組" ? "selected" : ""}>活動組</option>
+                <option value="資訊組" ${m.dept === "資訊組" ? "selected" : ""}>資訊組</option>
+                <option value="供品組" ${m.dept === "供品組" ? "selected" : ""}>供品組</option>
               </select>
             </td>
-            <td class="py-2.5 px-2 text-right font-black ${prof.points < 0 ? 'text-rose-600' : 'text-peanut-deep'}">
+            <td class="py-2.5 px-2 text-right font-black ${prof.points < 0 ? "text-rose-600" : "text-peanut-deep"}">
               ${prof.points} P
             </td>
             <td class="py-2.5 px-2 text-right whitespace-nowrap space-x-1">
@@ -2185,27 +2919,27 @@
             </td>
           </tr>
         `;
-      }).join('');
+      }).join("");
     }
 
     async function handleAddMember(e) {
       e.preventDefault();
-      const name = document.getElementById('new-member-name').value.trim();
-      let account = document.getElementById('new-member-account').value.trim().toLowerCase();
-      const password = document.getElementById('new-member-password').value.trim();
-      const role = document.getElementById('new-member-role').value;
-      const dept = document.getElementById('new-member-dept').value;
+      const name = document.getElementById("new-member-name").value.trim();
+      let account = document.getElementById("new-member-account").value.trim().toLowerCase();
+      const password = document.getElementById("new-member-password").value.trim();
+      const role = document.getElementById("new-member-role").value;
+      const dept = document.getElementById("new-member-dept").value;
 
       if (!name || !account || !password) return;
-      if (!account.includes('@')) account += '@pnts';
+      if (!account.includes("@")) account += "@pnts";
 
       const currentList = [...getMembersList()];
       if (currentList.some(m => m.account.toLowerCase() === account)) {
-        showToast('此帳號已存在於名單中！', 'warning');
+        showToast("此帳號已存在於名單中！", "warning");
         return;
       }
 
-      const palette = ['#6B8E55', '#748CAB', '#F4A261', '#2A9D8F', '#9B5DE5', '#E76F51', '#457B9D'];
+      const palette = ["#6B8E55", "#748CAB", "#F4A261", "#2A9D8F", "#9B5DE5", "#E76F51", "#457B9D"];
       const color = palette[currentList.length % palette.length];
 
       currentList.push({
@@ -2215,12 +2949,12 @@
         password,
         dept,
         color,
-        variant: 'classic'
+        variant: "classic"
       });
 
-      document.getElementById('new-member-name').value = '';
-      document.getElementById('new-member-account').value = '';
-      document.getElementById('new-member-password').value = '';
+      document.getElementById("new-member-name").value = "";
+      document.getElementById("new-member-account").value = "";
+      document.getElementById("new-member-password").value = "";
 
       await syncRosterToCloud(currentList);
       renderAdminScoreSelect();
@@ -2238,7 +2972,7 @@
       const newDept = document.getElementById(`edit-dept-${idx}`).value;
 
       if (!newName || !newPw) {
-        showToast('名字與密碼不可為空白！', 'warning');
+        showToast("名字與密碼不可為空白！", "warning");
         return;
       }
 
@@ -2258,11 +2992,11 @@
       const target = currentList[idx];
       if (!target) return;
       if (target.account === currentSessionAccount) {
-        showToast('無法刪除目前正在登入操作後台的自己！', 'warning');
+        showToast("無法刪除目前正在登入操作後台的自己！", "warning");
         return;
       }
       openConfirmModal(
-        '刪除成員確認',
+        "刪除成員確認",
         `確定要將「${target.name} (${target.account})」從同學名單中移除嗎？`,
         () => deleteMemberAt(idx)
       );
@@ -2273,27 +3007,27 @@
       await syncRosterToCloud(currentList);
       renderAdminScoreSelect();
       refreshMemberPage();
-      showToast('🗑️ 已從名單中移除該成員', 'warning');
+      showToast("🗑️ 已從名單中移除該成員", "warning");
     }
 
     function restoreDefaultMembersConfirm() {
       openConfirmModal(
-        '還原預設 17 人名單',
-        '確定要將同學名單還原為最初的 17 位官方成員設定嗎？',
+        "還原預設 17 人名單",
+        "確定要將同學名單還原為最初的 17 位官方成員設定嗎？",
         async () => {
           const restored = DEFAULT_IPO_MEMBERS.map(m => ({ ...m }));
           await syncRosterToCloud(restored);
           renderAdminScoreSelect();
           refreshMemberPage();
-          showToast('↩ 已還原預設 17 人名單！');
+          showToast("↩ 已還原預設 17 人名單！");
         }
       );
     }
 
     function resetAllScoresConfirm() {
       openConfirmModal(
-        '全體點數歸零確認',
-        '確定要將全體成員點數與今日挑戰紀錄全部歸零嗎？',
+        "全體點數歸零確認",
+        "確定要將全體成員點數與今日挑戰紀錄全部歸零嗎？",
         () => resetAllScoresToZero()
       );
     }
@@ -2308,52 +3042,51 @@
       cloudEsgCount = 0;
 
       await pushToGoogleSheet({
-        action: 'resetAll',
+        action: "resetAll",
         profiles: resetMap
       });
 
       refreshMemberPage();
       renderEsgCount();
-      showToast('🔄 已將全體成員點數與計數歸零！', 'warning');
+      showToast("🔄 已將全體成員點數與計數歸零！", "warning");
     }
 
     /* =========================================================================
        14. INITIALIZATION ON WINDOW LOAD
     ========================================================================= */
     window.onload = function () {
-      document.getElementById('hero-santa-mascot').innerHTML = renderPeanutoSVG('santa', '#DC2626', false);
-      document.getElementById('hero-cosmic-mascot').innerHTML = renderPeanutoSVG('cosmic', '#6366F1', false);
-      document.getElementById('home-oracle-peanut').innerHTML = renderPeanutoSVG('sprout', '#6B8E55', false);
-      document.getElementById('xmas-card-mascot').innerHTML = renderPeanutoSVG('santa', '#DC2626', false);
-      document.getElementById('purpose-hero-mascot').innerHTML = renderPeanutoSVG('classic', '#D8A46F', false);
-      document.getElementById('login-mascot-box').innerHTML = renderPeanutoSVG('sprout', '#6B8E55', false);
+      document.getElementById("hero-santa-mascot").innerHTML = renderPeanutoSVG("santa", "#DC2626", false);
+      document.getElementById("hero-cosmic-mascot").innerHTML = renderPeanutoSVG("cosmic", "#6366F1", false);
+      document.getElementById("home-oracle-peanut").innerHTML = renderPeanutoSVG("sprout", "#6B8E55", false);
+      document.getElementById("xmas-card-mascot").innerHTML = renderPeanutoSVG("santa", "#DC2626", false);
+      document.getElementById("purpose-hero-mascot").innerHTML = renderPeanutoSVG("classic", "#D8A46F", false);
+      document.getElementById("login-mascot-box").innerHTML = renderPeanutoSVG("sprout", "#6B8E55", false);
 
       const galleryItems = [
-        { variant: 'classic', band: '#FFFFFF', label: 'Classic 白肚兜' },
-        { variant: 'sprout', band: '#6B8E55', label: 'Peanuto 嫩芽' },
-        { variant: 'santa', band: '#DC2626', label: 'Santa 聖誕限定' },
-        { variant: 'pumpkin', band: '#F97316', label: '2026 萬聖紀念' }
+        { variant: "classic", band: "#FFFFFF", label: "Classic 白肚兜" },
+        { variant: "sprout", band: "#6B8E55", label: "Peanuto 嫩芽" },
+        { variant: "santa", band: "#DC2626", label: "Santa 聖誕限定" },
+        { variant: "pumpkin", band: "#F97316", label: "2026 萬聖紀念" }
       ];
-      document.getElementById('home-mascot-gallery').innerHTML = galleryItems.map(item => `
+      document.getElementById("home-mascot-gallery").innerHTML = galleryItems.map(item => `
         <div class="rounded-2xl bg-peanut-cream p-3 text-center border border-peanut-light/70">
           <div class="w-16 h-16 mx-auto">${renderPeanutoSVG(item.variant, item.band, false)}</div>
           <div class="text-xs font-black text-navy mt-1.5">${item.label}</div>
         </div>
-      `).join('');
+      `).join("");
 
       renderLoginQuickChips();
       applyGlobalAnnouncement();
-      renderMemberDirectory('ALL');
+      renderMemberDirectory("ALL");
       renderChristmasBillboard();
       renderEsgCount();
       renderWishWall();
       renderUniverseStudio();
       syncHeaderAuth();
 
-      const initialHash = VALID_ROUTES.includes(window.location.hash) ? window.location.hash : '#/home';
+      const initialHash = VALID_ROUTES.includes(window.location.hash) ? window.location.hash : "#/home";
       renderRoute(initialHash);
 
-      // Connect to Google Sheet backend if configured
       initCloudConnection();
     };
   </script>
