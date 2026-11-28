@@ -8,7 +8,7 @@
     // =========================================================================
     // ★ 【全班雲端連線設定】請將你的 Google Apps Script (/exec) 網址貼在下方雙引號內：
     // =========================================================================
-    window.IPO_SHEET_URL = "https://script.google.com/macros/s/AKfycbwLkCcIquJhvcyfIwGm3VcIAx_5zkr9WTbnHN_6CLJnKt6tj9sWveh10AJNbkfNcWuu/exec";
+    window.IPO_SHEET_URL = "";
 
     // 若網址列帶有 ?sheet= 參數（一鍵連線分享網址），自動套用並記憶於該裝置
     (function() {
@@ -1587,6 +1587,8 @@
 
     let lastCloudErrorMsg = "";
     let syncTimerId = null;
+    let isWritingToCloud = false;
+    let lastWriteTimestamp = 0;
 
     const state = {
       route: "#/home",
@@ -1678,35 +1680,88 @@
 
     async function pushToCloud(payload) {
       const url = getActiveSheetUrl();
-      if (!url) return;
-      const encoded = encodeURIComponent(JSON.stringify(payload));
-
-      if (encoded.length < 3500) {
-        try {
-          const res = await fetchViaJsonp(url, "payload=" + encoded);
-          if (res && res.ok) {
-            lastCloudErrorMsg = "";
-            state.cloudStatus = "connected";
-            updateCloudSyncBadge();
-            setTimeout(function() { syncFromCloud(true); }, 600);
-            return;
-          }
-        } catch (err) {
-          console.warn("JSONP write fallback to POST:", err);
-        }
-      }
+      if (!url) return false;
+      isWritingToCloud = true;
+      lastWriteTimestamp = Date.now();
+      state.cloudStatus = "syncing";
+      updateCloudSyncBadge();
 
       try {
-        await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
-        });
-        setTimeout(function() { syncFromCloud(true); }, 1000);
-      } catch (e) {
-        lastCloudErrorMsg = "寫入試算表失敗：" + (e.message || String(e));
+        // 若是 saveMembers 且名單較多，自動分批寫入避免 URL 過長
+        if (payload && payload.action === "saveMembers" && Array.isArray(payload.members) && payload.members.length > 8) {
+          const chunkSize = 8;
+          for (let i = 0; i < payload.members.length; i += chunkSize) {
+            const chunk = payload.members.slice(i, i + chunkSize);
+            const batchPayload = {
+              action: "saveMembersBatch",
+              mode: i === 0 ? "replace" : "append",
+              members: chunk
+            };
+            const res = await fetchViaJsonp(url, "payload=" + encodeURIComponent(JSON.stringify(batchPayload)));
+            if (!res || !res.ok) {
+              throw new Error((res && res.error) ? res.error : "名單分批寫入失敗");
+            }
+          }
+          lastCloudErrorMsg = "";
+          state.cloudStatus = "connected";
+          updateCloudSyncBadge();
+          return true;
+        }
+
+        // 若是 upsertProfile / adjustPoints，精簡 dailyStaySeconds 只保留最近 14 天避免 URL 爆掉
+        const cleanPayload = JSON.parse(JSON.stringify(payload));
+        if (cleanPayload.profile && cleanPayload.profile.dailyStaySeconds) {
+          const keys = Object.keys(cleanPayload.profile.dailyStaySeconds).sort().slice(-14);
+          const trimmedStay = {};
+          keys.forEach(function(k) { trimmedStay[k] = cleanPayload.profile.dailyStaySeconds[k]; });
+          cleanPayload.profile.dailyStaySeconds = trimmedStay;
+        }
+        if (cleanPayload.profile && cleanPayload.profile.dailyEarnedPoints) {
+          const eKeys = Object.keys(cleanPayload.profile.dailyEarnedPoints).sort().slice(-14);
+          const trimmedEarned = {};
+          eKeys.forEach(function(k) { trimmedEarned[k] = cleanPayload.profile.dailyEarnedPoints[k]; });
+          cleanPayload.profile.dailyEarnedPoints = trimmedEarned;
+        }
+
+        const encoded = encodeURIComponent(JSON.stringify(cleanPayload));
+        const res = await fetchViaJsonp(url, "payload=" + encoded);
+        if (res && res.ok) {
+          lastCloudErrorMsg = "";
+          state.cloudStatus = "connected";
+          updateCloudSyncBadge();
+          return true;
+        } else {
+          throw new Error((res && res.error) ? res.error : "Google 試算表未回傳寫入成功（請確認已更新最新版 Code.gs 並部署新版本）");
+        }
+      } catch (err) {
+        lastCloudErrorMsg = "寫入試算表失敗：" + (err.message || String(err));
         state.cloudStatus = "error";
         updateCloudSyncBadge();
+        refreshCloudModalDiagnostic();
+        showToast("雲端儲存失敗！請點擊上方「雲端權限待確認」檢查部署版本", "error");
+        return false;
+      } finally {
+        isWritingToCloud = false;
+        lastWriteTimestamp = Date.now();
+      }
+    }
+
+    async function forcePushAllToCloud() {
+      const url = getActiveSheetUrl();
+      if (!url) {
+        showToast("尚未綁定試算表網址！", "error");
+        return;
+      }
+      showToast("正在將全部名單與個人點數強制寫入 Google 試算表...", "info");
+      const okMembers = await pushToCloud({ action: "saveMembers", members: state.members });
+      await pushToCloud({ action: "setAnnouncement", announcement: state.announcement });
+      const accounts = Object.keys(state.profiles);
+      for (let i = 0; i < accounts.length; i++) {
+        const acc = accounts[i];
+        await pushToCloud({ action: "upsertProfile", account: acc, profile: state.profiles[acc] });
+      }
+      if (okMembers && state.cloudStatus === "connected") {
+        showToast("已將全部資料成功寫入 Google 試算表！", "success");
       }
     }
 
@@ -2084,6 +2139,10 @@
         updateCloudSyncBadge();
         return;
       }
+      // 若正在寫入或剛寫入 4 秒內，跳過此次背景讀取以免覆蓋剛修改的資料
+      if (silent && (isWritingToCloud || (Date.now() - lastWriteTimestamp < 4000))) {
+        return;
+      }
       if (!silent) {
         state.cloudStatus = "syncing";
         updateCloudSyncBadge();
@@ -2275,14 +2334,20 @@
       const maxVal = Math.max.apply(null, valuesArray.concat([1]));
 
       el.innerHTML = valuesArray.map(function(val, idx) {
-        const ratio = val > 0 ? Math.max(0.18, val / maxVal) : 0.08;
-        const heightPx = Math.round(ratio * 124);
         const isToday = idx === todayIndex;
+        const pct = Math.max(8, Math.round((val / maxVal) * 100));
+        const barColor = isToday
+          ? "bg-gradient-to-t from-navy via-navy-light to-peanut-caramel shadow-md"
+          : "bg-peanut-caramel/65 hover:bg-peanut-caramel";
+        const labelColor = isToday ? "text-navy font-black" : "text-slate-500 font-bold";
+
         return `
-          <div class="flex flex-col items-center justify-end h-full">
-            <span class="text-xs sm:text-sm font-black text-navy mb-2">${val}</span>
-            <div class="w-9 sm:w-12 bg-navy rounded-t-2xl transition-all duration-500 ${isToday ? "ring-2 ring-peanut-caramel ring-offset-2 ring-offset-[#FDF8F0]" : ""}" style="height: ${heightPx}px;"></div>
-            <span class="text-xs font-bold ${isToday ? "text-navy font-black" : "text-slate-500"} mt-3">${labelsArray[idx]}</span>
+          <div class="flex flex-col items-center justify-end h-full gap-2 group">
+            <span class="text-[11px] font-black ${isToday ? "text-peanut-deep" : "text-slate-500"}">${val}</span>
+            <div class="w-full max-w-[34px] h-36 rounded-full bg-peanut-sand/70 p-1 flex items-end justify-center overflow-hidden">
+              <div class="w-full rounded-full transition-all duration-500 ${barColor}" style="height: ${pct}%"></div>
+            </div>
+            <span class="text-xs ${labelColor}">${escapeHtml(labelsArray[idx])}</span>
           </div>
         `;
       }).join("");
