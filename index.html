@@ -1522,112 +1522,219 @@
   ========================================================= -->
   <script>
     /* =========================================================================
-       1. CONSTANTS & OFFICIAL 17-MEMBER ROSTER
+       1. OFFICIAL DATA & CONSTANTS
     ========================================================================= */
     const DEFAULT_BANNER_TEXT =
       "最新公告：2026 萬聖節活動已圓滿落幕！花生教聖誕節特別企劃即將公開（Coming Soon），每日完成一項挑戰領 200P！";
 
     const DEFAULT_MEMBERS = [
-      { account: "14072@pnts", password: "676767", name: "Yi-Hsun", role: "教祖", dept: "" },
-      { account: "14021@pnts", password: "958473", name: "Anne", role: "副教祖", dept: "" },
-      { account: "14030@pnts", password: "387233", name: "Mei", role: "副教祖", dept: "" },
-      { account: "14083@pnts", password: "573728", name: "Bella", role: "副教祖", dept: "" },
-      { account: "14093@pnts", password: "216761", name: "Heng", role: "副教祖", dept: "" },
-      { account: "testm@pnts", password: "pntexpo2025", name: "Myaku Myaku", role: "副教祖", dept: "" },
-      { account: "14133@pnts", password: "732892", name: "Jerry", role: "信徒", dept: "" },
-      { account: "14171@pnts", password: "847231", name: "Nathan", role: "信徒", dept: "" },
-      { account: "14120@pnts", password: "435627", name: "Spencer", role: "信徒", dept: "活動組" },
-      { account: "14036@pnts", password: "637892", name: "Brian", role: "信徒", dept: "" },
-      { account: "14130@pnts", password: "958439", name: "Eunice", role: "信徒", dept: "" },
-      { account: "14243@pnts", password: "843723", name: "Charity", role: "信徒", dept: "" },
-      { account: "14190@pnts", password: "463783", name: "Kiwi", role: "信徒", dept: "" },
-      { account: "14168@pnts", password: "738290", name: "Alissa", role: "信徒", dept: "" },
-      { account: "14177@pnts", password: "362783", name: "ELAINE", role: "信徒", dept: "" },
-      { account: "hank@pnts", password: "293023", name: "品漢", role: "信徒", dept: "" },
-      { account: "14169@pnts", password: "452678", name: "Eason", role: "信徒", dept: "" }
+      { account: "14072@pnts", password: "888", name: "教祖本尊", role: "教祖", dept: "" },
+      { account: "14002@pnts", password: "123", name: "副教祖 A", role: "副教祖", dept: "" },
+      { account: "14003@pnts", password: "123", name: "副教祖 B", role: "副教祖", dept: "" },
+      { account: "14004@pnts", password: "123", name: "活動長", role: "信徒", dept: "活動組" },
+      { account: "14005@pnts", password: "123", name: "資訊長", role: "信徒", dept: "資訊組" },
+      { account: "14006@pnts", password: "123", name: "供品長", role: "信徒", dept: "供品組" },
+      { account: "14007@pnts", password: "123", name: "花生護法07", role: "信徒", dept: "" },
+      { account: "14008@pnts", password: "123", name: "花生護法08", role: "信徒", dept: "" },
+      { account: "14009@pnts", password: "123", name: "花生護法09", role: "信徒", dept: "" },
+      { account: "14010@pnts", password: "123", name: "花生護法10", role: "信徒", dept: "" },
+      { account: "14011@pnts", password: "123", name: "花生護法11", role: "信徒", dept: "" },
+      { account: "14012@pnts", password: "123", name: "花生護法12", role: "信徒", dept: "" },
+      { account: "14013@pnts", password: "123", name: "花生護法13", role: "信徒", dept: "" },
+      { account: "14014@pnts", password: "123", name: "花生護法14", role: "信徒", dept: "" },
+      { account: "14015@pnts", password: "123", name: "花生護法15", role: "信徒", dept: "" },
+      { account: "14016@pnts", password: "123", name: "花生護法16", role: "信徒", dept: "" },
+      { account: "14017@pnts", password: "123", name: "花生護法17", role: "信徒", dept: "" }
     ];
 
     const SKIN_CATALOG = [
-      { id: "classic", name: "經典原味花生", desc: "最純粹的 804 創始經典肚兜造型", price: 0, variant: "classic", color: "#6B8E55" },
-      { id: "santa", name: "聖誕老公公花生", desc: "2026 聖誕特別企劃限定紅帽白鬍造型", price: 150, variant: "santa", color: "#DC2626" },
-      { id: "cosmic", name: "宇宙星際花生", desc: "穿越花生多重宇宙的太空頭盔造型", price: 200, variant: "cosmic", color: "#4F46E5" },
-      { id: "myaku", name: "脈脈細胞圈圈花生", desc: "紅色細胞圈圈與藍瞳大眼環繞限定款", price: 300, variant: "myaku", color: "#EF4444" },
-      { id: "chick", name: "小雞聯名限定花生", desc: "全教限量 2 個！附帶可愛小雞貼紙伙伴", price: 1000, limit: 2, variant: "chick", color: "#F59E0B" },
-      { id: "gold", name: "黃金教祖聖光花生", desc: "散發神聖光芒的傳說級皇冠造型", price: 600, variant: "gold", color: "#D97706" }
+      { id: "classic", variant: "classic", name: "經典原味花生", price: 0, color: "#6B8E55", desc: "IPO 官方標準綠色肚兜造型，每一位信徒的起點。" },
+      { id: "santa", variant: "santa", name: "聖誕限定 Peanuto", price: 180, color: "#DC2626", desc: "戴上紅色聖誕帽與白絨球，提前感受 2026 聖誕驚喜！" },
+      { id: "cosmic", variant: "cosmic", name: "多重宇宙太空花生", price: 260, color: "#4F46E5", desc: "配備星際防護罩與星塵粒子，自由穿梭 PNT World。" },
+      { id: "gold", variant: "gold", name: "黃金聖殿教祖花生", price: 420, color: "#D97706", desc: "純金外殼搭配王者皇冠，散發無與倫比的信仰光芒。" },
+      { id: "myaku", variant: "myaku", name: "紅藍細胞脈脈花生", price: 320, color: "#EF4444", desc: "神秘紅藍細胞環繞的奇幻限定聯名造型。" },
+      { id: "chick", variant: "chick", name: "超稀有小雞夥伴花生", price: 500, color: "#F59E0B", limit: 3, desc: "全教限量 3 個！呆萌小雞陪伴你一起守護花生。" }
     ];
 
     const STUDIO_VARIANTS = [
       { id: "classic", name: "經典原味", icon: "sparkles" },
       { id: "santa", name: "聖誕限定", icon: "gift" },
-      { id: "cosmic", name: "宇宙星際", icon: "orbit" },
-      { id: "myaku", name: "脈脈細胞", icon: "circle-dot" },
-      { id: "chick", name: "小雞聯名", icon: "bird" },
-      { id: "gold", name: "黃金聖光", icon: "crown" }
+      { id: "cosmic", name: "多重宇宙", icon: "orbit" },
+      { id: "gold", name: "黃金聖殿", icon: "crown" },
+      { id: "myaku", name: "紅藍脈脈", icon: "atom" },
+      { id: "chick", name: "小雞夥伴", icon: "bird" }
     ];
 
     const STUDIO_COLORS = [
-      { name: "抹茶綠", hex: "#6B8E55" },
-      { name: "聖誕紅", hex: "#DC2626" },
-      { name: "深海藍", hex: "#1D4ED8" },
-      { name: "星雲紫", hex: "#6D28D9" },
-      { name: "焦糖橘", hex: "#D97706" },
-      { name: "櫻花粉", hex: "#DB2777" }
+      { name: "IPO 經典綠", hex: "#6B8E55" },
+      { name: "聖誕緋紅", hex: "#DC2626" },
+      { name: "宇宙靛藍", hex: "#4F46E5" },
+      { name: "焦糖琥珀", hex: "#D97706" },
+      { name: "深海海軍藍", hex: "#233140" },
+      { name: "櫻花粉紅", hex: "#EC4899" }
     ];
 
     const ORACLE_QUOTES = [
-      "「一顆花生解決不了的事，那就吃兩顆（但記得遠離教祖）！」",
-      "「今天上課保持微笑，好運就會像花生殼一樣自動打開。」",
-      "「段考前深呼吸三秒，花生的智慧正在 804 上空守護你。」",
-      "「不要小看任何一顆花生，團結起來就是堅不可摧的力量！」",
-      "「如果是花生，它會選擇先吃飽再煩惱！」",
-      "「環保考卷紙袋用得好，地球與花生都會為你驕傲。」",
-      "「今日宜：友善同學、珍惜食物、默念三聲 Peanut！」"
+      "「大吉：今天適合冷靜三秒，把困難剝開，裡面一定藏著兩顆飽滿的花生！」",
+      "「上上籤：一顆花生很渺小，和 804 夥伴一起努力就是無敵堅果盤。」",
+      "「花生啟示：段考題目再難，只要心中有花生，就能穩穩答對！」",
+      "「智慧神諭：不要浪費任何一顆花生，也不要浪費今天的任何一分鐘。」",
+      "「幸運預兆：今天下課去喝口水、伸個懶腰，好運就會像花生一樣成雙成對！」",
+      "「最高指導原則：花生可以沒有你，但你今天絕對不能沒有好心情！」"
     ];
 
-    const GAS_CODE_TEMPLATE = `// 請貼入 Google 試算表 -> 擴充功能 -> Apps Script 並部署為「網頁應用程式 (所有人)」
-// 完整程式碼請複製右側畫布的 Code.gs 檔案內容！
-function doGet(e) { return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON); }`;
+    const GAS_CODE_TEMPLATE = `// 請直接複製右側畫布「Google Apps Script 雲端後端 (Code.gs)」的完整程式碼，\n// 貼入 Google 試算表 → 擴充功能 → Apps Script，並部署為「網頁應用程式（誰可以存取：所有人）」。`;
 
-    /* =========================================================================
-       2. GLOBAL STATE & STORAGE HELPERS
-    ========================================================================= */
+    let lastCloudErrorMsg = "";
+    let syncTimerId = null;
+
     const state = {
       route: "#/home",
       heroSlide: 0,
-      members: JSON.parse(JSON.stringify(DEFAULT_MEMBERS)),
-      profiles: {},
-      ledger: [],
-      currentUserAccount: null,
       memberTab: "overview",
-      weeklyChartMode: "stay",
-      ledgerFilter: "ALL",
-      announcement: DEFAULT_BANNER_TEXT,
-      esgCount: 42,
-      wishes: [
-        { id: "w1", account: "14072@pnts", role: "教祖", name: "Yi-Hsun", text: "願 804 全體信徒天天開心、考試順利，聖誕企劃大成功！", likes: 12, createdAt: 1730000000000 },
-        { id: "w2", account: "14120@pnts", role: "幹部", name: "Spencer", text: "活動組正在全力籌備聖誕神秘驚喜，大家敬請期待！", likes: 9, createdAt: 1730000001000 }
-      ],
-      xmasSubscribers: [
-        { account: "14072@pnts", name: "Yi-Hsun", role: "教祖", createdAt: 1730000000000 }
-      ],
-      xmasIdeas: [
-        { id: "i1", account: "14021@pnts", author: "Anne", text: "希望有神秘聖誕抽籤與小遊戲對決！", createdAt: 1730000000000 }
-      ],
       memberFilter: "ALL",
+      ledgerFilter: "ALL",
+      weeklyChartMode: "stay",
       studioVariant: "classic",
       studioColor: "#6B8E55",
       cloudStatus: "idle",
+      announcement: DEFAULT_BANNER_TEXT,
+      esgCount: 42,
+      members: JSON.parse(JSON.stringify(DEFAULT_MEMBERS)),
+      profiles: {},
+      ledger: [],
+      wishes: [
+        { id: "w_init_1", account: "14072@pnts", role: "教祖", name: "教祖本尊", text: "願 804 全體信徒段考順利、每天都能開開心心信仰花生！", likes: 12, createdAt: Date.now() - 3600000 }
+      ],
+      xmasSubscribers: [],
+      xmasIdeas: [
+        { id: "i_init_1", account: "14004@pnts", author: "活動長", text: "希望聖誕節可以有神秘祝福小卡交換！", createdAt: Date.now() - 1800000 }
+      ],
+      currentUserAccount: null,
       activeChallengeTimer: null,
       stayTimerId: null,
       pendingConfirmFn: null
     };
 
-    let lastCloudErrorMsg = "";
-    let syncTimerId = null;
-
     function refreshLucideIcons() {
-      if (window.lucide && typeof window.lucide.createIcons === "function") {
-        window.lucide.createIcons();
+      try {
+        if (window.lucide && typeof window.lucide.createIcons === "function") {
+          window.lucide.createIcons();
+        }
+      } catch (e) {}
+    }
+
+    /* =========================================================================
+       2. CLOUD JSONP & FETCH ENGINE + STORAGE HELPERS
+    ========================================================================= */
+    function fetchViaJsonp(baseUrl, extraQuery) {
+      return new Promise(function(resolve, reject) {
+        const cbName = "ipoJsonpCb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+        const script = document.createElement("script");
+        const timer = setTimeout(function() {
+          cleanup();
+          reject(new Error("JSONP 連線逾時（請確認 Apps Script 部署權限已設為「所有人」）"));
+        }, 10000);
+
+        function cleanup() {
+          clearTimeout(timer);
+          try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        window[cbName] = function(resp) {
+          cleanup();
+          resolve(resp);
+        };
+
+        const sep = baseUrl.indexOf("?") === -1 ? "?" : "&";
+        const queryPart = extraQuery ? "&" + extraQuery : "";
+        script.src = baseUrl + sep + "callback=" + cbName + queryPart + "&_t=" + Date.now();
+        script.onerror = function() {
+          cleanup();
+          reject(new Error("無法載入 Apps Script 回應（請確認部署版本與權限）"));
+        };
+        document.body.appendChild(script);
+      });
+    }
+
+    async function syncFromCloud(silent) {
+      const url = getActiveSheetUrl();
+      if (!url) {
+        state.cloudStatus = "idle";
+        updateCloudSyncBadge();
+        return;
+      }
+      if (!silent) {
+        state.cloudStatus = "syncing";
+        updateCloudSyncBadge();
+      }
+
+      try {
+        // 優先使用 100% 穿透 302 轉址的 JSONP 讀取通道
+        const jsonpData = await fetchViaJsonp(url, "");
+        if (jsonpData && jsonpData.ok) {
+          lastCloudErrorMsg = "";
+          state.cloudStatus = "connected";
+          applyCloudPayload(jsonpData);
+        } else {
+          throw new Error((jsonpData && jsonpData.error) ? jsonpData.error : "後端回傳 ok: false");
+        }
+      } catch (jsonpErr) {
+        try {
+          const sep = url.indexOf("?") === -1 ? "?" : "&";
+          const resp = await fetch(url + sep + "_t=" + Date.now(), { method: "GET" });
+          const data = await resp.json();
+          if (data && data.ok) {
+            lastCloudErrorMsg = "";
+            state.cloudStatus = "connected";
+            applyCloudPayload(data);
+          } else {
+            throw new Error((data && data.error) ? data.error : "GET 讀取失敗");
+          }
+        } catch (fetchErr) {
+          lastCloudErrorMsg = jsonpErr.message || fetchErr.message || "連線失敗";
+          state.cloudStatus = "error";
+        }
+      }
+
+      updateCloudSyncBadge();
+      refreshCloudModalDiagnostic();
+    }
+
+    async function pushToCloud(payload) {
+      const url = getActiveSheetUrl();
+      if (!url) return;
+      const encoded = encodeURIComponent(JSON.stringify(payload));
+
+      // 若資料長度在網址安全範圍內，直接用 JSONP 透過 doGet 寫入（100% 穿透 302 轉址且能收到 ok: true）
+      if (encoded.length < 3500) {
+        try {
+          const res = await fetchViaJsonp(url, "payload=" + encoded);
+          if (res && res.ok) {
+            lastCloudErrorMsg = "";
+            state.cloudStatus = "connected";
+            updateCloudSyncBadge();
+            setTimeout(function() { syncFromCloud(true); }, 600);
+            return;
+          }
+        } catch (err) {
+          console.warn("JSONP write fallback to POST:", err);
+        }
+      }
+
+      // 超長資料（如一次儲存整份 17 人名單）改用標準 POST（不設 no-cors，讓瀏覽器正常跟隨 302 轉址）
+      try {
+        await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        setTimeout(function() { syncFromCloud(true); }, 1000);
+      } catch (e) {
+        lastCloudErrorMsg = "寫入試算表失敗：" + (e.message || String(e));
+        state.cloudStatus = "error";
+        updateCloudSyncBadge();
       }
     }
 
@@ -2138,7 +2245,7 @@ function doGet(e) { return ContentService.createTextOutput(JSON.stringify({ ok: 
       const input = document.getElementById("cloud-url-quick-input");
       const val = (input ? input.value : "").trim();
       if (!val) {
-        window.IPO_SHEET_URL = "https://script.google.com/macros/s/AKfycbwLkCcIquJhvcyfIwGm3VcIAx_5zkr9WTbnHN_6CLJnKt6tj9sWveh10AJNbkfNcWuu/exec";
+        window.IPO_SHEET_URL = "";
         try { window.localStorage.removeItem("ipo_shared_sheet_url"); } catch (e) {}
         lastCloudErrorMsg = "";
         state.cloudStatus = "idle";
