@@ -2138,7 +2138,7 @@ function doGet(e) { return ContentService.createTextOutput(JSON.stringify({ ok: 
       const input = document.getElementById("cloud-url-quick-input");
       const val = (input ? input.value : "").trim();
       if (!val) {
-        window.IPO_SHEET_URL = "";
+        window.IPO_SHEET_URL = "https://script.google.com/macros/s/AKfycbwLkCcIquJhvcyfIwGm3VcIAx_5zkr9WTbnHN_6CLJnKt6tj9sWveh10AJNbkfNcWuu/exec";
         try { window.localStorage.removeItem("ipo_shared_sheet_url"); } catch (e) {}
         lastCloudErrorMsg = "";
         state.cloudStatus = "idle";
