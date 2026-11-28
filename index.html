@@ -8,7 +8,7 @@
     // =========================================================================
     // ★ 【全班雲端連線設定】請將你的 Google Apps Script (/exec) 網址貼在下方雙引號內：
     // =========================================================================
-    window.IPO_SHEET_URL = "https://script.google.com/macros/s/AKfycbwLkCcIquJhvcyfIwGm3VcIAx_5zkr9WTbnHN_6CLJnKt6tj9sWveh10AJNbkfNcWuu/exec";
+    window.IPO_SHEET_URL = "";
 
     // 若網址列帶有 ?sheet= 參數（一鍵連線分享網址），自動套用並記憶於該裝置
     (function() {
@@ -1528,23 +1528,23 @@
       "最新公告：2026 萬聖節活動已圓滿落幕！花生教聖誕節特別企劃即將公開（Coming Soon），每日完成一項挑戰領 200P！";
 
     const DEFAULT_MEMBERS = [
-      { account: "14072@pnts", password: "888", name: "教祖本尊", role: "教祖", dept: "" },
-      { account: "14002@pnts", password: "123", name: "副教祖 A", role: "副教祖", dept: "" },
-      { account: "14003@pnts", password: "123", name: "副教祖 B", role: "副教祖", dept: "" },
-      { account: "14004@pnts", password: "123", name: "活動長", role: "信徒", dept: "活動組" },
-      { account: "14005@pnts", password: "123", name: "資訊長", role: "信徒", dept: "資訊組" },
-      { account: "14006@pnts", password: "123", name: "供品長", role: "信徒", dept: "供品組" },
-      { account: "14007@pnts", password: "123", name: "花生護法07", role: "信徒", dept: "" },
-      { account: "14008@pnts", password: "123", name: "花生護法08", role: "信徒", dept: "" },
-      { account: "14009@pnts", password: "123", name: "花生護法09", role: "信徒", dept: "" },
-      { account: "14010@pnts", password: "123", name: "花生護法10", role: "信徒", dept: "" },
-      { account: "14011@pnts", password: "123", name: "花生護法11", role: "信徒", dept: "" },
-      { account: "14012@pnts", password: "123", name: "花生護法12", role: "信徒", dept: "" },
-      { account: "14013@pnts", password: "123", name: "花生護法13", role: "信徒", dept: "" },
-      { account: "14014@pnts", password: "123", name: "花生護法14", role: "信徒", dept: "" },
-      { account: "14015@pnts", password: "123", name: "花生護法15", role: "信徒", dept: "" },
-      { account: "14016@pnts", password: "123", name: "花生護法16", role: "信徒", dept: "" },
-      { account: "14017@pnts", password: "123", name: "花生護法17", role: "信徒", dept: "" }
+      { account: "14072@pnts", password: "676767", name: "Yi-Hsun", role: "教祖", dept: "" },
+      { account: "14021@pnts", password: "958473", name: "Anne", role: "副教祖", dept: "" },
+      { account: "14030@pnts", password: "387233", name: "Mei", role: "副教祖", dept: "" },
+      { account: "14083@pnts", password: "573728", name: "Bella", role: "副教祖", dept: "" },
+      { account: "14093@pnts", password: "216761", name: "Heng", role: "副教祖", dept: "" },
+      { account: "testm@pnts", password: "pntexpo2025", name: "Myaku Myaku", role: "副教祖", dept: "" },
+      { account: "14133@pnts", password: "732892", name: "Jerry", role: "信徒", dept: "" },
+      { account: "14171@pnts", password: "847231", name: "Nathan", role: "信徒", dept: "" },
+      { account: "14120@pnts", password: "435627", name: "Spencer", role: "信徒", dept: "" },
+      { account: "14036@pnts", password: "637892", name: "Brian", role: "信徒", dept: "" },
+      { account: "14130@pnts", password: "958439", name: "Eunice", role: "信徒", dept: "" },
+      { account: "14243@pnts", password: "843723", name: "Charity", role: "信徒", dept: "" },
+      { account: "14190@pnts", password: "463783", name: "Kiwi", role: "信徒", dept: "" },
+      { account: "14168@pnts", password: "738290", name: "Alissa", role: "信徒", dept: "" },
+      { account: "14177@pnts", password: "362783", name: "ELAINE", role: "信徒", dept: "" },
+      { account: "hank@pnts", password: "293023", name: "品漢", role: "信徒", dept: "" },
+      { account: "14169@pnts", password: "452678", name: "Eason", role: "信徒", dept: "" }
     ];
 
     const SKIN_CATALOG = [
@@ -1627,6 +1627,24 @@
     /* =========================================================================
        2. CLOUD JSONP & FETCH ENGINE + STORAGE HELPERS
     ========================================================================= */
+    function getActiveSheetUrl() {
+      try {
+        const inlineUrl = (window.IPO_SHEET_URL || "").trim();
+        if (inlineUrl) return inlineUrl;
+        return (window.localStorage.getItem("ipo_shared_sheet_url") || "").trim();
+      } catch (e) {
+        return (window.IPO_SHEET_URL || "").trim();
+      }
+    }
+
+    function safeGetStorage(key) {
+      try { return window.localStorage.getItem(key); } catch (e) { return null; }
+    }
+
+    function safeSetStorage(key, val) {
+      try { window.localStorage.setItem(key, val); } catch (e) {}
+    }
+
     function fetchViaJsonp(baseUrl, extraQuery) {
       return new Promise(function(resolve, reject) {
         const cbName = "ipoJsonpCb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
@@ -1658,56 +1676,11 @@
       });
     }
 
-    async function syncFromCloud(silent) {
-      const url = getActiveSheetUrl();
-      if (!url) {
-        state.cloudStatus = "idle";
-        updateCloudSyncBadge();
-        return;
-      }
-      if (!silent) {
-        state.cloudStatus = "syncing";
-        updateCloudSyncBadge();
-      }
-
-      try {
-        // 優先使用 100% 穿透 302 轉址的 JSONP 讀取通道
-        const jsonpData = await fetchViaJsonp(url, "");
-        if (jsonpData && jsonpData.ok) {
-          lastCloudErrorMsg = "";
-          state.cloudStatus = "connected";
-          applyCloudPayload(jsonpData);
-        } else {
-          throw new Error((jsonpData && jsonpData.error) ? jsonpData.error : "後端回傳 ok: false");
-        }
-      } catch (jsonpErr) {
-        try {
-          const sep = url.indexOf("?") === -1 ? "?" : "&";
-          const resp = await fetch(url + sep + "_t=" + Date.now(), { method: "GET" });
-          const data = await resp.json();
-          if (data && data.ok) {
-            lastCloudErrorMsg = "";
-            state.cloudStatus = "connected";
-            applyCloudPayload(data);
-          } else {
-            throw new Error((data && data.error) ? data.error : "GET 讀取失敗");
-          }
-        } catch (fetchErr) {
-          lastCloudErrorMsg = jsonpErr.message || fetchErr.message || "連線失敗";
-          state.cloudStatus = "error";
-        }
-      }
-
-      updateCloudSyncBadge();
-      refreshCloudModalDiagnostic();
-    }
-
     async function pushToCloud(payload) {
       const url = getActiveSheetUrl();
       if (!url) return;
       const encoded = encodeURIComponent(JSON.stringify(payload));
 
-      // 若資料長度在網址安全範圍內，直接用 JSONP 透過 doGet 寫入（100% 穿透 302 轉址且能收到 ok: true）
       if (encoded.length < 3500) {
         try {
           const res = await fetchViaJsonp(url, "payload=" + encoded);
@@ -1723,7 +1696,6 @@
         }
       }
 
-      // 超長資料（如一次儲存整份 17 人名單）改用標準 POST（不設 no-cors，讓瀏覽器正常跟隨 302 轉址）
       try {
         await fetch(url, {
           method: "POST",
@@ -1736,24 +1708,6 @@
         state.cloudStatus = "error";
         updateCloudSyncBadge();
       }
-    }
-
-    function getActiveSheetUrl() {
-      try {
-        const inlineUrl = (window.IPO_SHEET_URL || "").trim();
-        if (inlineUrl) return inlineUrl;
-        return (window.localStorage.getItem("ipo_shared_sheet_url") || "").trim();
-      } catch (e) {
-        return (window.IPO_SHEET_URL || "").trim();
-      }
-    }
-
-    function safeGetStorage(key) {
-      try { return window.localStorage.getItem(key); } catch (e) { return null; }
-    }
-
-    function safeSetStorage(key, val) {
-      try { window.localStorage.setItem(key, val); } catch (e) {}
     }
 
     function getTodayDateKey() {
@@ -1869,18 +1823,19 @@
       list.forEach(function(raw, idx) {
         if (!raw || typeof raw !== "object") return;
         const acc = String(raw.account || raw.acc || "").trim();
-        if (!acc || acc === "undefined") return;
+        if (!acc || acc === "undefined" || acc === "null") return;
         const def = DEFAULT_MEMBERS.find(function(d) { return d.account.toLowerCase() === acc.toLowerCase(); }) || DEFAULT_MEMBERS[idx];
-        const nameVal = String(raw.name || raw.displayName || "").trim();
-        const pwdVal = String(raw.password || raw.pwd || "").trim();
-        const roleVal = String(raw.role || "").trim();
-        const deptVal = String(raw.dept || "").trim();
+        const rawName = String(raw.name || raw.displayName || "").trim();
+        const rawPwd = String(raw.password || raw.pwd || "").trim();
+        const rawRole = String(raw.role || "").trim();
+        const rawDept = String(raw.dept || "").trim();
+        const isInvalidName = !rawName || rawName === "undefined" || rawName === "null" || rawName === "NaN";
         cleaned.push({
           account: acc,
-          password: (pwdVal && pwdVal !== "undefined") ? pwdVal : (def ? def.password : "123456"),
-          name: (nameVal && nameVal !== "undefined") ? nameVal : (def ? def.name : acc.split("@")[0]),
-          role: (roleVal && roleVal !== "undefined") ? roleVal : (def ? def.role : "信徒"),
-          dept: (deptVal && deptVal !== "undefined") ? deptVal : (def ? def.dept : "")
+          password: (rawPwd && rawPwd !== "undefined" && rawPwd !== "null") ? rawPwd : (def ? def.password : "123"),
+          name: !isInvalidName ? rawName : (def ? def.name : acc.split("@")[0]),
+          role: (rawRole && rawRole !== "undefined" && rawRole !== "null") ? rawRole : (def ? def.role : "信徒"),
+          dept: (rawDept && rawDept !== "undefined" && rawDept !== "null") ? rawDept : (def ? def.dept : "")
         });
       });
       return cleaned.length > 0 ? cleaned : null;
@@ -1888,9 +1843,15 @@
 
     function initLocalState() {
       try {
-        const savedMembers = JSON.parse(safeGetStorage("ipo_members_v3") || "null");
-        const validSavedMembers = sanitizeMembersList(savedMembers);
-        if (validSavedMembers) state.members = validSavedMembers;
+        const savedMembersV4 = JSON.parse(safeGetStorage("ipo_members_v4") || "null");
+        const validList = sanitizeMembersList(savedMembersV4);
+        if (validList) {
+          state.members = validList;
+        } else {
+          // 清除先前誤植的代號快取，直接啟用官方真實 17 人名單
+          state.members = JSON.parse(JSON.stringify(DEFAULT_MEMBERS));
+          safeSetStorage("ipo_members_v4", JSON.stringify(state.members));
+        }
 
         const savedProfiles = JSON.parse(safeGetStorage("ipo_profiles") || "null");
         if (savedProfiles && typeof savedProfiles === "object") state.profiles = savedProfiles;
@@ -1923,7 +1884,7 @@
     }
 
     function persistLocalState() {
-      safeSetStorage("ipo_members_v3", JSON.stringify(state.members));
+      safeSetStorage("ipo_members_v4", JSON.stringify(state.members));
       safeSetStorage("ipo_profiles", JSON.stringify(state.profiles));
       safeSetStorage("ipo_ledger_v1", JSON.stringify(state.ledger));
       safeSetStorage("ipo_announcement", state.announcement);
@@ -2089,6 +2050,9 @@
           state.members = validRemoteMembers;
           state.members.forEach(function(m) { getMemberProfile(m.account); });
         }
+      } else if (Array.isArray(data.members) && data.members.length === 0 && state.members.length > 0) {
+        // 若試算表 Members 分頁尚無資料，自動將目前 17 位名單同步回雲端
+        pushToCloud({ action: "saveMembers", members: state.members });
       }
       if (Array.isArray(data.ledger)) {
         state.ledger = data.ledger;
@@ -2113,36 +2077,6 @@
       return true;
     }
 
-    function fetchViaJsonp(baseUrl) {
-      return new Promise(function(resolve, reject) {
-        const cbName = "ipoJsonpCb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
-        const script = document.createElement("script");
-        const timer = setTimeout(function() {
-          cleanup();
-          reject(new Error("JSONP 連線逾時（請確認 Apps Script 部署權限已設為「所有人」）"));
-        }, 9000);
-
-        function cleanup() {
-          clearTimeout(timer);
-          try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
-          if (script.parentNode) script.parentNode.removeChild(script);
-        }
-
-        window[cbName] = function(resp) {
-          cleanup();
-          resolve(resp);
-        };
-
-        const sep = baseUrl.indexOf("?") === -1 ? "?" : "&";
-        script.src = baseUrl + sep + "callback=" + cbName + "&_t=" + Date.now();
-        script.onerror = function() {
-          cleanup();
-          reject(new Error("無法載入 Apps Script 回應（權限可能未開放為「所有人」）"));
-        };
-        document.body.appendChild(script);
-      });
-    }
-
     async function syncFromCloud(silent) {
       const url = getActiveSheetUrl();
       if (!url) {
@@ -2156,33 +2090,33 @@
       }
 
       try {
-        const sep = url.indexOf("?") === -1 ? "?" : "&";
-        const resp = await fetch(url + sep + "_t=" + Date.now(), { method: "GET" });
-        const text = await resp.text();
-        let data = null;
-        try {
-          data = JSON.parse(text);
-        } catch (parseErr) {
-          throw new Error("回傳非 JSON 格式（請改用個人 Gmail 部署並設為「所有人」）");
-        }
-        if (data && data.ok) {
+        const jsonpData = await fetchViaJsonp(url, "");
+        if (jsonpData && jsonpData.ok) {
           lastCloudErrorMsg = "";
           state.cloudStatus = "connected";
-          applyCloudPayload(data);
+          applyCloudPayload(jsonpData);
         } else {
-          throw new Error((data && data.error) ? data.error : "後端回傳 ok: false");
+          throw new Error((jsonpData && jsonpData.error) ? jsonpData.error : "後端回傳 ok: false");
         }
-      } catch (fetchErr) {
+      } catch (jsonpErr) {
         try {
-          const jsonpData = await fetchViaJsonp(url);
-          if (jsonpData && jsonpData.ok) {
+          const sep = url.indexOf("?") === -1 ? "?" : "&";
+          const resp = await fetch(url + sep + "_t=" + Date.now(), { method: "GET" });
+          const text = await resp.text();
+          let data = null;
+          try {
+            data = JSON.parse(text);
+          } catch (parseErr) {
+            throw new Error("回傳非 JSON 格式（請改用個人 Gmail 部署並設為「所有人」）");
+          }
+          if (data && data.ok) {
             lastCloudErrorMsg = "";
             state.cloudStatus = "connected";
-            applyCloudPayload(jsonpData);
+            applyCloudPayload(data);
           } else {
-            throw new Error((jsonpData && jsonpData.error) ? jsonpData.error : "JSONP 回傳失敗");
+            throw new Error((data && data.error) ? data.error : "GET 讀取失敗");
           }
-        } catch (jsonpErr) {
+        } catch (fetchErr) {
           lastCloudErrorMsg = jsonpErr.message || fetchErr.message || "連線失敗";
           state.cloudStatus = "error";
         }
@@ -2190,20 +2124,6 @@
 
       updateCloudSyncBadge();
       refreshCloudModalDiagnostic();
-    }
-
-    async function pushToCloud(payload) {
-      const url = getActiveSheetUrl();
-      if (!url) return;
-      try {
-        await fetch(url, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
-        });
-        setTimeout(function() { syncFromCloud(true); }, 1200);
-      } catch (e) {}
     }
 
     function refreshCloudModalDiagnostic() {
